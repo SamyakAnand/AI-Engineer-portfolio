@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" fill="none">
+  <defs>
+    <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Hexagonal Cyber Shield Icon -->
+  <g transform="translate(20, 10)">
+    <!-- Outer Glow Polygon -->
+    <polygon points="50,5 90,28 90,72 50,95 10,72 10,28" 
+             stroke="url(#cyber-grad)" stroke-width="3" fill="#0d1117" filter="url(#glow)"/>
+    
+    <!-- Inner Core & Neural Conduits -->
+    <polygon points="50,18 78,34 78,66 50,82 22,66 22,34" 
+             stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 2" fill="none" opacity="0.8"/>
+    
+    <!-- Central Node Core -->
+    <circle cx="50" cy="50" r="10" fill="url(#cyber-grad)" filter="url(#glow)"/>
+    <circle cx="50" cy="50" r="4" fill="#ffffff"/>
+
+    <!-- Neural Circuit Traces -->
+    <line x1="50" y1="18" x2="50" y2="40" stroke="#a855f7" stroke-width="2"/>
+    <line x1="50" y1="60" x2="50" y2="82" stroke="#a855f7" stroke-width="2"/>
+    <line x1="22" y1="50" x2="40" y2="50" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="60" y1="50" x2="78" y2="50" stroke="#38bdf8" stroke-width="2"/>
+  </g>
+
+  <!-- Typography: SAM.exe -->
+  <g transform="translate(130, 75)">
+    <!-- Glow Backdrop -->
+    <text font-family="'JetBrains Mono', 'Fira Code', 'Segoe UI', monospace" font-size="46" font-weight="900" 
+          letter-spacing="4" fill="url(#cyber-grad)" filter="url(#glow)" opacity="0.6">
+      SAM<tspan fill="#38bdf8" font-size="34">.exe</tspan>
+    </text>
+    
+    <!-- Crisp Foreground Text -->
+    <text font-family="'JetBrains Mono', 'Fira Code', 'Segoe UI', monospace" font-size="46" font-weight="900" 
+          letter-spacing="4" fill="#ffffff">
+      SAM<tspan fill="url(#cyber-grad)" font-size="34">.exe</tspan>
+    </text>
+  </g>
+
+  <!-- Subtitle Tagline -->
+  <text x="135" y="98" font-family="'JetBrains Mono', 'Segoe UI', monospace" font-size="11" font-weight="600" 
+        letter-spacing="5" fill="#94a3b8">
+    AUTONOMOUS 3D DIGITAL TWIN
+  </text>
+</svg>
