@@ -25,12 +25,9 @@ export default function FullPageFrameSequence() {
     ctx.fillStyle = '#07111d';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (image?.complete && image.naturalWidth) {
-      const mobile = window.matchMedia('(max-width: 767px)').matches;
-      // The source sequence is widescreen. On phones, `cover` cuts away most
-      // of the authored scene; contain keeps every frame intact.
-      const scale = mobile
-        ? Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight)
-        : Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      // Keep the sequence immersive on phones; section content is separately
+      // constrained to a single readable column at narrow widths.
+      const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
       const width = image.naturalWidth * scale;
       const height = image.naturalHeight * scale;
       ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
