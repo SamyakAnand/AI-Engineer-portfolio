@@ -59,7 +59,7 @@ export default function PortfolioChatbot() {
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [pending, setPending] = useState(false);
-  const [model, setModel] = useState('euri-chat-fast');
+  const model = 'euri-chat-fast';
   const messageListRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { projects } from '@/content/projects';
 import type { Project } from '@/content/types';
-import { GitBranch, ExternalLink, Terminal, Code2, Layers, Cpu, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { GitBranch, Terminal, Cpu, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import { soundFx } from '@/components/sound/AmbientSoundManager';
 
 export default function Scene04Projects() {

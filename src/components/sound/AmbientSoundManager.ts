@@ -1,6 +1,8 @@
 // Web Audio API ambient sound generator and cybernetic UI feedback
 // Zero external audio files required - 100% lightweight procedural synthesis
 
+type OscillatorWave = 'sine' | 'square' | 'sawtooth' | 'triangle';
+
 class AmbientSoundController {
   private ctx: AudioContext | null = null;
   private droneOsc1: OscillatorNode | null = null;
@@ -123,7 +125,7 @@ class AmbientSoundController {
     }
   }
 
-  private playBeep(freq: number, type: OscillatorType, dur: number) {
+  private playBeep(freq: number, type: OscillatorWave, dur: number) {
     if (!this.ctx || !this.masterGain) return;
     try {
       const osc = this.ctx.createOscillator();

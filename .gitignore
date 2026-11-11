@@ -30,6 +30,27 @@ Thumbs.db
 debug-site.png
 verify-now.png
 mobile-*.png
+vroid_screen_check.png
+temp_bundles/
+temp_samples/
+temp_talking_avatar/
+scripts/download_sample_b.py
+scripts/extract_all_thumbs.py
+scripts/find_list_json.py
+scripts/find_list_url.py
+scripts/inspect_bundles*.py
+scripts/inspect_catalog*.py
+scripts/inspect_urls.py
+scripts/manifest_samples.py
+scripts/save_vroid.py
+scripts/check_uia.ps1
+scripts/download_sample_c.py
+scripts/download_vrms.py
+scripts/extract_textures.py
+scripts/inspect_data_bin.py
+scripts/inspect_mat_names.py
+scripts/inspect_sample_c_zip.py
+assets/sam-avatar/
 screenshot_*.png
 artifacts/
 ezgif-116ef5d0463bc01d-jpg 2/
@@ -37,3 +58,4 @@ ezgif-1fb8e58309b4596c-jpg/
 gemini_generated_video_6b2e6d5c.mp4
 tsconfig.tsbuildinfo
 .env*
+scripts/dump_vrm_textures.py
