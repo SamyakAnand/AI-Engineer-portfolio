@@ -25,7 +25,12 @@ export default function FullPageFrameSequence() {
     ctx.fillStyle = '#07111d';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (image?.complete && image.naturalWidth) {
-      const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      const mobile = window.matchMedia('(max-width: 767px)').matches;
+      // The source sequence is widescreen. On phones, `cover` cuts away most
+      // of the authored scene; contain keeps every frame intact.
+      const scale = mobile
+        ? Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight)
+        : Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
       const width = image.naturalWidth * scale;
       const height = image.naturalHeight * scale;
       ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
@@ -56,10 +61,11 @@ export default function FullPageFrameSequence() {
       image.src = `/frames/frame_${String(index + 1).padStart(3, '0')}.webp`;
     });
     const resize = () => {
+      const mobile = window.matchMedia('(max-width: 767px)').matches;
       const ratio = Math.min(
         window.devicePixelRatio || 1,
-        3,
-        3840 / window.innerWidth,
+        mobile ? 1.5 : 3,
+        (mobile ? 1920 : 3840) / window.innerWidth,
         2160 / window.innerHeight,
       );
       canvas.width = Math.round(window.innerWidth * ratio);
@@ -90,6 +96,14 @@ export default function FullPageFrameSequence() {
         for (const neighbor of [frame - 1, frame + 1, frame - 2, frame + 2]) {
           if (neighbor >= 0 && neighbor < TOTAL_FRAMES) void loadFrame(neighbor, 'low');
         }
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          imagesRef.current.forEach((image, index) => {
+            if (image && Math.abs(index - frame) > 12) {
+              imagesRef.current[index] = null;
+              requested[index] = false;
+            }
+          });
+        }
       }
       render(frameRef.current);
       window.dispatchEvent(new CustomEvent('sam:hero-progress', { detail: { progress: progressRef.current } }));
@@ -104,6 +118,10 @@ export default function FullPageFrameSequence() {
     const preload = async () => {
       await loadFrame(0, 'high');
       if (reducedMotion) return;
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        await Promise.all(Array.from({ length: 6 }, (_, index) => loadFrame(index + 1)));
+        return;
+      }
       for (let start = 1; start < TOTAL_FRAMES && !cancelled; start += 16) {
         await Promise.all(Array.from({ length: Math.min(16, TOTAL_FRAMES - start) }, (_, offset) => loadFrame(start + offset)));
       }

@@ -945,6 +945,9 @@ body {
 }
 
 .portfolio-chat__model-label { padding: 12px 20px 4px; color: var(--text-secondary); font-size: 11px; }
+.portfolio-chat__suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
+.portfolio-chat__suggestions button { max-width: 100%; border: 1px solid var(--border-strong); border-radius: 999px; background: rgba(255,255,255,.045); color: var(--text); padding: 8px 11px; text-align: left; font-size: 12px; line-height: 1.35; touch-action: manipulation; }
+.portfolio-chat__suggestions button:active { background: rgba(185,217,236,.16); }
 .portfolio-chat__model { margin: 0 20px 8px; padding: 9px 11px; border-radius: 10px; border: 1px solid var(--border-strong); background: rgba(255,255,255,.06); color: var(--text); font-size: 12px; }
 .portfolio-chat__model option { color: #101820; }
 
@@ -1033,6 +1036,16 @@ body {
 @media (max-width: 540px) {
   .portfolio-chat__panel { right: 12px; bottom: 78px; width: calc(100vw - 24px); max-width: none; max-height: calc(100dvh - 96px); }
   .portfolio-chat__launcher { right: 16px; bottom: 16px; }
+  .portfolio-chat__messages { padding: 14px; }
+  .portfolio-chat__message { max-width: 94%; }
+  .portfolio-chat__input { min-width: 0; font-size: 16px; }
+}
+
+@media (max-width: 767px) {
+  #scene-tech, #scene-projects, #scene-journey, #scene-services, #scene-contact { scroll-margin-top: 76px; }
+  #scene-tech { padding-left: 16px; padding-right: 16px; }
+  #scene-tech ul { grid-template-columns: minmax(0, 1fr); }
+  #scene-tech li { min-height: 46px; }
 }
 
 /* ── 17. Arrow Navigation System ────────────────────────────────────── */

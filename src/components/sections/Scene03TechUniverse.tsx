@@ -1,5 +1,13 @@
 import Image from 'next/image';
 import { skills } from '@/content/skills';
+import { siReact, siNextdotjs, siJavascript, siTypescript, siNodedotjs, siLangchain, siLanggraph, siHuggingface } from 'simple-icons';
+import type { SimpleIcon } from 'simple-icons';
+
+const brandIcons: Record<string, SimpleIcon> = {
+  React: siReact, 'Next.js': siNextdotjs, JavaScript: siJavascript, TypeScript: siTypescript,
+  'Node.js': siNodedotjs, LangChain: siLangchain, LangGraph: siLanggraph,
+  'Hugging Face Transformers': siHuggingface,
+};
 
 const logos: Record<string, string> = {
   'PyTorch': 'pytorch_logo.png', 'TensorFlow': 'tensorflow_logo.png', 'Keras': 'keras_logo.png',
@@ -20,14 +28,15 @@ export default function Scene03TechUniverse() {
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/75">A broader view of my work across AI applications, machine learning, software, and data.</p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {skills.map(group => <section key={group.category} className="rounded-2xl border border-white/15 bg-[#07111d]/[.84] p-5 sm:p-6">
+        {skills.map(group => <section key={group.category} className="rounded-2xl border border-white/20 bg-[#07111d]/[.40] p-4 shadow-[0_16px_50px_rgba(0,0,0,.10)] backdrop-blur-[3px] sm:p-6">
           <h3 className="mb-4 text-lg font-medium text-white">{group.category}</h3>
           <ul className="grid grid-cols-2 gap-2.5">
             {group.skills.map(skill => {
               const logo = logos[skill.name];
-              return <li key={skill.name} className="flex min-h-12 items-center gap-2.5 rounded-xl border border-white/10 bg-[#07111d]/80 px-3 py-2 text-sm text-white/85">
-                {logo ? <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-white p-1"><Image src={`/portfolio/skills/${logo}`} alt="" width={28} height={28} className="h-full w-full object-contain" /></span> : <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-sky-100/25 bg-sky-100/10 text-[10px] font-semibold text-sky-100">{skill.group === 'ai' ? 'AI' : skill.name.slice(0, 2).toUpperCase()}</span>}
-                <span className="leading-snug">{skill.name}</span>
+              const brand = brandIcons[skill.name];
+              return <li key={skill.name} className="flex min-h-12 min-w-0 items-center gap-2.5 rounded-xl border border-white/[.14] bg-[#07111d]/[.46] px-2.5 py-2 text-sm text-white/90 sm:px-3">
+                {logo ? <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-white p-1"><Image src={`/portfolio/skills/${logo}`} alt="" width={28} height={28} className="h-full w-full object-contain" /></span> : brand ? <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/10 bg-white/[.08] p-1.5" style={{ color: `#${brand.hex}` }}><svg viewBox="0 0 24 24" className="h-full w-full fill-current"><path d={brand.path}/></svg></span> : <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-sky-100/20 bg-sky-100/[.08] text-[9px] font-bold text-sky-100">{skill.name.includes('Retrieval') ? 'RAG' : skill.name.includes('Large language') ? 'LLM' : skill.group === 'ai' ? 'AI' : skill.name.slice(0, 2).toUpperCase()}</span>}
+                <span className="min-w-0 break-words leading-snug">{skill.name}</span>
               </li>;
             })}
           </ul>

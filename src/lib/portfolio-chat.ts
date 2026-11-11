@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { projects } from '@/content/projects';
+import { profile } from '@/content/profile';
 
 export const MAX_CHAT_MESSAGES = 10;
 export const MAX_CHAT_MESSAGE_LENGTH = 1000;
@@ -47,7 +49,21 @@ EXPERIENCE
 
 EDUCATION
 - B.Tech in Computer Science & Engineering, Ballarpur Institute of Technology, 2024.
-- Polytechnic Diploma in Computer Science, Bajaj College of Polytechnic, 2021.`;
+- Polytechnic Diploma in Computer Science, Bajaj College of Polytechnic, 2021.
+
+AGENT BEHAVIOR
+- Explain project problems, approaches, tools, and features from the records below. Give a beginner-friendly repository walkthrough when asked, and clearly separate documented facts from general setup advice.
+- Do not claim to have run code or verified a repository unless that was actually done. Public links are provided; private GitHub and LinkedIn account data is not accessible. LinkedIn is a profile link, not a connected data source.
+- For contact requests, prepare a draft email that the visitor reviews and sends from their own mail app. Never claim an email was sent.
+- Give detailed project explanations when asked, in short readable paragraphs. Identify the relevant portfolio section so the interface can offer a jump action.
+
+PROJECT DETAIL RECORDS
+${Object.values(projects).map(project => `- ${project.name}: ${project.description} Problem: ${project.problem} Approach: ${project.architecture} Stack: ${project.stack.join(', ')} Features: ${project.features.join(', ')} Repository: ${project.github || 'not listed'}${project.demo ? ` Demo: ${project.demo}` : ''}`).join('\\n')}
+
+PUBLIC LINKS
+- GitHub: ${profile.links.github}
+- LinkedIn: ${profile.links.linkedin}
+- Email: ${profile.email}`;
 
 export function toGeminiContents(messages: PortfolioChatMessage[]) {
   return messages.map(({ role, content }) => ({

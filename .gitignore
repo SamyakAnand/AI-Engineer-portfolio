@@ -29,6 +29,7 @@ Thumbs.db
 # local visual QA output and generated reference artifacts
 debug-site.png
 verify-now.png
+mobile-*.png
 screenshot_*.png
 artifacts/
 ezgif-116ef5d0463bc01d-jpg 2/

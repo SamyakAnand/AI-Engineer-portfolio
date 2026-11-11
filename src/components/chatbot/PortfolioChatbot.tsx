@@ -9,13 +9,20 @@ type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
   navigation?: PortfolioTarget;
+  emailDraft?: string;
 };
 
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
-  content: 'Hi, I’m SAM.exe. Ask me about Samyak’s projects, skills, or experience.',
+  content: 'Hi, I’m SAM.exe. I can explain projects, guide you through a repository, or take you to any section. What would you like to know?',
 };
+
+const suggestedQuestions = [
+  'Walk me through ARGUS AI',
+  'Which AI and LLM skills does Samyak use?',
+  'How can I discuss a project?',
+];
 
 function makeId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -88,7 +95,11 @@ export default function PortfolioChatbot() {
       const data = await response.json().catch(() => ({}));
       const answer = response.ok && typeof data.reply === 'string' ? plainText(data.reply) : '';
       const reply = answer || failureMessage(data.error);
-      setMessages([...nextMessages, { id: makeId(), role: 'assistant', content: reply, navigation }]);
+      const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
+      setMessages([...nextMessages, {
+        id: makeId(), role: 'assistant', content: reply, navigation,
+        emailDraft: wantsEmail ? content : undefined,
+      }]);
     } catch {
       setMessages([...nextMessages, {
         id: makeId(),
@@ -120,10 +131,14 @@ export default function PortfolioChatbot() {
               <div key={message.id} className={`portfolio-chat__message portfolio-chat__message--${message.role}`}>
                 <p>{message.content}</p>
                 {message.role === 'assistant' && message.navigation && <button type="button" onClick={() => goToPortfolioTarget(message.navigation!)} className="mt-3 rounded-full border border-white/15 px-3 py-1.5 text-xs text-sky-100 transition hover:bg-white/10">Go to {message.navigation.label} ↗</button>}
+                {message.role === 'assistant' && message.emailDraft && <a className="mt-3 inline-flex rounded-full border border-white/15 px-3 py-1.5 text-xs text-sky-100 transition hover:bg-white/10" href={`mailto:samyak.g.anand@gmail.com?subject=${encodeURIComponent('Portfolio inquiry')}&body=${encodeURIComponent(`Hi Samyak,\n\nI spoke with SAM.exe about: ${message.emailDraft}\n\n`)}`}>Draft email to Samyak ↗</a>}
               </div>
             ))}
             {pending && <p className="portfolio-chat__typing" role="status">Thinking…</p>}
           </div>
+          {messages.length === 1 && !pending && <div className="portfolio-chat__suggestions" aria-label="Suggested questions">
+            {suggestedQuestions.map(question => <button key={question} type="button" onClick={() => setDraft(question)}>{question}</button>)}
+          </div>}
           <form className="portfolio-chat__form" onSubmit={sendMessage}>
             <label className="sr-only" htmlFor="portfolio-chat-input">Your message</label>
             <input
