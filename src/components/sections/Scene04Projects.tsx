@@ -2,10 +2,29 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { projects } from '@/content/projects';
 import type { Project } from '@/content/types';
-import { GitBranch, Terminal, Cpu, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { GitBranch, Terminal, Cpu, CheckCircle, ArrowRight, ShieldCheck, X, ExternalLink, Layers } from 'lucide-react';
 import { soundFx } from '@/components/sound/AmbientSoundManager';
+
+/* ─── card variants ──────────────────────────────────────────────────── */
+const cardVariants = {
+  hidden: { opacity: 0, y: 32, scale: 0.97 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { duration: 0.55, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+/* ─── shadow style helpers ───────────────────────────────────────────── */
+const ts = (size: 'sm' | 'md' | 'lg') => ({
+  textShadow: {
+    sm: '0 1px 6px rgba(0,0,0,1)',
+    md: '0 2px 10px rgba(0,0,0,1), 0 1px 4px rgba(0,0,0,1)',
+    lg: '0 3px 18px rgba(0,0,0,1), 0 2px 6px rgba(0,0,0,1)',
+  }[size],
+});
 
 export default function Scene04Projects() {
   const projectList = Object.values(projects);
@@ -14,21 +33,32 @@ export default function Scene04Projects() {
   return (
     <section
       id="scene-projects"
-      className="relative z-10 min-h-screen py-32 px-6 md:px-12 lg:px-20 bg-transparent text-white overflow-hidden border-t border-sky-950/40"
+      className="relative z-10 min-h-screen scroll-mt-24 overflow-hidden border-t border-purple-950/40 bg-transparent px-6 py-32 text-white md:px-12 lg:px-20"
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-16 border-b border-white/10">
+      <div className="mx-auto max-w-7xl">
+
+        {/* ── section header ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col gap-6 border-b border-white/[0.12] pb-14 md:flex-row md:items-end md:justify-between"
+        >
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-sans tracking-[0.25em] text-sky-400 uppercase mb-3">
-              <Terminal className="w-3.5 h-3.5" />
-              WORK
+            <div className="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-purple-400"
+              style={ts('sm')}>
+              <Terminal className="h-3.5 w-3.5" />
+              Work
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold font-display tracking-tight">
-              Selected projects<span className="text-sky-500">.</span>
+            <h2
+              className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl"
+              style={ts('lg')}
+            >
+              Selected projects<span className="text-purple-400">.</span>
             </h2>
-            <p className="mt-2 text-base sm:text-lg text-gray-300 font-light max-w-2xl">
-              A mix of AI, machine learning, and analytics projects. Open a repository to see the implementation.
+            <p className="mt-3 max-w-2xl text-base font-light text-white/85 sm:text-lg" style={ts('md')}>
+              A mix of AI, machine learning, and analytics projects — built to solve real problems.
             </p>
           </div>
 
@@ -37,200 +67,272 @@ export default function Scene04Projects() {
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={() => soundFx.playHover()}
-            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl border border-sky-500/30 bg-sky-950/40 hover:bg-sky-900/50 hover:border-sky-400 transition-all text-xs font-sans text-sky-200"
+            className="inline-flex w-fit items-center gap-2.5 rounded-xl border border-purple-400/40 bg-black/50 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-purple-200 backdrop-blur-sm transition hover:bg-purple-900/60 hover:border-purple-400/70"
           >
-            <GitBranch className="w-4 h-4 text-sky-400" />
-            <span>VIEW ALL PROJECTS</span>
+            <GitBranch className="h-4 w-4 text-purple-400" />
+            View all projects
           </a>
-        </div>
+        </motion.div>
 
-        {/* Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+        {/* ── cards grid ── */}
+        <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {projectList.map((project, idx) => (
-            <div
+            <motion.div
               key={project.id}
+              custom={idx}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
               onMouseEnter={() => soundFx.playHover()}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#07111d]/[.82] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-sky-200/30 hover:bg-[#07111d]/[.90]"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.12] bg-black/35 backdrop-blur-[6px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300 hover:-translate-y-2 hover:border-purple-400/40 hover:bg-black/45 hover:shadow-[0_16px_60px_rgba(168,85,247,0.25)]"
             >
-              {project.screenshots[0] && <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/10">
-                <Image src={project.screenshots[0]} alt={`${project.name} preview`} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.025]" />
-              </div>}
-              <div className="flex items-center justify-between px-6 pt-5 mb-1">
-                <span className="text-[11px] text-sky-100/60 tracking-[.14em] uppercase">PROJECT 0{idx + 1}</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-200/70" />
+              {/* image */}
+              {project.screenshots[0] ? (
+                <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/[0.08]">
+                  <Image
+                    src={project.screenshots[0]}
+                    alt={`${project.name} preview`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                  />
+                  {/* gradient overlay so text below always reads */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+              ) : (
+                /* placeholder for projects without screenshots */
+                <div className="flex aspect-[16/9] w-full items-center justify-center border-b border-white/[0.08] bg-gradient-to-br from-purple-950/60 to-black/60">
+                  <Layers className="h-12 w-12 text-purple-400/30" />
+                </div>
+              )}
+
+              {/* number badge */}
+              <div className="flex items-center justify-between px-6 pt-5">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-purple-300/90" style={ts('sm')}>
+                  Project 0{idx + 1}
+                </span>
+                <span className="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
               </div>
 
-              <div className="px-6 pb-6">
-                {/* Title */}
-                <h3 className="text-xl sm:text-2xl font-semibold font-display text-white leading-snug">
+              <div className="flex flex-1 flex-col px-6 pb-6">
+                {/* title */}
+                <h3
+                  className="mt-2 text-xl font-bold leading-snug text-white sm:text-2xl"
+                  style={ts('lg')}
+                >
                   {project.name}
                 </h3>
 
-                {/* Description */}
-                <p className="mt-3 text-sm text-gray-300 font-light leading-relaxed line-clamp-3">
+                {/* description */}
+                <p
+                  className="mt-3 text-sm font-light leading-relaxed text-white/85 line-clamp-3"
+                  style={ts('md')}
+                >
                   {project.description}
                 </p>
 
-                {/* Architecture Preview Box */}
-                <div className="mt-5 p-3 rounded-xl bg-white/[.035] border border-white/[.07] text-xs text-white/55">
-                  <span className="text-sky-100/65 uppercase tracking-widest block text-[9px] mb-1">
-                    APPROACH
+                {/* architecture box */}
+                <div className="mt-4 rounded-xl border border-purple-400/20 bg-purple-950/40 p-3 backdrop-blur-sm">
+                  <span className="mb-1 block text-[9px] font-bold uppercase tracking-widest text-purple-300/90" style={ts('sm')}>
+                    Approach
                   </span>
-                  <p className="line-clamp-2 text-white/80">{project.architecture}</p>
+                  <p className="text-xs leading-relaxed text-white/90 line-clamp-2" style={ts('sm')}>
+                    {project.architecture}
+                  </p>
                 </div>
 
-                {/* Tech Pills */}
-                <div className="mt-5 flex flex-wrap gap-1.5">
+                {/* tech stack pills */}
+                <div className="mt-4 flex flex-wrap gap-1.5">
                   {project.stack.slice(0, 4).map((tech) => (
                     <span
                       key={tech}
-                      className="px-2.5 py-1 rounded-md bg-white/[.05] border border-white/10 text-[10px] text-white/65"
+                      className="rounded-md border border-purple-400/25 bg-purple-950/50 px-2.5 py-1 text-[10px] font-medium text-purple-200"
+                      style={ts('sm')}
                     >
                       {tech}
                     </span>
                   ))}
                   {project.stack.length > 4 && (
-                    <span className="px-2 py-1 rounded-md bg-white/5 text-[10px] font-sans text-white/40">
+                    <span className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/60">
                       +{project.stack.length - 4}
                     </span>
                   )}
                 </div>
-              </div>
 
-              {/* Bottom Actions */}
-              <div className="mt-8 pt-5 border-t border-white/10 flex items-center justify-between">
-                <button
-                  onClick={() => {
-                    soundFx.playClick();
-                    setSelectedProject(project);
-                  }}
-                  className="inline-flex items-center gap-1.5 text-xs font-sans text-sky-300 hover:text-white font-medium transition-colors"
-                >
-                  <span>Project details</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </button>
-
-                {project.github ? (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="View GitHub Repository"
-                    className="p-2 rounded-lg bg-white/5 hover:bg-sky-600/40 border border-white/10 hover:border-sky-400 text-white/70 hover:text-white transition-all"
+                {/* actions */}
+                <div className="mt-auto flex items-center justify-between border-t border-white/[0.08] pt-4 mt-5">
+                  <button
+                    onClick={() => { soundFx.playClick(); setSelectedProject(project); }}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-300 transition hover:text-white"
+                    style={ts('sm')}
                   >
-                    <GitBranch className="w-4 h-4" />
-                  </a>
-                ) : (
-                  <span className="text-[10px] font-sans text-white/30 uppercase">INTERNAL BUILD</span>
-                )}
+                    Project details
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </button>
+
+                  {project.github ? (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="View GitHub"
+                      className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/70 transition hover:bg-purple-600/40 hover:border-purple-400 hover:text-white"
+                    >
+                      <GitBranch className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <span className="text-[10px] uppercase text-white/30" style={ts('sm')}>Internal</span>
+                  )}
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Deep Architecture Inspection Modal */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-          <div className="relative w-full max-w-3xl rounded-2xl border border-sky-500/40 bg-[#070514] p-6 sm:p-8 shadow-[0_0_80px_rgba(139,92,246,0.3)] max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-start justify-between pb-6 border-b border-white/10">
-              <div>
-                <span className="text-xs font-sans text-sky-400 tracking-widest uppercase">
-                  PROJECT DETAILS
+      {/* ── Detail Modal ── */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-lg sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              className="relative w-full max-w-3xl rounded-2xl border border-purple-500/40 bg-[#060414]/98 p-6 shadow-[0_0_80px_rgba(168,85,247,0.3)] max-h-[90vh] overflow-y-auto sm:p-8"
+              initial={{ scale: 0.92, y: 32, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.92, y: 32, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* close */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute right-4 top-4 rounded-lg bg-white/5 p-2 text-white/60 transition hover:bg-white/15 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* header */}
+              <div className="border-b border-white/[0.12] pb-6">
+                <span className="text-xs font-semibold uppercase tracking-widest text-purple-400">
+                  Project Details
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-bold font-display text-white mt-1">
+                <h3 className="mt-1 text-2xl font-bold text-white sm:text-3xl">
                   {selectedProject.name}
                 </h3>
               </div>
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-            </div>
 
-            {/* Problem Statement */}
-            <div className="mt-6">
-              <h4 className="text-xs font-sans text-cyan-400 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                THE PROBLEM SOLVED
-              </h4>
-              <p className="text-sm text-gray-300 font-light leading-relaxed bg-white/[0.02] p-4 rounded-xl border border-white/5">
-                {selectedProject.problem}
-              </p>
-            </div>
-
-            {/* Architecture Flow */}
-            <div className="mt-6">
-              <h4 className="text-xs font-sans text-sky-400 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                <Cpu className="w-3.5 h-3.5" />
-                END-TO-END PIPELINE ARCHITECTURE
-              </h4>
-              <div className="p-4 rounded-xl bg-sky-950/30 border border-sky-500/20 text-xs font-sans text-sky-200 leading-relaxed">
-                {selectedProject.architecture}
-              </div>
-            </div>
-
-            {/* Key Features */}
-            <div className="mt-6">
-              <h4 className="text-xs font-sans text-white/50 uppercase tracking-widest mb-2">
-                CORE CAPABILITIES & VERIFIED SPECS
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {selectedProject.features.map((feat) => (
-                  <div
-                    key={feat}
-                    className="flex items-center gap-2 text-xs font-sans text-gray-300 p-2.5 rounded-lg bg-white/[0.03] border border-white/5"
-                  >
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>{feat}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Full Stack Chips */}
-            <div className="mt-6">
-              <h4 className="text-xs font-sans text-white/50 uppercase tracking-widest mb-2">
-                DEPLOYMENT TECH STACK
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {selectedProject.stack.map((s) => (
-                  <span
-                    key={s}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-sans text-cyan-300"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Modal Bottom Actions */}
-            <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
-              {selectedProject.github && (
-                <a
-                  href={selectedProject.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 text-white font-sans text-xs uppercase font-semibold hover:bg-sky-500 transition-colors shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-                >
-                  <GitBranch className="w-4 h-4" />
-                  <span>EXPLORE CODE ON GITHUB</span>
-                </a>
+              {/* screenshot in modal */}
+              {selectedProject.screenshots[0] && (
+                <div className="relative mt-5 aspect-[16/9] w-full overflow-hidden rounded-xl border border-white/10">
+                  <Image
+                    src={selectedProject.screenshots[0]}
+                    alt={selectedProject.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 font-sans text-xs uppercase transition-colors"
-              >
-                CLOSE BLUEPRINT
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+              {/* problem */}
+              <div className="mt-6">
+                <h4 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-purple-400">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  Problem Solved
+                </h4>
+                <p className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-4 text-sm leading-relaxed text-white/90">
+                  {selectedProject.problem}
+                </p>
+              </div>
+
+              {/* architecture */}
+              <div className="mt-6">
+                <h4 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-purple-300">
+                  <Cpu className="h-3.5 w-3.5" />
+                  Pipeline Architecture
+                </h4>
+                <div className="rounded-xl border border-purple-400/20 bg-purple-950/40 p-4 text-xs font-medium leading-relaxed text-purple-100">
+                  {selectedProject.architecture}
+                </div>
+              </div>
+
+              {/* features */}
+              <div className="mt-6">
+                <h4 className="mb-3 text-xs font-bold uppercase tracking-widest text-white/60">
+                  Core Capabilities
+                </h4>
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  {selectedProject.features.map((feat) => (
+                    <div
+                      key={feat}
+                      className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] p-3 text-xs text-white/90"
+                    >
+                      <CheckCircle className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                      {feat}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* stack */}
+              <div className="mt-6">
+                <h4 className="mb-3 text-xs font-bold uppercase tracking-widest text-white/60">
+                  Tech Stack
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.stack.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-lg border border-purple-400/20 bg-purple-950/50 px-3 py-1.5 text-xs font-medium text-purple-200"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* actions */}
+              <div className="mt-8 flex items-center justify-between border-t border-white/[0.1] pt-6">
+                {selectedProject.github ? (
+                  <a
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-xs font-bold uppercase text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] transition hover:bg-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]"
+                  >
+                    <GitBranch className="h-4 w-4" />
+                    Explore on GitHub
+                  </a>
+                ) : <div />}
+
+                {selectedProject.demo && (
+                  <a
+                    href={selectedProject.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-purple-400/30 bg-purple-950/40 px-5 py-2.5 text-xs font-bold uppercase text-purple-200 transition hover:bg-purple-900/60"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Live Demo
+                  </a>
+                )}
+
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-xs font-semibold uppercase text-white/70 transition hover:bg-white/10"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

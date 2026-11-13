@@ -1,7 +1,19 @@
 import type { SkillCategory } from './types';
 
 export const skills: readonly SkillCategory[] = [
-  { category: 'AI & LLM', skills: [
+  { category: 'Frontier Models & AI Systems', skills: [
+    { name: 'ChatGPT & GPT-4o / o-series', group: 'frontier' },
+    { name: 'Claude 3.5 & 3.7 Sonnet (Anthropic)', group: 'frontier' },
+    { name: 'DeepSeek V3 & R1 Reasoning', group: 'frontier' },
+    { name: 'Google Gemini 2.0 & Flash', group: 'frontier' },
+    { name: 'Grok & xAI Ecosystem', group: 'frontier' },
+    { name: 'Meta Llama 3 & 3.3', group: 'frontier' },
+    { name: 'Google Antigravity & Agentic SDK', group: 'frontier' },
+    { name: 'Moonshot, Qwen & Mistral', group: 'frontier' },
+    { name: 'Ollama & Local Model Runtime', group: 'frontier' },
+    { name: 'Frontier API Routing & Tool Calling', group: 'frontier' },
+  ] },
+  { category: 'AI & LLM Architecture', skills: [
     { name: 'Large language models', group: 'ai' },
     { name: 'LLM application development', group: 'ai' },
     { name: 'Retrieval augmented generation (RAG)', group: 'ai' },
@@ -11,7 +23,6 @@ export const skills: readonly SkillCategory[] = [
     { name: 'Embeddings & semantic search', group: 'ai' },
     { name: 'AI agents & tool calling', group: 'ai' },
     { name: 'Prompt design & guardrails', group: 'ai' },
-    { name: 'Ollama & local models', group: 'ai' },
     { name: 'Structured outputs', group: 'ai' },
   ] },
   { category: 'Machine learning', skills: [

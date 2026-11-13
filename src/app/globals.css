@@ -20,10 +20,10 @@
   --surface-elevated: #172534;
   --surface-glow: #1b2b3b;
 
-  --accent: #b9d9ec;
-  --accent2: #82b7d9;
-  --accent3: #e3d5b7;
-  --accent-strong: #d5ecfa;
+  --accent: #c084fc;
+  --accent2: #a855f7;
+  --accent3: #e9d5ff;
+  --accent-strong: #f3e8ff;
   --accent-coral: #FF3038;
   --accent-coral-subtle: rgba(255, 48, 56, 0.15);
 
@@ -74,6 +74,49 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* ── Universal dark text-shadow with subtle cosmic purple aura for elite readability ── */
+/* Dual-layered: solid dark base for 100% crisp sharpness + deep purple ambient aura */
+#scene-projects p,
+#scene-projects span:not(.no-ts),
+#scene-projects a:not(.no-ts),
+#scene-projects li,
+#scene-journey p,
+#scene-journey span:not(.no-ts),
+#scene-journey li,
+#scene-identity p,
+#scene-identity span:not(.no-ts),
+#scene-tech p,
+#scene-tech span:not(.no-ts),
+#scene-services p,
+#scene-services span:not(.no-ts),
+#scene-services li,
+#scene-contact p,
+#scene-contact span:not(.no-ts),
+#scene-certifications p,
+#scene-certifications span:not(.no-ts),
+#hero-cinematic p,
+#hero-cinematic span:not(.no-ts),
+#hero-cinematic li {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 1),
+    0 2px 10px rgba(0, 0, 0, 0.98),
+    0 0 16px rgba(112, 26, 179, 0.45);
+}
+
+#scene-projects h1, #scene-projects h2, #scene-projects h3, #scene-projects h4,
+#scene-journey h1, #scene-journey h2, #scene-journey h3,
+#scene-identity h1, #scene-identity h2, #scene-identity h3,
+#scene-tech h1, #scene-tech h2, #scene-tech h3,
+#scene-services h1, #scene-services h2, #scene-services h3,
+#scene-contact h1, #scene-contact h2, #scene-contact h3,
+#scene-certifications h1, #scene-certifications h2, #scene-certifications h3,
+#hero-cinematic h1, #hero-cinematic h2, #hero-cinematic h3 {
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 1),
+    0 4px 20px rgba(0, 0, 0, 1),
+    0 0 24px rgba(147, 51, 234, 0.55);
 }
 
 html {
@@ -896,26 +939,9 @@ body {
   bottom: 24px;
   right: 24px;
   z-index: 9990;
-  min-height: 48px;
-  padding: 0 18px;
   border-radius: var(--radius-full);
-  background: var(--accent);
-  color: #080808;
-  border: none;
-  font-size: 18px;
-  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
-  transition: background 0.2s, transform 0.2s;
-}
-
-.portfolio-chat__launcher:hover {
-  background: var(--accent-strong);
-  transform: scale(1.05);
-}
-
-.portfolio-chat__launcher[aria-expanded="true"] {
-  background: var(--accent-strong);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .portfolio-chat__panel {
@@ -926,11 +952,11 @@ body {
   width: 400px;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 120px);
-  background: rgba(8, 19, 31, .94);
-  backdrop-filter: blur(24px);
-  border: 1px solid var(--border-strong);
+  background: rgba(6, 15, 27, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-glow-strong);
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.6), 0 0 32px -4px rgba(139, 92, 246, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;

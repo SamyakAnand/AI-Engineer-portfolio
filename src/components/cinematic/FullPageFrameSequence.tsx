@@ -73,12 +73,13 @@ export default function FullPageFrameSequence() {
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const sectionBeats = [
         ['hero-cinematic', 0],
-        ['scene-identity', 0.18],
-        ['scene-tech', 0.34],
-        ['scene-projects', 0.52],
-        ['scene-journey', 0.70],
-        ['scene-services', 0.84],
-        ['scene-contact', 0.93],
+        ['scene-identity', 0.16],
+        ['scene-tech', 0.32],
+        ['scene-projects', 0.48],
+        ['scene-journey', 0.64],
+        ['scene-certifications', 0.76],
+        ['scene-services', 0.86],
+        ['scene-contact', 0.94],
       ] as const;
       const anchors: FrameScrollAnchor[] = sectionBeats.flatMap(([id, progress]) => {
         const section = document.getElementById(id);

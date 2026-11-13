@@ -40,6 +40,15 @@ export const metadata: Metadata = {
   authors: [{ name: 'Samyak Anand', url: 'https://github.com/SamyakAnand' }],
   creator: 'Samyak Anand',
   metadataBase: new URL('https://samyak-anand.vercel.app'),
+  icons: {
+    icon: [
+      { url: '/favicon.png', sizes: '64x64', type: 'image/png' },
+      { url: '/branding/sam-chatbot-icon.png', sizes: '256x256', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/branding/sam-chatbot-icon.png', sizes: '256x256', type: 'image/png' },
+    ],
+  },
   openGraph: {
     type: 'website',
     siteName: 'Samyak Anand Portfolio',
