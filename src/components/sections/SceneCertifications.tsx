@@ -1,388 +1,293 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Award, ChevronLeft, ChevronRight, ExternalLink, X,
-  BookOpen, Brain, Database, BarChart3, Code2
+  Award, ExternalLink, X, Brain, Database, BarChart3, Code2,
+  CheckCircle2, Sparkles, ShieldCheck
 } from 'lucide-react';
 
-/* ─── data ───────────────────────────────────────────────────────────── */
-const certs = [
+/* ─── Verified Certifications Data ─────────────────────────────────────── */
+interface CertItem {
+  id: string;
+  category: 'Specialization' | 'Machine Learning' | 'Data Science' | 'Industry';
+  title: string;
+  issuer: string;
+  year: string;
+  description: string;
+  icon: typeof Brain;
+  tags: string[];
+  credentialUrl: string;
+}
+
+const verifiedCerts: CertItem[] = [
   {
-    id: 'naresh-fullstack-ds',
+    id: 'naresh-it-ds-ai',
+    category: 'Specialization',
     title: 'Full Stack Data Science & AI Specialization',
-    platform: 'Naresh IT',
+    issuer: 'Naresh IT Hyderabad',
     year: '2024',
-    description:
-      'Comprehensive program covering Python, data analysis, machine learning, deep learning, NLP, and production deployment of AI systems.',
+    description: 'Comprehensive specialization covering end-to-end data science workflows, machine learning architectures, deep learning models, natural language processing, and production deployment pipelines.',
     icon: Brain,
-    iconColor: 'text-violet-400',
-    glowColor: 'rgba(167,139,250,0.3)',
-    borderHover: 'hover:border-violet-400/50',
-    tags: ['Python', 'Machine Learning', 'Deep Learning', 'NLP', 'Power BI', 'SQL'],
-    credential: null,
+    tags: ['Machine Learning', 'Deep Learning', 'NLP', 'Python', 'FastAPI', 'SQL'],
+    credentialUrl: 'https://drive.google.com/file/d/1Xt-6yvDKc1HBgtIq_XNYELI9KuXi_6pe/view?usp=sharing',
   },
   {
-    id: 'udemy-ds-ml',
-    title: 'Data Science & Machine Learning Advanced',
-    platform: 'Udemy',
+    id: 'kaggle-intermediate-ml',
+    category: 'Machine Learning',
+    title: 'Intermediate Machine Learning',
+    issuer: 'Kaggle',
     year: '2024',
-    description:
-      'Advanced course on applied machine learning — covering feature engineering, ensemble methods, hyperparameter tuning, and model deployment pipelines.',
+    description: 'Advanced machine learning implementation covering missing-value imputation, categorical encoding, cross-validation architectures, XGBoost modeling, and preventing data leakage.',
     icon: BarChart3,
-    iconColor: 'text-sky-400',
-    glowColor: 'rgba(56,189,248,0.3)',
-    borderHover: 'hover:border-sky-400/50',
-    tags: ['Scikit-learn', 'XGBoost', 'Feature Engineering', 'Model Pipelines', 'Pandas'],
-    credential: null,
+    tags: ['XGBoost', 'Cross-Validation', 'Data Leakage Prevention', 'Pipelines'],
+    credentialUrl: 'https://drive.google.com/file/d/1rq5vENWlVaDEznE2YLVpQ6Cj-UpnxBWN/view?usp=sharing',
   },
   {
-    id: 'python-analytics',
-    title: 'Python for Data Analytics',
-    platform: 'Self-Paced / Practice',
-    year: '2023',
-    description:
-      'Hands-on Python data analytics practice across Pandas, NumPy, Matplotlib, Seaborn, and EDA workflows for real-world datasets.',
-    icon: Code2,
-    iconColor: 'text-emerald-400',
-    glowColor: 'rgba(52,211,153,0.3)',
-    borderHover: 'hover:border-emerald-400/50',
-    tags: ['Python', 'Pandas', 'NumPy', 'Matplotlib', 'EDA'],
-    credential: null,
-  },
-  {
-    id: 'sql-databases',
-    title: 'SQL & Database Foundations',
-    platform: 'Self-Paced / Practice',
-    year: '2023',
-    description:
-      'Structured query language mastery: joins, subqueries, window functions, indexing strategies, and integration with Python data pipelines.',
-    icon: Database,
-    iconColor: 'text-amber-400',
-    glowColor: 'rgba(251,191,36,0.3)',
-    borderHover: 'hover:border-amber-400/50',
-    tags: ['SQL', 'MySQL', 'PostgreSQL', 'Window Functions', 'Query Optimization'],
-    credential: null,
-  },
-  {
-    id: 'powerbi-dashboards',
-    title: 'Business Intelligence & Power BI',
-    platform: 'Self-Paced / Practice',
+    id: 'kaggle-feature-engineering',
+    category: 'Machine Learning',
+    title: 'Feature Engineering',
+    issuer: 'Kaggle',
     year: '2024',
-    description:
-      'End-to-end Power BI dashboard development: Power Query, DAX measures, data modeling, and publishing interactive business intelligence reports.',
-    icon: BookOpen,
-    iconColor: 'text-orange-400',
-    glowColor: 'rgba(251,146,60,0.3)',
-    borderHover: 'hover:border-orange-400/50',
-    tags: ['Power BI', 'DAX', 'Power Query', 'Data Modeling', 'KPI Design'],
-    credential: null,
+    description: 'Techniques for maximizing model predictive power through mutual information scoring, synthetic feature extraction, k-means clustering, principal component analysis (PCA), and target encoding.',
+    icon: Code2,
+    tags: ['PCA', 'Clustering', 'Mutual Information', 'Target Encoding'],
+    credentialUrl: 'https://drive.google.com/file/d/1LpOkKnO3Q-eV9S1l1GmUTtx4l6JVhfiU/view?usp=sharing',
+  },
+  {
+    id: 'kaggle-intro-ml',
+    category: 'Machine Learning',
+    title: 'Intro to Machine Learning',
+    issuer: 'Kaggle',
+    year: '2024',
+    description: 'Foundations of supervised modeling, validation techniques, decision trees, random forests, and model performance metrics with Scikit-learn.',
+    icon: Brain,
+    tags: ['Scikit-learn', 'Random Forest', 'Decision Trees', 'Validation'],
+    credentialUrl: 'https://drive.google.com/file/d/1gTKfv3SqqsOmE5rabXFiNnsa482Jqox5/view?usp=drive_link',
+  },
+  {
+    id: 'kaggle-pandas',
+    category: 'Data Science',
+    title: 'Pandas Data Analysis',
+    issuer: 'Kaggle',
+    year: '2024',
+    description: 'Data manipulation, aggregation, exploratory analysis, grouping, and indexing workflows on tabular datasets using high-performance Pandas routines.',
+    icon: Database,
+    tags: ['Pandas', 'Data Transformation', 'Indexing', 'Aggregation'],
+    credentialUrl: 'https://drive.google.com/file/d/14zLla9ukIX1nS8oaUmqHhYS-rhLCasGc/view?usp=sharing',
+  },
+  {
+    id: 'gilbert-research-cert',
+    category: 'Industry',
+    title: 'Data Science & ML Research Completion',
+    issuer: 'Gilbert Research Center',
+    year: '2024',
+    description: 'Research internship credential certifying clinical dataset modeling, statistical validation, and MLflow experiment tracking workflows.',
+    icon: ShieldCheck,
+    tags: ['Clinical ML', 'MLflow', 'Research Validation', 'Pipelines'],
+    credentialUrl: 'https://drive.google.com/file/d/110GOvC_rg53Na7fu77q6JEbazoFC1L2D/view?usp=sharing',
   },
 ];
 
-/* ─── modal ──────────────────────────────────────────────────────────── */
-function CertModal({
-  cert,
-  onClose,
-  onPrev,
-  onNext,
-}: {
-  cert: (typeof certs)[0];
-  onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  const Icon = cert.icon;
-  return (
-    <motion.div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4 backdrop-blur-lg"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <motion.div
-        className="relative w-full max-w-2xl rounded-2xl border border-white/15 bg-[#07111d]/95 p-8 shadow-[0_0_80px_rgba(139,92,246,0.25)] max-h-[90vh] overflow-y-auto"
-        initial={{ scale: 0.9, y: 24 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 24 }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* close */}
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-2 text-white/50 transition hover:bg-white/10 hover:text-white"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        {/* prev / next */}
-        <button
-          onClick={onPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex rounded-full bg-white/5 p-2.5 text-white/60 transition hover:bg-white/15 hover:text-white"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          onClick={onNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex rounded-full bg-white/5 p-2.5 text-white/60 transition hover:bg-white/15 hover:text-white"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-
-        <div className="flex flex-col items-center text-center">
-          {/* icon */}
-          <div
-            className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5"
-            style={{ boxShadow: `0 0 40px ${cert.glowColor}` }}
-          >
-            <Icon className={`h-10 w-10 ${cert.iconColor}`} />
-          </div>
-
-          <h3 className="text-2xl font-bold text-white" style={{ textShadow: '0 2px 12px rgba(0,0,0,1)' }}>
-            {cert.title}
-          </h3>
-          <span className="mt-2 rounded-full border border-violet-400/30 bg-violet-950/50 px-4 py-1 text-sm text-violet-200">
-            {cert.platform} · {cert.year}
-          </span>
-
-          {/* tags */}
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {cert.tags.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-sky-400/20 bg-sky-950/50 px-3 py-1 text-xs font-medium text-sky-200"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-
-          {/* description */}
-          <div className="mt-6 w-full rounded-xl border border-white/10 bg-white/[0.03] p-5 text-left">
-            <h4 className="mb-2 text-sm font-semibold text-white/80">What I Learned</h4>
-            <p className="text-sm leading-relaxed text-white/75">{cert.description}</p>
-          </div>
-
-          {cert.credential && (
-            <a
-              href={cert.credential}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-pink-500 px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:from-violet-700 hover:to-pink-600"
-            >
-              View Certificate <ExternalLink className="h-4 w-4" />
-            </a>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-/* ─── main section ───────────────────────────────────────────────────── */
 export default function SceneCertifications() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const [selected, setSelected] = useState<(typeof certs)[0] | null>(null);
-
-  const goNext = useCallback(() => {
-    setDirection(1);
-    setActiveIdx((p) => (p + 1) % certs.length);
-  }, []);
-
-  const goPrev = useCallback(() => {
-    setDirection(-1);
-    setActiveIdx((p) => (p - 1 + certs.length) % certs.length);
-  }, []);
-
-  /* auto-rotate */
-  useEffect(() => {
-    const t = setInterval(goNext, 5000);
-    return () => clearInterval(t);
-  }, [goNext]);
-
-  /* modal nav */
-  const openModal = (cert: (typeof certs)[0]) => setSelected(cert);
-  const closeModal = () => setSelected(null);
-  const modalPrev = () => {
-    if (!selected) return;
-    const i = certs.findIndex((c) => c.id === selected.id);
-    setSelected(certs[(i - 1 + certs.length) % certs.length]);
-  };
-  const modalNext = () => {
-    if (!selected) return;
-    const i = certs.findIndex((c) => c.id === selected.id);
-    setSelected(certs[(i + 1) % certs.length]);
-  };
-
-  /* 3 visible cards */
-  const visible = [0, 1, 2].map((offset) => certs[(activeIdx + offset) % certs.length]);
-
-  const slideVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 120 : -120, opacity: 0, scale: 0.9 }),
-    center: { x: 0, opacity: 1, scale: 1 },
-    exit: (d: number) => ({ x: d < 0 ? 120 : -120, opacity: 0, scale: 0.9 }),
-  };
+  const [activeCert, setActiveCert] = useState<CertItem | null>(null);
 
   return (
     <section
       id="scene-certifications"
-      className="relative z-10 scroll-mt-24 bg-transparent px-6 py-24 text-white md:px-12 lg:px-20"
+      className="relative z-10 scroll-mt-24 border-t border-purple-950/40 bg-transparent px-6 py-28 text-white md:px-12 lg:px-20"
     >
-      <div className="mx-auto max-w-6xl">
-
-        {/* header */}
+      <div className="mx-auto max-w-7xl">
+        {/* ── Section Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-4 text-center"
+          className="mb-14 max-w-3xl"
         >
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-950/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-300">
-            <Award className="h-3.5 w-3.5" />
-            Certifications
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-950/40 px-3.5 py-1 text-xs font-semibold uppercase tracking-widest text-purple-300 backdrop-blur-sm shadow-[0_0_12px_rgba(168,85,247,0.2)]">
+            <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+            Verified Credentials
           </div>
           <h2
-            className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl"
-            style={{ textShadow: '0 4px 24px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,1)' }}
+            className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
+            style={{ textShadow: '0 4px 24px rgba(0,0,0,1), 0 0 24px rgba(168,85,247,0.45)' }}
           >
-            Credentials &amp; Learning
+            Certifications &amp; Accreditations<span className="text-purple-400">.</span>
           </h2>
           <p
-            className="mx-auto mt-4 max-w-xl text-base text-white/85"
+            className="mt-4 max-w-2xl text-base font-light text-slate-100 sm:text-lg"
             style={{ textShadow: '0 2px 10px rgba(0,0,0,1)' }}
           >
-            Industry-recognized certifications validating expertise in data science, ML, and AI.
+            Formally earned industry specializations, competitive machine learning accreditations, and research completion certificates with direct verification links.
           </p>
-          {/* gradient bar */}
-          <div className="mx-auto mt-5 h-1 w-24 rounded-full bg-gradient-to-r from-violet-500 to-pink-500" />
         </motion.div>
 
-        {/* carousel controls */}
-        <div className="mt-10 flex items-center justify-center gap-6">
-          <button
-            onClick={goPrev}
-            className="rounded-full border border-white/15 bg-black/40 p-3 text-white/70 backdrop-blur-sm transition hover:bg-violet-900/50 hover:text-white hover:border-violet-400/50"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+        {/* ── Certifications Grid ── */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {verifiedCerts.map((cert) => {
+            const Icon = cert.icon;
+            return (
+              <motion.div
+                key={cert.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="group relative flex flex-col justify-between rounded-3xl border border-white/15 bg-black/45 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/50 hover:bg-black/55 sm:p-7"
+              >
+                <div>
+                  {/* Category & Year Header */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                    <span className="rounded-full border border-purple-400/30 bg-purple-950/40 px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-purple-300">
+                      {cert.category}
+                    </span>
+                    <span className="text-xs font-mono font-medium text-white/60">
+                      {cert.year}
+                    </span>
+                  </div>
 
-          {/* dots */}
-          <div className="flex gap-2">
-            {certs.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => { setDirection(i > activeIdx ? 1 : -1); setActiveIdx(i); }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === activeIdx ? 'w-6 bg-violet-400' : 'w-2 bg-white/20'
-                }`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={goNext}
-            className="rounded-full border border-white/15 bg-black/40 p-3 text-white/70 backdrop-blur-sm transition hover:bg-violet-900/50 hover:text-white hover:border-violet-400/50"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* cards */}
-        <div className="mt-8 grid min-h-[340px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence initial={false} mode="popLayout" custom={direction}>
-            {visible.map((cert, i) => {
-              const Icon = cert.icon;
-              return (
-                <motion.div
-                  key={`${cert.id}-${activeIdx}-${i}`}
-                  layout
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.42, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={() => openModal(cert)}
-                  className={`
-                    group flex h-full cursor-pointer flex-col rounded-2xl border border-white/[0.12]
-                    bg-black/35 p-6 backdrop-blur-[8px] shadow-[0_8px_40px_rgba(0,0,0,0.5)]
-                    transition-all duration-300
-                    ${cert.borderHover}
-                    hover:-translate-y-2 hover:bg-black/45
-                  `}
-                >
-                  {/* icon */}
-                  <div className="mb-5 flex justify-center">
-                    <div
-                      className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-transform duration-300 group-hover:scale-110"
-                      style={{ boxShadow: `0 0 24px ${cert.glowColor}` }}
-                    >
-                      <Icon className={`h-8 w-8 ${cert.iconColor}`} />
+                  {/* Title & Issuer */}
+                  <div className="mt-4 flex items-start gap-3.5">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-purple-400/30 bg-purple-950/50 shadow-md">
+                      <Icon className="h-5 w-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <h3
+                        className="text-lg font-bold leading-snug text-white group-hover:text-purple-200 transition-colors"
+                        style={{ textShadow: '0 2px 8px rgba(0,0,0,1)' }}
+                      >
+                        {cert.title}
+                      </h3>
+                      <p className="text-xs font-semibold text-purple-300/80">
+                        {cert.issuer}
+                      </p>
                     </div>
                   </div>
 
-                  {/* title */}
-                  <h3
-                    className="mb-1 text-center text-base font-bold text-white leading-snug"
-                    style={{ textShadow: '0 2px 10px rgba(0,0,0,1)' }}
-                  >
-                    {cert.title}
-                  </h3>
-
-                  {/* platform */}
-                  <p
-                    className="mb-4 text-center text-xs font-semibold text-sky-200/90"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,1)' }}
-                  >
-                    {cert.platform} · {cert.year}
-                  </p>
-
-                  {/* description */}
-                  <p
-                    className="mb-4 flex-1 text-center text-xs leading-relaxed text-white/80 line-clamp-3"
-                    style={{ textShadow: '0 1px 4px rgba(0,0,0,1)' }}
-                  >
+                  {/* Description */}
+                  <p className="mt-3.5 text-xs sm:text-sm font-normal leading-relaxed text-slate-200 line-clamp-3">
                     {cert.description}
                   </p>
 
-                  {/* tags */}
-                  <div className="flex flex-wrap justify-center gap-1.5 mb-4">
-                    {cert.tags.slice(0, 3).map((t) => (
+                  {/* Tags */}
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {cert.tags.map((tag) => (
                       <span
-                        key={t}
-                        className="rounded-full border border-violet-400/20 bg-violet-950/50 px-2.5 py-0.5 text-[10px] font-medium text-violet-200"
-                        style={{ textShadow: '0 1px 3px rgba(0,0,0,1)' }}
+                        key={tag}
+                        className="rounded-lg border border-purple-400/20 bg-purple-950/40 px-2 py-0.5 text-[10px] font-medium text-purple-200"
                       >
-                        {t}
+                        {tag}
                       </span>
                     ))}
-                    {cert.tags.length > 3 && (
-                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-white/50">
-                        +{cert.tags.length - 3}
-                      </span>
-                    )}
                   </div>
+                </div>
 
-                  {/* view details */}
-                  <p className="mt-auto text-center text-xs font-semibold text-violet-400 transition group-hover:text-violet-300">
-                    View Details →
-                  </p>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                {/* Footer Actions */}
+                <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+                  <button
+                    onClick={() => setActiveCert(cert)}
+                    className="text-xs font-semibold text-purple-300 hover:text-white transition-colors"
+                  >
+                    View Details
+                  </button>
+
+                  <a
+                    href={cert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-purple-400/30 bg-purple-950/40 px-3 py-1.5 text-xs font-semibold text-purple-200 transition hover:bg-purple-900/60 hover:border-purple-400/60"
+                  >
+                    <span>Verify Credential</span>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
-      {/* modal */}
+      {/* ── Certificate Inspection Modal ── */}
       <AnimatePresence>
-        {selected && (
-          <CertModal cert={selected} onClose={closeModal} onPrev={modalPrev} onNext={modalNext} />
+        {activeCert && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-lg sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveCert(null)}
+          >
+            <motion.div
+              className="relative w-full max-w-xl rounded-3xl border border-purple-500/40 bg-[#060414]/98 p-6 shadow-[0_0_80px_rgba(168,85,247,0.35)] sm:p-8"
+              initial={{ scale: 0.92, y: 24, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.92, y: 24, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setActiveCert(null)}
+                aria-label="Close"
+                className="absolute right-4 top-4 rounded-xl bg-white/5 p-2 text-white/60 transition hover:bg-white/15 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-400/30 bg-purple-950/50 shadow-lg">
+                  <Award className="h-8 w-8 text-purple-400" />
+                </div>
+
+                <span className="rounded-full border border-purple-400/30 bg-purple-950/40 px-3 py-1 text-xs font-mono uppercase tracking-wider text-purple-300">
+                  {activeCert.category} · {activeCert.year}
+                </span>
+
+                <h3 className="mt-3 text-2xl font-bold text-white">
+                  {activeCert.title}
+                </h3>
+                <p className="mt-1 text-sm font-semibold text-purple-300">
+                  {activeCert.issuer}
+                </p>
+
+                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-200">
+                  {activeCert.description}
+                </p>
+
+                <div className="mt-5 flex flex-wrap justify-center gap-1.5">
+                  {activeCert.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-lg border border-purple-400/25 bg-purple-950/50 px-2.5 py-1 text-xs font-medium text-purple-200"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-8 flex w-full flex-wrap items-center justify-center gap-3 border-t border-white/10 pt-6">
+                  <a
+                    href={activeCert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] transition hover:from-purple-500 hover:to-violet-500"
+                  >
+                    <span>Open Verified Certificate</span>
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+
+                  <button
+                    onClick={() => setActiveCert(null)}
+                    className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold uppercase text-white/70 transition hover:bg-white/10"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

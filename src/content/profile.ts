@@ -2,8 +2,8 @@ import type { Profile } from './types';
 
 export const profile: Profile = {
   name: 'Samyak Anand',
-  role: 'AI & Data Science Practitioner',
-  tagline: 'Building useful intelligence from data.',
+  role: 'Applied AI Engineer',
+  tagline: 'I build intelligent systems that turn complex problems into useful products.',
   location: 'Hyderabad, India',
   phone: '+91 96237 19948',
   email: 'samyak.g.anand@gmail.com',
@@ -29,8 +29,8 @@ export const profile: Profile = {
       end: 'Present',
       location: 'Chandrapur / Hyderabad',
       items: [
-        'Teach Python, data analysis, and machine learning through practical exercises.',
-        'Guide learners through applied projects and common data workflows.',
+        'Teaching Python, data analysis, and machine learning fundamentals through hands-on exercises.',
+        'Guiding learners through applied ML projects, EDA routines, and model evaluation workflows.',
       ],
     },
     {
@@ -40,9 +40,8 @@ export const profile: Profile = {
       end: 'August 2025',
       location: 'Remote',
       items: [
-        'Worked on analytics, web scraping, and NLP recruitment-scoring workflows.',
-        'Contributed to a CARS24 car listing data collection project.',
-        'Built a resume analysis project using NLP techniques.',
+        'Developed analytics workflows, web scraping pipelines, and CARS24 data collection systems.',
+        'Engineered NLP recruitment-scoring workflows and automated resume analysis prototypes.',
       ],
     },
     {
@@ -52,13 +51,21 @@ export const profile: Profile = {
       end: 'July 2024',
       location: 'Remote',
       items: [
-        'Analyzed clinical datasets using statistical and machine learning methods.',
-        'Worked with data pipelines and MLflow experiment tracking.',
-        'Summarized model results for research collaborators.',
+        'Analyzed clinical healthcare datasets using statistical and machine learning algorithms.',
+        'Constructed modular data pipelines and tracked experiments using MLflow.',
+        'Collaborated with research mentors to summarize model performance and clinical findings.',
       ],
     },
   ],
-  projects: ['nexus', 'argus', 'resume-analyzer', 'disease-predictor', 'blinkit-dashboard', 'insurance-dashboard', 'financial-risk-dashboard', 'credit-card-dashboard'],
+  projects: [
+    'argus',
+    'nexus',
+    'studycopilot',
+    'resume-analyzer',
+    'disease-predictor',
+    'blinkit-dashboard',
+    'credit-card-dashboard',
+  ],
   links: {
     github: 'https://github.com/SamyakAnand',
     linkedin: 'https://www.linkedin.com/in/samyakanand/',

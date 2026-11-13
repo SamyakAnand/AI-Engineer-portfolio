@@ -17,9 +17,12 @@ export interface Profile {
 export interface Project {
   id: string;
   name: string;
+  category?: string;
   description: string;
   problem: string;
   architecture: string;
+  decisions?: string;
+  limitations?: string;
   stack: string[];
   features: string[];
   screenshots: string[];
