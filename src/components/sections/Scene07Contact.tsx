@@ -86,6 +86,30 @@ const socialIcons = [
       </svg>
     ),
   },
+  {
+    name: 'Naukri',
+    url: 'https://www.naukri.com/mnjuser/profile',
+    bgBadge: 'bg-[#275df5]/15 border-[#275df5]/40 text-[#4d7cfe] shadow-[0_0_15px_rgba(39,93,245,0.25)]',
+    hoverBorder: 'hover:border-[#275df5] hover:bg-[#275df5]/25 hover:shadow-[0_0_20px_rgba(39,93,245,0.5)]',
+    iconColor: 'text-[#4d7cfe]',
+    svg: (
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-5 w-5 sm:h-6 sm:w-6 shrink-0"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
+        <path d="M8 7v10l8-10v10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
 ];
 
 /* ─── Communication Method Cards (Email, Call/WhatsApp, Current Base) ─── */
@@ -455,7 +479,7 @@ export default function Scene07Contact() {
                   Social &amp; Developer Profiles
                 </span>
 
-                <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5">
                   {socialIcons.map((soc) => (
                     <a
                       key={soc.name}
@@ -464,13 +488,13 @@ export default function Scene07Contact() {
                       rel="noopener noreferrer"
                       title={soc.name}
                       aria-label={soc.name}
-                      className={`group flex flex-col items-center justify-center gap-2 rounded-2xl border bg-black/40 p-3 transition-all duration-300 ${soc.bgBadge} ${soc.hoverBorder} hover:scale-105`}
+                      className={`group flex flex-col items-center justify-center gap-1.5 rounded-2xl border bg-black/40 p-2 sm:p-2.5 transition-all duration-300 ${soc.bgBadge} ${soc.hoverBorder} hover:scale-105`}
                     >
                       {/* Prominent Icon Box */}
-                      <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-black/60 border border-white/10 group-hover:border-white/30 transition-all duration-300">
+                      <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-black/60 border border-white/10 group-hover:border-white/30 transition-all duration-300">
                         {soc.svg}
                       </div>
-                      <span className="text-[11px] font-semibold tracking-tight text-white/90 group-hover:text-white transition-colors">
+                      <span className="text-[10px] sm:text-[11px] font-semibold tracking-tight text-white/90 group-hover:text-white transition-colors">
                         {soc.name}
                       </span>
                     </a>
