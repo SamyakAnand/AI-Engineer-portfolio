@@ -1,6 +1,21 @@
 'use client';
 
-import { ArrowUpRight, MapPin, GraduationCap, Code2, Sparkles, Briefcase, Brain, Database, Zap } from 'lucide-react';
+import {
+  ArrowUpRight,
+  MapPin,
+  GraduationCap,
+  Code2,
+  Sparkles,
+  Briefcase,
+  Brain,
+  Database,
+  Zap,
+  Users,
+  Award,
+  Clock,
+  GitBranch,
+  ShieldCheck,
+} from 'lucide-react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
@@ -26,14 +41,83 @@ function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
     return () => cancelAnimationFrame(frame);
   }, [inView, to]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  const formatted = to >= 1000 ? count.toLocaleString() : count;
+  return <span ref={ref}>{formatted}{suffix}</span>;
 }
 
 const stats = [
-  { label: 'AI & ML Projects', value: 10, suffix: '+', icon: Brain, color: 'text-purple-400' },
-  { label: 'Live Deployments', value: 6, suffix: '', icon: Zap, color: 'text-emerald-400' },
-  { label: 'Datasets Analyzed', value: 20, suffix: '+', icon: Database, color: 'text-cyan-400' },
-  { label: 'Certifications Earned', value: 6, suffix: '', icon: Sparkles, color: 'text-amber-400' },
+  {
+    label: 'AI & ML Systems',
+    value: 10,
+    suffix: '+',
+    icon: Brain,
+    color: 'text-purple-400',
+    desc: 'RAG, Agents & Custom Modeling',
+    glow: 'bg-purple-500/20',
+  },
+  {
+    label: 'Live Deployments',
+    value: 6,
+    suffix: '',
+    icon: Zap,
+    color: 'text-emerald-400',
+    desc: 'Vercel & Render Production',
+    glow: 'bg-emerald-500/20',
+  },
+  {
+    label: 'Students Mentored',
+    value: 100,
+    suffix: '+',
+    icon: Users,
+    color: 'text-cyan-400',
+    desc: 'Python, ML & Data Science',
+    glow: 'bg-cyan-500/20',
+  },
+  {
+    label: "Master's Groups Guided",
+    value: 10,
+    suffix: '+',
+    icon: Award,
+    color: 'text-amber-400',
+    desc: 'End-to-End Capstone Pipelines',
+    glow: 'bg-amber-500/20',
+  },
+  {
+    label: 'Datasets Analyzed',
+    value: 20,
+    suffix: '+',
+    icon: Database,
+    color: 'text-indigo-400',
+    desc: 'EDA, Feature Pipelines & BI',
+    glow: 'bg-indigo-500/20',
+  },
+  {
+    label: 'Verified Certifications',
+    value: 11,
+    suffix: '+',
+    icon: ShieldCheck,
+    color: 'text-fuchsia-400',
+    desc: 'Naresh IT, Kaggle & Research',
+    glow: 'bg-fuchsia-500/20',
+  },
+  {
+    label: 'Training Hours Delivered',
+    value: 1000,
+    suffix: '+',
+    icon: Clock,
+    color: 'text-rose-400',
+    desc: 'Hands-on Labs & Curriculum',
+    glow: 'bg-rose-500/20',
+  },
+  {
+    label: 'GitHub Repositories',
+    value: 27,
+    suffix: '+',
+    icon: GitBranch,
+    color: 'text-blue-400',
+    desc: 'Public Systems & Open Source',
+    glow: 'bg-blue-500/20',
+  },
 ];
 
 const expertise = [
@@ -146,7 +230,7 @@ export default function Scene02Identity() {
                 I enjoy taking an idea from problem definition to implementation. My hands-on work includes building machine learning applications, developing LLM-powered applications, experimenting with retrieval-augmented generation (RAG), creating local knowledge intelligence workflows, and architecting data analytics platforms.
               </p>
               <p className="text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
-                Alongside engineering, I teach Python, data science, and machine learning at Softgrowth Infotech — translating complex algorithmic ideas into intuitive, repeatable problem-solving frameworks.
+                Alongside engineering, I teach Python, data science, and machine learning at Softgrowth Infotech — having mentored over 100+ students and guided 10+ college master&apos;s capstone groups end-to-end through real-world deployment.
               </p>
             </div>
 
@@ -239,32 +323,60 @@ export default function Scene02Identity() {
           </motion.div>
         </div>
 
-        {/* ── Animated Stats Strip ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4"
-        >
-          {stats.map(({ label, value, suffix, icon: Icon, color }) => (
-            <div
-              key={label}
-              className="group flex flex-col items-center gap-2 rounded-3xl border border-white/10 bg-black/40 p-5 text-center backdrop-blur-md shadow-md transition hover:border-purple-400/30 hover:bg-black/55"
-            >
-              <div className={`flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/50 ${color}`}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <div
-                className={`font-display text-3xl font-bold sm:text-4xl ${color}`}
-                style={{ textShadow: '0 2px 12px rgba(0,0,0,1)' }}
-              >
-                <AnimatedCounter to={value} suffix={suffix} />
-              </div>
-              <span className="text-xs font-medium text-white/60">{label}</span>
+        {/* ── Animated Stats Strip: Expanded Verified Track Record ── */}
+        <div className="mt-16">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
+              <span className="text-xs font-mono uppercase tracking-widest text-purple-300">
+                Track Record &amp; Impact · Verified Metrics
+              </span>
             </div>
-          ))}
-        </motion.div>
+            <span className="text-[11px] font-mono text-white/50">
+              Production Deployments · Mentorship · Open Source
+            </span>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4"
+          >
+            {stats.map(({ label, value, suffix, icon: Icon, color, desc, glow }) => (
+              <div
+                key={label}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 p-4 text-left backdrop-blur-md shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/40 hover:bg-slate-900/70"
+              >
+                <div className="flex items-center justify-between">
+                  <div className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${color} shadow-sm transition-transform duration-300 group-hover:scale-110`}>
+                    <Icon className="h-4.5 w-4.5" />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">Verified</span>
+                </div>
+
+                <div className="mt-3">
+                  <div
+                    className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl ${color}`}
+                    style={{ textShadow: '0 2px 14px rgba(0,0,0,0.9)' }}
+                  >
+                    <AnimatedCounter to={value} suffix={suffix} />
+                  </div>
+                  <h3 className="mt-1 text-xs font-bold text-white/95 group-hover:text-white sm:text-sm">
+                    {label}
+                  </h3>
+                  <p className="mt-0.5 text-[11px] font-medium text-white/60 leading-tight">
+                    {desc}
+                  </p>
+                </div>
+
+                {/* Ambient bottom glow accent */}
+                <div className={`pointer-events-none absolute -bottom-6 -right-6 h-16 w-16 rounded-full blur-2xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 ${glow}`} />
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );

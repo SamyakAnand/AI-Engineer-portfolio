@@ -8,7 +8,7 @@ import type { Project } from '@/content/types';
 import {
   GitBranch, Cpu, CheckCircle, ArrowRight,
   ShieldCheck, X, ExternalLink, Layers, AlertCircle, Wrench, Sparkles, Play,
-  Workflow, Database, ArrowUpRight
+  Workflow, Database, ArrowUpRight, ChevronLeft, ChevronRight, ArrowLeft
 } from 'lucide-react';
 import { soundFx } from '@/components/sound/AmbientSoundManager';
 
@@ -22,17 +22,211 @@ const ts = (size: 'sm' | 'md' | 'lg') => ({
 
 type FilterType = 'all' | 'ai' | 'ml' | 'analytics';
 
+function ProjectCard({
+  project,
+  idx = 0,
+  onSelect,
+}: {
+  project: Project;
+  idx?: number;
+  onSelect: (p: Project) => void;
+}) {
+  return (
+    <motion.div
+      layout
+      key={project.id}
+      initial={{ opacity: 0, y: 24, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.4, delay: Math.min(idx * 0.05, 0.3) }}
+      onMouseEnter={() => soundFx.playHover()}
+      onClick={() => {
+        soundFx.playClick();
+        onSelect(project);
+      }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.12] bg-[#080718]/65 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 hover:-translate-y-2 hover:border-purple-400/60 hover:bg-[#0c0924]/85 hover:shadow-[0_16px_60px_rgba(168,85,247,0.3)] cursor-pointer"
+    >
+      {/* Image Preview & Badges */}
+      <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/[0.08] bg-black/40">
+        {project.screenshots[0] ? (
+          <Image
+            src={project.screenshots[0]}
+            alt={`${project.name} preview`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-950/60 to-black/60">
+            <Layers className="h-12 w-12 text-purple-400/30" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080718] via-black/40 to-transparent" />
+
+        {/* Top Left: Category Tag */}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5">
+          <span className="rounded-full border border-purple-400/40 bg-black/75 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-purple-200 backdrop-blur-md shadow-md">
+            {project.category || 'Architecture'}
+          </span>
+        </div>
+
+        {/* Top Right: Floating Live Badge if available */}
+        {project.demo && (
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-black/85 px-3 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-300 backdrop-blur-md shadow-md">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+            </span>
+            Live
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        {/* Title */}
+        <div className="flex items-start justify-between gap-3">
+          <h3
+            className="text-xl font-bold leading-snug text-white group-hover:text-purple-200 transition-colors sm:text-2xl"
+            style={ts('lg')}
+          >
+            {project.name}
+          </h3>
+        </div>
+
+        {/* Description */}
+        <p
+          className="mt-2.5 text-xs sm:text-sm font-normal leading-relaxed text-slate-200 line-clamp-2"
+          style={ts('md')}
+        >
+          {project.description}
+        </p>
+
+        {/* Architecture Flow Micro-Preview */}
+        <div className="mt-4 rounded-xl border border-purple-400/20 bg-purple-950/40 p-3 backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-purple-300" style={ts('sm')}>
+            <Workflow className="h-3 w-3 text-purple-400" />
+            Pipeline Architecture
+          </div>
+          <p className="mt-1 text-xs font-mono leading-relaxed text-slate-100 line-clamp-2" style={ts('sm')}>
+            {project.architecture}
+          </p>
+        </div>
+
+        {/* Tech Stack Pills */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {project.stack.slice(0, 4).map((tech) => (
+            <span
+              key={tech}
+              className="rounded-lg border border-purple-400/25 bg-purple-950/50 px-2.5 py-1 text-[10px] font-medium text-purple-200"
+              style={ts('sm')}
+            >
+              {tech}
+            </span>
+          ))}
+          {project.stack.length > 4 && (
+            <span className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/60">
+              +{project.stack.length - 4}
+            </span>
+          )}
+        </div>
+
+        {/* Direct Action Bar */}
+        <div className="mt-auto flex items-center justify-between border-t border-white/[0.08] pt-4 mt-5">
+          <span
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-300 transition group-hover:text-white"
+            style={ts('sm')}
+          >
+            Inspect Case Study
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            {project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Open Live Application"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-2 py-1 text-[11px] font-semibold text-emerald-300 transition hover:bg-emerald-900/50 hover:border-emerald-400"
+              >
+                <Play className="h-3 w-3 fill-current" />
+                <span className="hidden sm:inline">Demo</span>
+              </a>
+            )}
+
+            {project.github ? (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View GitHub Repository"
+                onClick={(e) => e.stopPropagation()}
+                className="rounded-lg border border-white/10 bg-white/5 p-1.5 text-white/70 transition hover:bg-purple-600/40 hover:border-purple-400 hover:text-white"
+              >
+                <GitBranch className="h-4 w-4" />
+              </a>
+            ) : (
+              <span className="text-[10px] uppercase text-white/30" style={ts('sm')}>Internal</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Scene04Projects() {
   const projectList = Object.values(projects);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [showAllInGrid, setShowAllInGrid] = useState(false);
   const scrollBodyRef = useRef<HTMLDivElement>(null);
+  const deckRef = useRef<HTMLDivElement>(null);
 
   const filteredProjects = activeFilter === 'all'
     ? projectList
     : projectList.filter((p) => p.type === activeFilter);
 
-  /* Lock body scroll, pause Lenis, and listen for Escape key when modal is open */
+  const displayedGridProjects = showAllInGrid ? filteredProjects : filteredProjects.slice(0, 6);
+  const remainingProjects = filteredProjects.slice(6);
+
+  const scrollDeck = (direction: 'left' | 'right') => {
+    if (!deckRef.current) return;
+    const scrollAmount = 380;
+    deckRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
+  const currentIndex = selectedProject
+    ? filteredProjects.findIndex((p) => p.id === selectedProject.id)
+    : -1;
+
+  const prevProject = currentIndex > 0
+    ? filteredProjects[currentIndex - 1]
+    : filteredProjects[filteredProjects.length - 1];
+
+  const nextProject = currentIndex >= 0 && currentIndex < filteredProjects.length - 1
+    ? filteredProjects[currentIndex + 1]
+    : filteredProjects[0];
+
+  const goToPrev = () => {
+    if (filteredProjects.length === 0) return;
+    soundFx.playClick();
+    setSelectedProject(prevProject);
+    scrollBodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToNext = () => {
+    if (filteredProjects.length === 0) return;
+    soundFx.playClick();
+    setSelectedProject(nextProject);
+    scrollBodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  /* Lock body scroll, pause Lenis, and listen for Escape & Arrow navigation keys */
   useEffect(() => {
     if (selectedProject) {
       const originalBodyOverflow = document.body.style.overflow;
@@ -44,7 +238,13 @@ export default function Scene04Projects() {
       window.dispatchEvent(new CustomEvent('portfolio:scroll-lock', { detail: { locked: true } }));
 
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setSelectedProject(null);
+        if (e.key === 'Escape') {
+          setSelectedProject(null);
+        } else if (e.key === 'ArrowLeft') {
+          goToPrev();
+        } else if (e.key === 'ArrowRight') {
+          goToNext();
+        }
       };
       window.addEventListener('keydown', handleKeyDown);
 
@@ -55,7 +255,7 @@ export default function Scene04Projects() {
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [selectedProject]);
+  }, [selectedProject, currentIndex, filteredProjects]);
 
   /* Native wheel event listener on the scroll container to ensure 100% fluid scrolling */
   useEffect(() => {
@@ -151,157 +351,88 @@ export default function Scene04Projects() {
           })}
         </div>
 
-        {/* ── Cards Grid ── */}
+        {/* ── Cards Grid (Top 6 Featured or All) ── */}
         <motion.div
           layout
           className="mt-10 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, idx) => (
-              <motion.div
-                layout
+            {displayedGridProjects.map((project, idx) => (
+              <ProjectCard
                 key={project.id}
-                initial={{ opacity: 0, y: 24, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                onMouseEnter={() => soundFx.playHover()}
-                onClick={() => {
-                  soundFx.playClick();
-                  setSelectedProject(project);
-                }}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.12] bg-[#080718]/65 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 hover:-translate-y-2 hover:border-purple-400/60 hover:bg-[#0c0924]/85 hover:shadow-[0_16px_60px_rgba(168,85,247,0.3)] cursor-pointer"
-              >
-                {/* Image Preview & Badges */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/[0.08] bg-black/40">
-                  {project.screenshots[0] ? (
-                    <Image
-                      src={project.screenshots[0]}
-                      alt={`${project.name} preview`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-950/60 to-black/60">
-                      <Layers className="h-12 w-12 text-purple-400/30" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#080718] via-black/40 to-transparent" />
-
-                  {/* Top Left: Category Tag */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="rounded-full border border-purple-400/40 bg-black/75 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-purple-200 backdrop-blur-md shadow-md">
-                      {project.category || 'Architecture'}
-                    </span>
-                  </div>
-
-                  {/* Top Right: Floating Live Badge if available */}
-                  {project.demo && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-black/85 px-3 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-300 backdrop-blur-md shadow-md">
-                      <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-                      </span>
-                      Live
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-1 flex-col p-6">
-                  {/* Title & Quick Stats */}
-                  <div className="flex items-start justify-between gap-3">
-                    <h3
-                      className="text-xl font-bold leading-snug text-white group-hover:text-purple-200 transition-colors sm:text-2xl"
-                      style={ts('lg')}
-                    >
-                      {project.name}
-                    </h3>
-                  </div>
-
-                  {/* Description */}
-                  <p
-                    className="mt-2.5 text-xs sm:text-sm font-normal leading-relaxed text-slate-200 line-clamp-2"
-                    style={ts('md')}
-                  >
-                    {project.description}
-                  </p>
-
-                  {/* Architecture Flow Micro-Preview */}
-                  <div className="mt-4 rounded-xl border border-purple-400/20 bg-purple-950/40 p-3 backdrop-blur-sm">
-                    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-purple-300" style={ts('sm')}>
-                      <Workflow className="h-3 w-3 text-purple-400" />
-                      Pipeline Architecture
-                    </div>
-                    <p className="mt-1 text-xs font-mono leading-relaxed text-slate-100 line-clamp-2" style={ts('sm')}>
-                      {project.architecture}
-                    </p>
-                  </div>
-
-                  {/* Tech Stack Pills */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.stack.slice(0, 4).map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-lg border border-purple-400/25 bg-purple-950/50 px-2.5 py-1 text-[10px] font-medium text-purple-200"
-                        style={ts('sm')}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.stack.length > 4 && (
-                      <span className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-white/60">
-                        +{project.stack.length - 4}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Direct Action Bar */}
-                  <div className="mt-auto flex items-center justify-between border-t border-white/[0.08] pt-4 mt-5">
-                    <span
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-300 transition group-hover:text-white"
-                      style={ts('sm')}
-                    >
-                      Inspect Case Study
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                    </span>
-
-                    <div className="flex items-center gap-1.5">
-                      {project.demo && (
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Open Live Application"
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-2 py-1 text-[11px] font-semibold text-emerald-300 transition hover:bg-emerald-900/50 hover:border-emerald-400"
-                        >
-                          <Play className="h-3 w-3 fill-current" />
-                          <span className="hidden sm:inline">Demo</span>
-                        </a>
-                      )}
-
-                      {project.github ? (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="View GitHub Repository"
-                          onClick={(e) => e.stopPropagation()}
-                          className="rounded-lg border border-white/10 bg-white/5 p-1.5 text-white/70 transition hover:bg-purple-600/40 hover:border-purple-400 hover:text-white"
-                        >
-                          <GitBranch className="h-4 w-4" />
-                        </a>
-                      ) : (
-                        <span className="text-[10px] uppercase text-white/30" style={ts('sm')}>Internal</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+                project={project}
+                idx={idx}
+                onSelect={setSelectedProject}
+              />
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* ── Extended Architecture Deck: Swipe & Scroll Track ── */}
+        {filteredProjects.length > 6 && (
+          <div className="mt-16 border-t border-white/10 pt-10">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
+                  <h3 className="text-sm font-mono uppercase tracking-widest text-purple-300">
+                    Extended Architecture Deck · Swipe / Scroll Deck
+                  </h3>
+                </div>
+                <p className="mt-1 text-xs text-white/60">
+                  Swipe or scroll horizontally to inspect deep learning models, anomaly pipelines &amp; live web applications
+                </p>
+              </div>
+
+              {/* Deck Navigation Controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    soundFx.playClick();
+                    setShowAllInGrid(!showAllInGrid);
+                  }}
+                  className="rounded-full border border-purple-400/40 bg-purple-950/50 px-4 py-2 text-xs font-semibold text-purple-200 transition hover:bg-purple-900/60 hover:border-purple-400 hover:text-white shadow-sm"
+                >
+                  {showAllInGrid ? 'Show Top 6 Only' : `View All in Grid (${filteredProjects.length})`}
+                </button>
+
+                <button
+                  onClick={() => scrollDeck('left')}
+                  aria-label="Scroll left"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white/80 transition hover:border-purple-400 hover:bg-white/15 hover:text-white"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => scrollDeck('right')}
+                  aria-label="Scroll right"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white/80 transition hover:border-purple-400 hover:bg-white/15 hover:text-white"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Horizontal Swipeable & Scrollable Deck */}
+            <div
+              ref={deckRef}
+              className="flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth snap-x snap-mandatory [scrollbar-width:thin] [scrollbar-color:rgba(168,85,247,0.4)_transparent]"
+            >
+              {(showAllInGrid ? filteredProjects : remainingProjects).map((project, idx) => (
+                <div
+                  key={`deck-${project.id}`}
+                  className="w-[320px] shrink-0 sm:w-[380px] snap-start"
+                >
+                  <ProjectCard
+                    project={project}
+                    idx={idx}
+                    onSelect={setSelectedProject}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── High-UX Scroll-Isolated Case Study Modal ── */}
@@ -315,6 +446,41 @@ export default function Scene04Projects() {
             onClick={() => setSelectedProject(null)}
             data-lenis-prevent="true"
           >
+            {/* ── Always-Visible Floating Close Pill Button ── */}
+            <button
+              onClick={() => setSelectedProject(null)}
+              aria-label="Close Case Study"
+              className="fixed top-3 right-3 sm:top-5 sm:right-6 z-[130] flex items-center gap-2 rounded-full border border-rose-400/50 bg-black/90 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_25px_rgba(244,63,94,0.4)] backdrop-blur-2xl transition hover:scale-105 hover:bg-rose-600 hover:border-rose-300"
+            >
+              <X className="h-4 w-4 text-rose-300" />
+              <span>Close (ESC)</span>
+            </button>
+
+            {/* ── Floating Side Navigation Chevrons (Desktop) ── */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToPrev();
+              }}
+              title={`Previous: ${prevProject?.name || 'Project'} (Arrow Left)`}
+              aria-label="Previous Case Study"
+              className="fixed left-2 sm:left-5 top-1/2 -translate-y-1/2 z-[125] hidden md:flex h-12 w-12 items-center justify-center rounded-full border border-purple-400/40 bg-black/90 text-purple-200 shadow-[0_0_30px_rgba(168,85,247,0.45)] backdrop-blur-2xl transition hover:scale-110 hover:bg-purple-600 hover:text-white group"
+            >
+              <ChevronLeft className="h-6 w-6 transition-transform group-hover:-translate-x-0.5" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                goToNext();
+              }}
+              title={`Next: ${nextProject?.name || 'Project'} (Arrow Right)`}
+              aria-label="Next Case Study"
+              className="fixed right-2 sm:right-5 top-1/2 -translate-y-1/2 z-[125] hidden md:flex h-12 w-12 items-center justify-center rounded-full border border-purple-400/40 bg-black/90 text-purple-200 shadow-[0_0_30px_rgba(168,85,247,0.45)] backdrop-blur-2xl transition hover:scale-110 hover:bg-purple-600 hover:text-white group"
+            >
+              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-0.5" />
+            </button>
+
             <motion.div
               className="relative flex flex-col w-full max-w-4xl h-[92vh] max-h-[92vh] rounded-3xl border border-purple-500/40 bg-[#070516] shadow-[0_0_100px_rgba(168,85,247,0.4)] overflow-hidden"
               initial={{ scale: 0.94, y: 24, opacity: 0 }}
@@ -324,9 +490,10 @@ export default function Scene04Projects() {
               onClick={(e) => e.stopPropagation()}
               data-lenis-prevent="true"
             >
-              {/* ── Sticky Top Header with Actions ── */}
-              <div className="sticky top-0 z-30 shrink-0 flex items-center justify-between border-b border-white/10 bg-[#070516]/95 px-5 py-3.5 sm:px-8 sm:py-4 backdrop-blur-xl">
-                <div className="flex items-center gap-3">
+              {/* ── Sticky Top Header with Full Navigation Deck & Actions ── */}
+              <div className="sticky top-0 z-30 shrink-0 flex items-center justify-between border-b border-white/10 bg-[#070516]/95 px-4 py-3 sm:px-8 sm:py-3.5 backdrop-blur-xl">
+                {/* Category & Verified Badge */}
+                <div className="flex items-center gap-2.5">
                   <span className="rounded-full border border-purple-400/40 bg-purple-950/70 px-3 py-1 text-[11px] font-mono uppercase tracking-wider text-purple-300">
                     {selectedProject.category || 'AI Case Study'}
                   </span>
@@ -338,16 +505,40 @@ export default function Scene04Projects() {
                   )}
                 </div>
 
+                {/* Center: Interactive Project Deck Navigation */}
+                <div className="flex items-center gap-1.5 rounded-full border border-purple-400/30 bg-black/60 p-1 shadow-inner backdrop-blur-md">
+                  <button
+                    onClick={goToPrev}
+                    title="Previous Project (Arrow Left)"
+                    className="flex h-7 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold text-slate-300 hover:bg-purple-600/40 hover:text-white transition-all"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Prev</span>
+                  </button>
+                  <span className="px-2 text-[11px] font-mono text-purple-300">
+                    {currentIndex + 1} / {filteredProjects.length}
+                  </span>
+                  <button
+                    onClick={goToNext}
+                    title="Next Project (Arrow Right)"
+                    className="flex h-7 items-center gap-1 rounded-full px-2.5 text-[11px] font-semibold text-slate-300 hover:bg-purple-600/40 hover:text-white transition-all"
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                {/* Right Actions & Prominent Close Button */}
                 <div className="flex items-center gap-2">
                   {selectedProject.demo && (
                     <a
                       href={selectedProject.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-950/50 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-900/70 shadow-[0_0_15px_rgba(52,211,153,0.2)]"
+                      className="hidden md:inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-emerald-950/50 px-3 py-1.5 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-900/70"
                     >
                       <Play className="h-3 w-3 fill-current" />
-                      <span className="hidden sm:inline">Launch App</span>
+                      <span>Demo</span>
                     </a>
                   )}
 
@@ -356,19 +547,20 @@ export default function Scene04Projects() {
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-purple-400/40 bg-purple-950/50 px-3.5 py-1.5 text-xs font-semibold text-purple-200 transition hover:bg-purple-900/70"
+                      className="hidden md:inline-flex items-center gap-1.5 rounded-xl border border-purple-400/40 bg-purple-950/50 px-3 py-1.5 text-xs font-semibold text-purple-200 transition hover:bg-purple-900/70"
                     >
                       <GitBranch className="h-3.5 w-3.5" />
-                      <span className="hidden sm:inline">GitHub</span>
+                      <span>GitHub</span>
                     </a>
                   )}
 
                   <button
                     onClick={() => setSelectedProject(null)}
                     aria-label="Close Case Study"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
+                    className="flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-950/50 px-3 py-1.5 text-xs font-bold text-rose-200 transition hover:bg-rose-600 hover:text-white shadow-sm"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-4 w-4" />
+                    <span>Close</span>
                   </button>
                 </div>
               </div>
@@ -536,18 +728,38 @@ export default function Scene04Projects() {
                 </div>
               </div>
 
-              {/* ── Fixed Footer Controls ── */}
+              {/* ── Fixed Footer Controls with Forward & Backward Buttons ── */}
               <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-[#070516] px-5 py-4 sm:px-8">
+                {/* Left: Previous & Next Project Navigation Workflow */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={goToPrev}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-semibold text-white/90 transition hover:border-purple-400 hover:bg-purple-950/50 hover:text-white"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5 text-purple-400" />
+                    <span>Prev Project</span>
+                  </button>
+
+                  <button
+                    onClick={goToNext}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-semibold text-white/90 transition hover:border-purple-400 hover:bg-purple-950/50 hover:text-white"
+                  >
+                    <span>Next Project</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-purple-400" />
+                  </button>
+                </div>
+
+                {/* Center/Right: Live Link + GitHub + Close Button */}
                 <div className="flex flex-wrap items-center gap-2.5">
                   {selectedProject.demo && (
                     <a
                       href={selectedProject.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(52,211,153,0.35)] transition hover:from-emerald-400 hover:to-teal-500"
+                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(52,211,153,0.35)] transition hover:from-emerald-400 hover:to-teal-500"
                     >
-                      <Play className="h-3.5 w-3.5 fill-current" />
-                      Launch Live Project
+                      <Play className="h-3 w-3 fill-current" />
+                      Launch App
                       <ArrowUpRight className="h-3.5 w-3.5" />
                     </a>
                   )}
@@ -557,20 +769,20 @@ export default function Scene04Projects() {
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] transition hover:bg-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]"
+                      className="inline-flex items-center gap-2 rounded-xl bg-purple-600 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(168,85,247,0.4)] transition hover:bg-purple-500"
                     >
-                      <GitBranch className="h-4 w-4" />
-                      Inspect Code on GitHub
+                      <GitBranch className="h-3.5 w-3.5" />
+                      GitHub Repo
                     </a>
                   )}
-                </div>
 
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-semibold uppercase text-white/70 transition hover:bg-white/10 hover:text-white"
-                >
-                  Close Case Study (ESC)
-                </button>
+                  <button
+                    onClick={() => setSelectedProject(null)}
+                    className="rounded-xl border border-rose-500/40 bg-rose-950/40 px-4 py-2 text-xs font-bold uppercase tracking-wider text-rose-200 transition hover:bg-rose-600 hover:text-white"
+                  >
+                    Close (ESC)
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

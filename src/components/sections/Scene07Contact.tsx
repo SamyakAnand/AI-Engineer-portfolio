@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import {
   Mail, Phone, MapPin, Send, User, MessageSquare, CheckCircle2,
-  AlertCircle, ArrowUpRight, Sparkles, ArrowUp, Play, ShieldCheck, Terminal, Globe
+  AlertCircle, ArrowUpRight, Sparkles, Play
 } from 'lucide-react';
-import BrandLogo from '@/components/ui/BrandLogo';
-import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
 
 /* ─── Social Platform Icons (GitHub, LinkedIn, WhatsApp, Instagram) ─── */
 const socialIcons = [
@@ -507,326 +506,28 @@ export default function Scene07Contact() {
           </motion.div>
         </div>
 
-        {/* ── World-Class Architectural Footer ── */}
-        <footer className="mt-28 overflow-hidden rounded-3xl border border-white/[0.12] bg-[#070516]/90 shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-          {/* Subtle glowing purple top border accent */}
-          <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-purple-500/80 to-transparent shadow-[0_0_12px_rgba(168,85,247,0.7)]" />
+        {/* ── Minimal, Premium Static Footer ── */}
+        <footer className="mt-20 border-t border-white/10 py-6 sm:py-7">
+          <div className="flex flex-col items-center justify-between gap-3 text-[12px] sm:text-[13px] text-white/50 sm:flex-row">
+            <p className="tracking-normal text-center sm:text-left">
+              &copy; {new Date().getFullYear()} Samyak Anand. All rights reserved.
+            </p>
 
-          {/* ── Tier 1: Brand Header, Positioning & Direct CTAs ── */}
-          <div className="border-b border-white/[0.08] px-6 py-10 sm:px-10 sm:py-12">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              {/* Brand & Positioning */}
-              <div className="max-w-2xl">
-                <div className="flex items-center gap-3.5">
-                  <BrandLogo className="h-10 w-10 shrink-0" />
-                  <div>
-                    <h3
-                      className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl"
-                      style={{ textShadow: '0 2px 12px rgba(0,0,0,1)' }}
-                    >
-                      Samyak Anand<span className="text-purple-400">.</span>
-                    </h3>
-                    <p className="text-xs font-mono uppercase tracking-widest text-purple-300">
-                      Applied AI Engineer · Machine Learning &amp; RAG Architect
-                    </p>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                  Architecting verifiable retrieval systems, autonomous analytical engines, and production-ready machine learning pipelines that translate complex problems into reliable, deployed software products.
-                </p>
-
-                {/* Real-time status pill */}
-                <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3.5 py-1 text-xs font-medium text-emerald-300 shadow-sm backdrop-blur-sm">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-                  </span>
-                  <span>Operational Status: Available for High-Impact AI Roles &amp; Engagements</span>
-                </div>
-              </div>
-
-              {/* Direct Quick Action CTAs */}
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href="mailto:samyak.g.anand@gmail.com"
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-[0_0_20px_rgba(168,85,247,0.35)] transition hover:from-purple-500 hover:to-indigo-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.55)]"
-                >
-                  <Mail className="h-4 w-4" />
-                  Initiate Uplink
-                </a>
-                <a
-                  href="/resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/10 hover:border-purple-400"
-                >
-                  <ArrowUpRight className="h-4 w-4 text-purple-400" />
-                  Download Résumé
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Tier 2: 4-Column Technical Matrix ── */}
-          <div className="grid grid-cols-1 gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-4 sm:px-10 border-b border-white/[0.08]">
-            {/* Col 1: Flagship Live Deployments */}
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-purple-300 mb-4 font-bold">
-                <Terminal className="h-3.5 w-3.5 text-purple-400" />
-                Live Systems
-              </div>
-              <ul className="space-y-2.5 text-xs">
-                <li>
-                  <a
-                    href="https://argus-ai-iota.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      ARGUS AI (Evidence RAG)
-                    </span>
-                    <ArrowUpRight className="h-3 w-3 text-white/30 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://nexus-peach-six.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      NEXUS (Data Analyst)
-                    </span>
-                    <ArrowUpRight className="h-3 w-3 text-white/30 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://disease-predictor-dvty.onrender.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      Disease Predictor (Render)
-                    </span>
-                    <ArrowUpRight className="h-3 w-3 text-white/30 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://student-performance-indicator-3pe6.onrender.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      Student Performance (Render)
-                    </span>
-                    <ArrowUpRight className="h-3 w-3 text-white/30 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://zivantrix.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-                      Zivantrix Platform
-                    </span>
-                    <ArrowUpRight className="h-3 w-3 text-white/30 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Col 2: Architecture Navigation */}
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-purple-300 mb-4 font-bold">
-                <Globe className="h-3.5 w-3.5 text-purple-400" />
-                Navigation
-              </div>
-              <ul className="space-y-2.5 text-xs text-slate-300">
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-identity')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Identity &amp; Engineering Creed
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-tech')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Technical Matrix &amp; AI Tools
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-projects')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Flagship Case Studies (8)
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-journey')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Professional Experience
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-certifications')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Accreditations &amp; Credentials
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigateToPortfolioSection('scene-services')}
-                    className="hover:text-purple-300 transition-colors text-left"
-                  >
-                    Engineering Capabilities
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Col 3: Direct Touchpoints */}
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-purple-300 mb-4 font-bold">
-                <Phone className="h-3.5 w-3.5 text-purple-400" />
-                Direct Touchpoints
-              </div>
-              <ul className="space-y-3 text-xs">
-                <li>
-                  <span className="block text-[10px] uppercase font-mono text-white/40">Primary Email</span>
-                  <a
-                    href="mailto:samyak.g.anand@gmail.com"
-                    className="text-white hover:text-purple-300 transition-colors font-medium break-all"
-                  >
-                    samyak.g.anand@gmail.com
-                  </a>
-                </li>
-                <li>
-                  <span className="block text-[10px] uppercase font-mono text-white/40">Direct / WhatsApp</span>
-                  <a
-                    href="tel:+919623719948"
-                    className="text-white hover:text-emerald-300 transition-colors font-medium"
-                  >
-                    +91 96237 19948
-                  </a>
-                </li>
-                <li>
-                  <span className="block text-[10px] uppercase font-mono text-white/40">Current Base</span>
-                  <span className="text-slate-300">Hyderabad, Telangana, India</span>
-                </li>
-                <li>
-                  <span className="block text-[10px] uppercase font-mono text-white/40">Specialization</span>
-                  <span className="text-slate-300">Naresh IT · Full Stack Data Science &amp; AI</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Col 4: Verified Developer Profiles */}
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-purple-300 mb-4 font-bold">
-                <ShieldCheck className="h-3.5 w-3.5 text-purple-400" />
-                Developer Profiles
-              </div>
-              <ul className="space-y-2.5 text-xs">
-                <li>
-                  <a
-                    href="https://github.com/SamyakAnand"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">GitHub (@SamyakAnand)</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/40 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.linkedin.com/in/samyakanand/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">LinkedIn (/in/samyakanand)</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/40 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://wa.me/919623719948"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">WhatsApp Direct</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/40 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.instagram.com/samyak_anand17/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">Instagram (@samyak_anand17)</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/40 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.naukri.com/mnjuser/profile"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between text-slate-300 hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-2">Naukri Professional Profile</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/40 group-hover:text-purple-300 transition-colors" />
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* ── Tier 3: Bottom Legal & Return-to-Top Bar ── */}
-          <div className="flex flex-col items-center justify-between gap-4 px-6 py-6 sm:flex-row sm:px-10 bg-black/40 text-xs text-white/50">
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
-              <span>© {new Date().getFullYear()} Samyak Anand · All rights reserved.</span>
-              <span className="hidden sm:inline text-white/20">|</span>
-              <span className="text-white/40 font-mono text-[11px]">
-                Built with Next.js 15, TypeScript, Tailwind CSS &amp; Three.js
-              </span>
-            </div>
-
-            <button
-              onClick={() => navigateToPortfolioSection('hero-cinematic')}
-              className="group inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-950/40 px-4 py-2 text-xs font-semibold text-purple-200 backdrop-blur-sm transition hover:bg-purple-900/60 hover:border-purple-400 hover:text-white shadow-sm"
-            >
-              <span>Back to Top</span>
-              <ArrowUp className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 text-purple-400" />
-            </button>
+            <nav aria-label="Legal navigation" className="flex items-center gap-2">
+              <Link
+                href="/privacy"
+                className="transition-colors hover:text-purple-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-white/20 select-none" aria-hidden="true">·</span>
+              <Link
+                href="/terms"
+                className="transition-colors hover:text-purple-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded"
+              >
+                Terms &amp; Conditions
+              </Link>
+            </nav>
           </div>
         </footer>
       </div>
