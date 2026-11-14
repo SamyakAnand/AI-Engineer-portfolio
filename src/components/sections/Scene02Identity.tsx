@@ -12,11 +12,10 @@ import {
   BarChart3,
   Users,
   ShieldCheck,
-  Globe,
-  UserCheck,
+  CheckCircle2,
 } from 'lucide-react';
 import Image from 'next/image';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useRef, useEffect, useState, type ComponentType } from 'react';
 import { professionalKpis, professionalImpactStatement } from '@/content/kpis';
 
@@ -59,48 +58,69 @@ const kpiIcons: Record<string, ComponentType<{ className?: string }>> = {
   'datasets-analyzed': Database,
   'academic-projects': GraduationCap,
   'certifications': ShieldCheck,
-  'websites-applications': Globe,
-  'team-leadership': UserCheck,
 };
 
-const expertise = [
-  { label: 'LLM Systems & RAG', level: 88, color: 'from-purple-500 to-violet-600' },
-  { label: 'Machine Learning', level: 83, color: 'from-indigo-500 to-purple-600' },
-  { label: 'Python & FastAPI', level: 90, color: 'from-emerald-500 to-teal-600' },
-  { label: 'Data Analytics & BI', level: 85, color: 'from-amber-500 to-orange-600' },
+const verifiedCompetencies = [
+  {
+    domain: 'LLM Systems & RAG Architectures',
+    badge: 'Project-Verified',
+    context: 'Passage offset verification in ARGUS AI & AST symbol mind maps in SHIRO',
+    border: 'border-purple-400/35 bg-purple-950/40 text-purple-200',
+    dot: 'bg-purple-400',
+  },
+  {
+    domain: 'Supervised ML & Production Pipelines',
+    badge: 'Project-Verified',
+    context: 'Clinical Predictor (SVM/Random Forest) & Network Security (MongoDB + Drift)',
+    border: 'border-indigo-400/35 bg-indigo-950/40 text-indigo-200',
+    dot: 'bg-indigo-400',
+  },
+  {
+    domain: 'Python & FastAPI Backend Architecture',
+    badge: 'Production Stack',
+    context: 'Asynchronous inference endpoints, Pydantic validation & deterministic evaluators',
+    border: 'border-emerald-400/35 bg-emerald-950/40 text-emerald-200',
+    dot: 'bg-emerald-400',
+  },
+  {
+    domain: 'Data Analytics & Star-Schema BI',
+    badge: '50+ Dashboards',
+    context: 'Executive DAX modeling, Power BI reports across Financial Risk, Credit Cards & Blinkit',
+    border: 'border-amber-400/35 bg-amber-950/40 text-amber-200',
+    dot: 'bg-amber-400',
+  },
 ];
 
-function SkillBar({ label, level, color, delay }: { label: string; level: number; color: string; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  return (
-    <div ref={ref} className="space-y-1.5">
-      <div className="flex items-center justify-between text-xs">
-        <span className="font-semibold text-white/90">{label}</span>
-        <span className="font-mono text-white/50">{level}%</span>
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-        <motion.div
-          className={`h-full rounded-full bg-gradient-to-r ${color}`}
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${level}%` } : {}}
-          transition={{ duration: 1.1, delay, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </div>
-    </div>
-  );
-}
-
 export default function Scene02Identity() {
+  const reduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.08,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: reduceMotion ? 0 : 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <section
       id="scene-identity"
-      className="relative z-10 scroll-mt-20 border-t border-white/10 bg-transparent px-4 py-24 text-white sm:px-8 md:px-12 lg:px-20"
+      className="relative z-10 scroll-mt-20 border-t border-white/10 bg-transparent px-4 py-20 text-white sm:px-8 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-7xl">
         {/* ── Top Row: Portrait + Narrative ── */}
-        <div className="grid items-center gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           {/* ── Left: Profile Portrait Card ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -113,7 +133,7 @@ export default function Scene02Identity() {
             <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-to-tr from-purple-600/35 via-violet-600/30 to-fuchsia-600/20 blur-2xl opacity-75 transition-opacity duration-700 group-hover:opacity-100" />
 
             {/* Portrait Container */}
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/45 p-2.5 shadow-[0_16px_50px_rgba(0,0,0,0.75)] backdrop-blur-md transition-all duration-500 group-hover:border-purple-400/50">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/45 p-2 sm:p-2.5 shadow-[0_16px_50px_rgba(0,0,0,0.75)] backdrop-blur-md transition-all duration-500 group-hover:border-purple-400/50">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/portfolio/profile-samyak.png"
@@ -128,11 +148,11 @@ export default function Scene02Identity() {
               </div>
 
               {/* Floating Location Badge */}
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between rounded-full border border-purple-400/30 bg-[#060f1b]/85 px-4 py-2 backdrop-blur-xl shadow-lg">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between rounded-full border border-purple-400/30 bg-[#060f1b]/85 px-3.5 sm:px-4 py-2 backdrop-blur-xl shadow-lg">
                 <span className="flex items-center gap-2 text-xs font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)] sm:text-sm">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
                   </span>
                   Samyak Anand
                 </span>
@@ -144,63 +164,101 @@ export default function Scene02Identity() {
             </div>
           </motion.div>
 
-          {/* ── Right: Narrative & Expertise Bars ── */}
+          {/* ── Right: Narrative & Evidence Badges ── */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col gap-6"
           >
-            <div>
+            <motion.div variants={itemVariants}>
               <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-950/40 px-3.5 py-1 text-xs font-semibold uppercase tracking-widest text-purple-300">
-                <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                <Sparkles className="h-3.5 w-3.5 text-purple-400 animate-pulse" />
                 About · Professional Identity
               </div>
               <h2
-                className="font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl"
+                className="font-display text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl"
                 style={{ textShadow: '0 3px 20px rgba(0,0,0,1), 0 0 20px rgba(168,85,247,0.45)' }}
               >
                 From problem definition to production intelligence<span className="text-purple-400">.</span>
               </h2>
-            </div>
+            </motion.div>
 
-            <div className="space-y-3.5">
-              <p className="text-base leading-relaxed text-white/95" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.95)' }}>
-                I am <span className="font-semibold text-white">Samyak Anand</span>, a Computer Science graduate with practical experience across data science, machine learning, AI application development, and technical training.
+            <motion.div variants={itemVariants} className="space-y-3">
+              <p className="text-sm sm:text-base leading-relaxed text-white/95" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.95)' }}>
+                I am <span className="font-semibold text-white">Samyak Anand</span>, an Applied AI Engineer with a strong Computer Science foundation and practical experience across Generative AI, retrieval systems, machine learning engineering, and technical training.
               </p>
-              <p className="text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
-                I enjoy taking an idea from problem definition to implementation. My hands-on work includes building machine learning applications, developing LLM-powered applications, experimenting with retrieval-augmented generation (RAG), creating local knowledge intelligence workflows, and architecting data analytics platforms.
+              <p className="text-xs sm:text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
+                I focus on building practical AI applications that couple intelligent workflows with verifiable evidence. My hands-on projects include deterministic data profiling engines (<span className="text-purple-300 font-medium">NEXUS</span>), passage-grounded knowledge retrieval with offset citations (<span className="text-purple-300 font-medium">ARGUS AI</span>), AST-driven codebase intelligence (<span className="text-purple-300 font-medium">SHIRO CodeMind</span>), and reproducible model evaluation workspaces (<span className="text-purple-300 font-medium">L Platform</span>).
               </p>
-              <p className="text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
-                Alongside engineering, I teach Python, Data Analytics, Data Science, and Machine Learning at Softgrowth Infotech — having mentored over 100+ students and guided 5+ Master&apos;s-level academic project teams through end-to-end architecture, technical documentation, reports, and defense presentations.
+              <p className="text-xs sm:text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
+                Alongside engineering, I served as <span className="text-white font-semibold">Data Science Trainer at Softgrowth Infotech</span> (October 2025 – November 2026, concluded 9 November 2026) in Hyderabad, India — mentoring over 100+ learners across Python, exploratory data analysis, and machine learning pipelines, while guiding 5+ Master&apos;s-level academic capstone teams through end-to-end system architectures, documentation, and technical defense presentations.
               </p>
-            </div>
+            </motion.div>
 
-            {/* Expertise Skill Bars */}
-            <div className="rounded-2xl border border-white/10 bg-black/35 p-5 backdrop-blur-sm space-y-4">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-purple-300">Core Proficiency</span>
-              {expertise.map((skill, i) => (
-                <SkillBar key={skill.label} {...skill} delay={0.1 + i * 0.1} />
-              ))}
-            </div>
-
-            {/* Quick Highlight Cards */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/40 hover:bg-black/55">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-300">
-                  <GraduationCap className="h-4 w-4 text-purple-400" />
-                  Education
-                </div>
-                <p className="mt-2 text-sm font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
-                  B.Tech, Computer Science &amp; Engg.
-                </p>
-                <p className="mt-1 text-xs text-white/70">
-                  Ballarpur Institute of Technology · 2024
-                </p>
+            {/* Evidence-Based Competency Deck */}
+            <motion.div
+              variants={itemVariants}
+              className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 backdrop-blur-sm space-y-3"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-purple-300">
+                  Evidence-Based Technical Competencies
+                </span>
+                <span className="text-[10px] font-mono text-white/40">
+                  Project Verified · Zero Vanity Percentages
+                </span>
               </div>
 
-              <a
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                {verifiedCompetencies.map((comp) => (
+                  <motion.div
+                    key={comp.domain}
+                    whileHover={reduceMotion ? {} : { scale: 1.01 }}
+                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:border-purple-400/30 hover:bg-white/[0.06]"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-bold text-white leading-tight">
+                        {comp.domain}
+                      </span>
+                      <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-mono font-semibold uppercase tracking-wider shrink-0 ${comp.border}`}>
+                        <span className={`h-1.5 w-1.5 rounded-full ${comp.dot}`} />
+                        {comp.badge}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[11px] text-slate-300 leading-relaxed font-light">
+                      {comp.context}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Quick Highlight Cards */}
+            <motion.div variants={itemVariants} className="grid gap-3 sm:grid-cols-2">
+              <motion.div
+                whileHover={reduceMotion ? {} : { y: -2 }}
+                className="rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
+              >
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-300">
+                  <GraduationCap className="h-4 w-4 text-purple-400" />
+                  Formal Education
+                </div>
+                <p className="mt-2 text-sm font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
+                  B.Tech, Computer Science &amp; Engg. (2024)
+                </p>
+                <p className="mt-0.5 text-xs text-white/70">
+                  Ballarpur Institute of Technology, Maharashtra
+                </p>
+                <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-purple-200">
+                  <span>Diploma, Computer Science (2021)</span>
+                  <span className="font-mono text-white/60">84.25%</span>
+                </div>
+              </motion.div>
+
+              <motion.a
+                whileHover={reduceMotion ? {} : { y: -2 }}
                 href="https://github.com/SamyakAnand"
                 target="_blank"
                 rel="noreferrer"
@@ -209,19 +267,20 @@ export default function Scene02Identity() {
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-fuchsia-300">
                   <span className="flex items-center gap-2">
                     <Code2 className="h-4 w-4 text-fuchsia-400" />
-                    Technical Work
+                    Verified Repositories
                   </span>
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 text-white" />
                 </div>
                 <p className="mt-2 text-sm font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
-                  Selected Work on GitHub
+                  Inspect Code on GitHub
                 </p>
                 <p className="mt-1 text-xs text-white/70">
-                  Inspect repositories, architectures &amp; source code
+                  Architectures, test fixtures, notebooks &amp; source
                 </p>
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
+                whileHover={reduceMotion ? {} : { y: -2 }}
                 href="https://www.linkedin.com/in/samyakanand/"
                 target="_blank"
                 rel="noreferrer"
@@ -238,11 +297,12 @@ export default function Scene02Identity() {
                   LinkedIn Profile
                 </p>
                 <p className="mt-1 text-xs text-white/70">
-                  Experience, recommendations &amp; endorsements
+                  Verified roles, recommendations &amp; career updates
                 </p>
-              </a>
+              </motion.a>
 
-              <a
+              <motion.a
+                whileHover={reduceMotion ? {} : { y: -2 }}
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
@@ -250,19 +310,19 @@ export default function Scene02Identity() {
               >
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-purple-300">
                   <span className="flex items-center gap-2">
-                    <ArrowUpRight className="h-4 w-4 text-purple-400" />
+                    <CheckCircle2 className="h-4 w-4 text-purple-400" />
                     Download Résumé
                   </span>
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 text-white" />
                 </div>
                 <p className="mt-2 text-sm font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
-                  Full CV · PDF
+                  Curriculum Vitae (PDF)
                 </p>
                 <p className="mt-1 text-xs text-white/70">
-                  Projects, experience &amp; certifications
+                  Full project architectures, career history &amp; contacts
                 </p>
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           </motion.div>
         </div>
 
@@ -276,7 +336,7 @@ export default function Scene02Identity() {
               </span>
             </div>
             <span className="text-[11px] font-mono text-white/50">
-              Technical Mentorship · Analytics · AI Engineering · Team Leadership
+              Technical Mentorship · Analytics · AI Engineering · Capstone Leadership
             </span>
           </div>
 
@@ -285,14 +345,15 @@ export default function Scene02Identity() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-3 sm:gap-3.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
           >
             {professionalKpis.map((kpi) => {
               const Icon = kpiIcons[kpi.id] || Sparkles;
               return (
-                <div
+                <motion.div
                   key={kpi.id}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 sm:p-5 text-left backdrop-blur-md shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                  whileHover={reduceMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-5 text-left backdrop-blur-md shadow-lg transition-colors ${
                     kpi.featured
                       ? 'border-cyan-400/40 bg-gradient-to-br from-cyan-950/30 via-slate-950/60 to-slate-950/50 shadow-[0_0_25px_rgba(6,182,212,0.14)] ring-1 ring-cyan-400/25 hover:border-cyan-400/60 hover:bg-slate-900/80'
                       : 'border-white/10 bg-slate-950/50 hover:border-purple-400/40 hover:bg-slate-900/70'
@@ -300,24 +361,24 @@ export default function Scene02Identity() {
                 >
                   <div className="flex items-center justify-between">
                     <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${kpi.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}
+                      className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${kpi.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}
                     >
-                      <Icon className="h-4.5 w-4.5" />
+                      <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                     </div>
                     {kpi.featured ? (
-                      <span className="rounded-full border border-cyan-400/30 bg-cyan-950/60 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">
-                        Flagship
+                      <span className="rounded-full border border-cyan-400/30 bg-cyan-950/60 px-2 py-0.5 text-[8px] sm:text-[9px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+                        Key
                       </span>
                     ) : (
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">
+                      <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-white/40">
                         Verified
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-3.5">
+                  <div className="mt-3">
                     <div
-                      className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl ${kpi.color}`}
+                      className={`font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight ${kpi.color}`}
                       style={{ textShadow: '0 2px 14px rgba(0,0,0,0.9)' }}
                     >
                       <AnimatedCounter to={kpi.value} suffix={kpi.suffix} />
@@ -325,7 +386,7 @@ export default function Scene02Identity() {
                     <h3 className="mt-1 text-xs sm:text-sm font-bold text-white/95 group-hover:text-white leading-snug">
                       {kpi.label}
                     </h3>
-                    <p className="mt-1 text-[11px] sm:text-xs font-normal text-white/60 leading-relaxed line-clamp-2">
+                    <p className="mt-1 text-[10px] sm:text-[11px] font-normal text-white/60 leading-relaxed line-clamp-2">
                       {kpi.desc}
                     </p>
                   </div>
@@ -334,7 +395,7 @@ export default function Scene02Identity() {
                   <div
                     className={`pointer-events-none absolute -bottom-6 -right-6 h-16 w-16 rounded-full blur-2xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 ${kpi.glow}`}
                   />
-                </div>
+                </motion.div>
               );
             })}
           </motion.div>

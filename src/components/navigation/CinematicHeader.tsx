@@ -13,7 +13,6 @@ const navLinks = [
   { label: 'Experience', id: 'scene-journey' },
   { label: 'Certifications', id: 'scene-certifications' },
   { label: 'Services', id: 'scene-services' },
-  { label: 'Contact', id: 'scene-contact' },
 ];
 
 const socials = [
@@ -35,13 +34,32 @@ const socials = [
       </svg>
     ),
   },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/samyak_anand17/',
+    mark: (
+      <svg aria-hidden="true" viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-current">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function CinematicHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero-cinematic');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const handleScrollLock = (e: Event) => {
+      const customEvent = e as CustomEvent<{ locked: boolean }>;
+      setModalOpen(Boolean(customEvent.detail?.locked));
+    };
+    window.addEventListener('portfolio:scroll-lock', handleScrollLock);
+    return () => window.removeEventListener('portfolio:scroll-lock', handleScrollLock);
+  }, []);
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 20);
@@ -94,7 +112,11 @@ export default function CinematicHeader() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 transition-all duration-300 ${
+          modalOpen ? 'pointer-events-none -translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+        }`}
+      >
         <motion.div
           initial={reduceMotion ? false : { y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -122,7 +144,7 @@ export default function CinematicHeader() {
                 Samyak Anand
               </span>
               <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-purple-400 sm:block" style={{ textShadow: '0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(168,85,247,0.5)' }}>
-                AI &amp; Data Scientist
+                Applied AI Engineer
               </span>
             </div>
           </a>
@@ -158,35 +180,36 @@ export default function CinematicHeader() {
             })}
           </nav>
 
-          {/* ── Right: Social Links + Contact CTA + Mobile Menu Button ── */}
+          {/* ── Right: Social Links + Single Prominent "Let's Talk" CTA + Mobile Menu Button ── */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-            {/* Social Icons (Desktop) */}
+            {/* Social Icons (Desktop: GitHub, LinkedIn, Instagram) */}
             <div className="hidden items-center gap-1 border-r border-white/10 pr-2 md:flex">
               {socials.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label={item.label}
-                  className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-purple-900/40 hover:text-purple-300"
+                  title={item.label}
+                  className="grid h-8 w-8 place-items-center rounded-full text-white/70 transition hover:bg-purple-900/40 hover:text-purple-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-purple-400"
                 >
                   {item.mark}
                 </a>
               ))}
             </div>
 
-            {/* Hire Me CTA button */}
+            {/* Let's Talk CTA button (Connecting directly to Contact Section) */}
             <button
               type="button"
               onClick={() => navigate('scene-contact')}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition-all duration-300 hover:scale-105 hover:from-purple-500 hover:to-indigo-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400"
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition-all duration-300 hover:scale-105 hover:from-purple-500 hover:to-indigo-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400"
             >
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
               </span>
-              Hire Me
+              Let&apos;s Talk
             </button>
 
             {/* Mobile Hamburger Menu Toggle Button (Visible only on mobile/tablet: md:hidden) */}
@@ -255,22 +278,38 @@ export default function CinematicHeader() {
                 })}
               </div>
 
-              <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
-                <div className="flex items-center gap-2">
-                  {socials.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={item.label}
-                      className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
-                    >
-                      {item.mark}
-                    </a>
-                  ))}
+              {/* Mobile Drawer Bottom: Let's Talk CTA & Social Icons */}
+              <div className="mt-3 flex flex-col gap-3 border-t border-white/10 pt-3">
+                <button
+                  type="button"
+                  onClick={() => navigate('scene-contact')}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 py-2.5 text-xs font-bold text-white shadow-[0_0_20px_rgba(168,85,247,0.45)]"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+                  </span>
+                  Let&apos;s Talk
+                </button>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {socials.map((item) => (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={item.label}
+                        title={item.label}
+                        className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white"
+                      >
+                        {item.mark}
+                      </a>
+                    ))}
+                  </div>
+                  <span className="text-xs font-mono text-white/50">Hyderabad, IN</span>
                 </div>
-                <span className="text-xs font-mono text-white/50">Hyderabad, IN</span>
               </div>
             </motion.nav>
           </>
@@ -279,4 +318,3 @@ export default function CinematicHeader() {
     </>
   );
 }
-

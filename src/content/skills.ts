@@ -3,6 +3,7 @@ import type { SkillCategory } from './types';
 export const skills: readonly SkillCategory[] = [
   {
     category: 'AI ENGINEERING',
+    description: 'Foundation models, autonomous multi-agent systems, and production RAG pipelines',
     skills: [
       { name: 'Large Language Models', group: 'ai' },
       { name: 'Retrieval-Augmented Generation (RAG)', group: 'ai' },
@@ -16,6 +17,7 @@ export const skills: readonly SkillCategory[] = [
   },
   {
     category: 'PROGRAMMING & AI TOOLS',
+    description: 'Core programming languages and frontier AI reasoning models',
     skills: [
       { name: 'Python', group: 'programming' },
       { name: 'SQL', group: 'programming' },
@@ -33,6 +35,7 @@ export const skills: readonly SkillCategory[] = [
   },
   {
     category: 'MACHINE LEARNING',
+    description: 'Supervised, unsupervised, deep neural networks, and NLP systems',
     skills: [
       { name: 'PyTorch', group: 'ml' },
       { name: 'TensorFlow', group: 'ml' },
@@ -44,6 +47,7 @@ export const skills: readonly SkillCategory[] = [
   },
   {
     category: 'BACKEND DEVELOPMENT',
+    description: 'High-throughput APIs, relational architectures, and distributed document stores',
     skills: [
       { name: 'FastAPI', group: 'backend' },
       { name: 'Flask', group: 'backend' },
@@ -54,6 +58,7 @@ export const skills: readonly SkillCategory[] = [
   },
   {
     category: 'DATA SCIENCE',
+    description: 'Exploratory data analysis, statistical modeling, and BI visualizations',
     skills: [
       { name: 'Pandas', group: 'data' },
       { name: 'NumPy', group: 'data' },
@@ -65,6 +70,7 @@ export const skills: readonly SkillCategory[] = [
   },
   {
     category: 'MLOPS AND INFRASTRUCTURE',
+    description: 'Containerization, reproducible versioning, experiment tracking, and cloud hosting',
     skills: [
       { name: 'Docker', group: 'mlops' },
       { name: 'MLflow', group: 'mlops' },

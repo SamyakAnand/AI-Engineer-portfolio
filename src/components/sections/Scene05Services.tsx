@@ -52,7 +52,7 @@ export default function Scene05Services() {
   return (
     <section
       id="scene-services"
-      className="relative z-10 scroll-mt-24 border-t border-purple-950/40 bg-transparent px-4 py-28 text-white sm:px-8 md:px-12 lg:px-20"
+      className="relative z-10 scroll-mt-24 border-t border-purple-950/40 bg-transparent px-4 py-20 text-white sm:px-8 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-7xl">
         {/* ── Section Header ── */}
@@ -108,7 +108,8 @@ export default function Scene05Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className={`group relative flex flex-col rounded-3xl border border-white/12 bg-black/45 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 ${accent.border} hover:bg-black/55 hover:shadow-[0_16px_60px_rgba(0,0,0,0.65)] sm:p-7`}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className={`group relative flex flex-col rounded-2xl sm:rounded-3xl border border-white/12 bg-black/45 p-5 sm:p-7 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 ${accent.border} hover:bg-black/55 hover:shadow-[0_16px_60px_rgba(0,0,0,0.65)]`}
             >
               {/* Number + Icon Header */}
               <div className="flex items-center justify-between">

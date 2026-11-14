@@ -211,7 +211,7 @@ export default function Scene07Contact() {
   return (
     <section
       id="scene-contact"
-      className="relative z-10 scroll-mt-24 bg-transparent px-6 py-28 text-white md:px-12 lg:px-20"
+      className="relative z-10 scroll-mt-24 border-t border-purple-950/40 bg-transparent px-4 py-20 text-white sm:px-8 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-7xl">
         {/* ── Section Header ── */}

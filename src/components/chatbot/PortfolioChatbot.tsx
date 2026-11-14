@@ -213,6 +213,7 @@ export default function PortfolioChatbot() {
           role="dialog"
           aria-modal="false"
           aria-labelledby="portfolio-chat-title"
+          data-lenis-prevent="true"
         >
           {/* ── 3D Neural Intelligence Universe Background ──────── */}
           <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-90">
@@ -255,10 +256,13 @@ export default function PortfolioChatbot() {
           <p className="portfolio-chat__model-label relative z-10">Interactive Neural Agent · Ready</p>
 
           <div
-            className="portfolio-chat__messages relative z-10"
+            className="portfolio-chat__messages relative z-10 overscroll-contain"
             ref={messageListRef}
             aria-live="polite"
             aria-busy={pending}
+            data-lenis-prevent="true"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
           >
             {messages.map((message) => (
               <div

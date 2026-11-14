@@ -14,34 +14,56 @@ export interface Profile {
   languages: { name: string; level: number }[];
 }
 
-export interface Project {
+export type SkillEvidence = 'project-backed' | 'hands-on' | 'course-backed' | 'learning';
+export type SkillTier = 'project-verified' | 'hands-on' | 'familiar';
+
+export interface SkillProjectRef {
   id: string;
   name: string;
-  category?: string;
-  type?: 'ai' | 'ml' | 'analytics';
-  description: string;
-  problem: string;
-  solution?: string;
-  architecture: string;
-  pipelineSteps?: string[];
-  decisions?: string;
-  limitations?: string;
-  stack: string[];
-  features: string[];
-  screenshots: string[];
-  github: string;
-  demo: string | null;
-  stats?: { label: string; value: string }[];
 }
 
 export interface SkillGroup {
   name: string;
   group: string;
+  tier?: SkillTier;
+  evidence?: SkillEvidence;
+  context?: string;
+  projectRefs?: SkillProjectRef[];
 }
 
 export interface SkillCategory {
   category: string;
+  description?: string;
   skills: SkillGroup[];
+}
+
+export type ProjectCategory = 'ai' | 'ml' | 'ds' | 'analytics' | 'portfolio' | 'systems';
+
+export interface Project {
+  id: string;
+  name: string;
+  tier?: 1 | 2; // Priority tier
+  category: string;
+  type: ProjectCategory;
+  description: string;
+  problem: string;
+  solution?: string;
+  intendedUsers?: string;
+  realWorldUseCase?: string;
+  architecture: string;
+  pipelineSteps?: string[];
+  decisions?: string;
+  limitations?: string;
+  evaluationResults?: string;
+  securityNotes?: string;
+  futureRoadmap?: string;
+  stack: string[];
+  features: string[];
+  screenshots: string[];
+  github: string;
+  demo: string | null;
+  isLive?: boolean;
+  stats?: { label: string; value: string }[];
 }
 
 export interface Certification {

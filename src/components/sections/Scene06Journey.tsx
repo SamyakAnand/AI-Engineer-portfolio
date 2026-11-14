@@ -178,7 +178,7 @@ function CardBody({
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: (idx ?? 0) * 0.08 }}
       className={`
-        w-full max-w-xl rounded-3xl border border-white/15 bg-black/45 p-6 backdrop-blur-xl
+        w-full max-w-xl rounded-2xl sm:rounded-3xl border border-white/15 bg-black/45 p-5 sm:p-7 backdrop-blur-xl
         shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300
         hover:-translate-y-1 hover:bg-black/55 ${accentBorder}
         ${accentGlow ? `hover:${accentGlow}` : ''}
@@ -293,7 +293,7 @@ export default function Scene06Journey() {
   return (
     <section
       id="scene-journey"
-      className="relative z-10 scroll-mt-24 bg-transparent px-6 py-28 text-white md:px-12 lg:px-20"
+      className="relative z-10 scroll-mt-24 border-t border-white/10 bg-transparent px-4 py-20 text-white sm:px-8 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
