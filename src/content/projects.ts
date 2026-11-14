@@ -27,7 +27,7 @@ export const projects: Record<Project['id'], Project> = {
       'FastAPI async inference pipeline',
       'Traceable source provenance',
     ],
-    screenshots: ['/projects/resume-analyzer.png'],
+    screenshots: ['/projects/argus-ai.png'],
     github: 'https://github.com/SamyakAnand/Argus-Ai',
     demo: 'https://argus-ai-iota.vercel.app',
     stats: [
@@ -63,7 +63,7 @@ export const projects: Record<Project['id'], Project> = {
       'SQL execution audit trace',
       'Reproducible markdown analysis reports',
     ],
-    screenshots: ['/projects/blinkit-dashboard.png'],
+    screenshots: ['/projects/nexus.png'],
     github: 'https://github.com/SamyakAnand/NEXUS',
     demo: 'https://nexus-peach-six.vercel.app',
     stats: [
@@ -99,7 +99,7 @@ export const projects: Record<Project['id'], Project> = {
       'Local Ollama integration with cloud API fallback',
       'Client-side state persistence',
     ],
-    screenshots: ['/projects/resume-analyzer.png'],
+    screenshots: ['/projects/zivantrix.png'],
     github: 'https://github.com/SamyakAnand',
     demo: null,
     stats: [
@@ -207,7 +207,7 @@ export const projects: Record<Project['id'], Project> = {
       'Interactive web form for real-time score prediction',
       'Comprehensive artifact serialization with pickle',
     ],
-    screenshots: ['/projects/disease-predictor.png'],
+    screenshots: ['/projects/student-performance.png'],
     github: 'https://github.com/SamyakAnand/Student-Performance-Indicator',
     demo: 'https://student-performance-indicator-3pe6.onrender.com/',
     stats: [
