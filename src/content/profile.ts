@@ -60,7 +60,7 @@ export const profile: Profile = {
   projects: [
     'argus',
     'nexus',
-    'studycopilot',
+    'shiro',
     'resume-analyzer',
     'disease-predictor',
     'blinkit-dashboard',
