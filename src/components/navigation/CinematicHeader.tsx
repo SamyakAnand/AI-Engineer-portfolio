@@ -176,13 +176,17 @@ export default function CinematicHeader() {
               ))}
             </div>
 
-            {/* Let's talk CTA button */}
+            {/* Hire Me CTA button */}
             <button
               type="button"
               onClick={() => navigate('scene-contact')}
-              className="rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition-all duration-300 hover:scale-105 hover:from-purple-500 hover:to-indigo-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400 sm:px-4 sm:py-2"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition-all duration-300 hover:scale-105 hover:from-purple-500 hover:to-indigo-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-400"
             >
-              Let’s talk
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+              </span>
+              Hire Me
             </button>
 
             {/* Mobile Hamburger Menu Toggle Button (Visible only on mobile/tablet: md:hidden) */}
