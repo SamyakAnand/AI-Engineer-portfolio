@@ -506,12 +506,36 @@ export default function Scene07Contact() {
         </div>
 
         {/* ── Footer ── */}
-        <footer className="mt-20 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/60 sm:flex-row">
-          <span>© {new Date().getFullYear()} Samyak Anand · Applied AI Engineer. All rights reserved.</span>
-          <span className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-            Available for AI &amp; ML Engagements
-          </span>
+        <footer className="mt-20 space-y-6 border-t border-white/10 pt-10">
+          {/* Top row: Brand + links */}
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-purple-400/40 bg-purple-950/50 shadow-[0_0_12px_rgba(168,85,247,0.3)]">
+                <span className="text-xs font-bold text-purple-300">SA</span>
+              </div>
+              <div>
+                <span className="block text-sm font-bold text-white">Samyak Anand</span>
+                <span className="text-xs text-purple-300">Applied AI Engineer</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 text-xs text-white/50">
+              <a href="https://github.com/SamyakAnand" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+              <a href="https://www.linkedin.com/in/samyakanand/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+              <a href="mailto:samyak.g.anand@gmail.com" className="hover:text-white transition-colors">Email</a>
+              <a href="/resume.pdf" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Résumé</a>
+            </div>
+          </div>
+          {/* Bottom row: Copyright + Status */}
+          <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+            <span className="text-xs text-white/40">© {new Date().getFullYear()} Samyak Anand · All rights reserved. Built with Next.js &amp; Tailwind CSS.</span>
+            <div className="flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-950/30 px-3 py-1 text-xs text-emerald-300">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              Available for AI &amp; ML Engagements
+            </div>
+          </div>
         </footer>
       </div>
     </section>

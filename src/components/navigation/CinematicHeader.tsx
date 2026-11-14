@@ -13,6 +13,7 @@ const navLinks = [
   { label: 'Experience', id: 'scene-journey' },
   { label: 'Certifications', id: 'scene-certifications' },
   { label: 'Services', id: 'scene-services' },
+  { label: 'Contact', id: 'scene-contact' },
 ];
 
 const socials = [
@@ -274,3 +275,4 @@ export default function CinematicHeader() {
     </>
   );
 }
+

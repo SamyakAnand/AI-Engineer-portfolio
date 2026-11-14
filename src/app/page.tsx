@@ -12,6 +12,7 @@ import SceneCertifications from '@/components/sections/SceneCertifications';
 import Scene05Services from '@/components/sections/Scene05Services';
 import Scene07Contact from '@/components/sections/Scene07Contact';
 import PortfolioChatbot from '@/components/chatbot/PortfolioChatbot';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 
 export default function Home() {
   return (
@@ -48,6 +49,9 @@ export default function Home() {
 
       {/* ── Interactive AI Portfolio Assistant with 3D Neural Universe ─ */}
       <PortfolioChatbot />
+
+      {/* ── Floating Scroll-to-Top Button ─────────────────────────────── */}
+      <ScrollToTop />
     </main>
   );
 }
