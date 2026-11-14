@@ -22,7 +22,7 @@ type ChatMessage = {
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
-  content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (NEXUS, ARGUS AI, StudyCopilot), his technical stack, or connect you directly with him. What would you like to explore?',
+  content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), his technical stack, or connect you directly with him. What would you like to explore?',
 };
 
 const suggestedQuestions = [
@@ -62,10 +62,17 @@ function generateLocalKnowledgeResponse(query: string): { reply: string; nav?: P
     };
   }
 
-  if (q.includes('studycopilot') || q.includes('study') || q.includes('quiz')) {
+  if (q.includes('shiro') || q.includes('codemind') || q.includes('codebase')) {
     return {
-      reply: 'StudyCopilot is an AI-powered student assistant built as a Telegram Mini App and FastAPI service. It generates adaptive summaries, flashcards, and active-recall quizzes using dynamic routing between local Ollama and cloud OpenRouter models.',
-      nav: { sectionId: 'scene-projects', label: 'StudyCopilot Project' },
+      reply: 'SHIRO CodeMind is an autonomous codebase intelligence workspace that indexes public GitHub repositories, builds parser-derived import graphs and symbol mind maps, and delivers source-grounded answers with verifiable line citations. Tech stack: Python, FastAPI, AST Parsing, NVIDIA NIM, Supabase, TypeScript.',
+      nav: { sectionId: 'scene-projects', label: 'SHIRO CodeMind Project' },
+    };
+  }
+
+  if (q.includes('l-platform') || q.includes('evaluation') || q.includes('evaluator') || q.includes('l intelligence') || q === 'l') {
+    return {
+      reply: 'L is an LLM intelligence and evaluation platform providing AI engineers with a provider-independent workspace to run repeatable experiments, score model outputs against explicit evaluation definitions, compare revisions, and inspect failures with verifiable trace evidence. Tech stack: Next.js, FastAPI, PostgreSQL, Supabase.',
+      nav: { sectionId: 'scene-projects', label: 'L Intelligence Platform' },
     };
   }
 
@@ -78,7 +85,7 @@ function generateLocalKnowledgeResponse(query: string): { reply: string; nav?: P
 
   if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('github')) {
     return {
-      reply: 'Samyak has built 6 flagship systems: NEXUS (Autonomous Data Analyst), ARGUS AI (Evidence-oriented Knowledge Agent), StudyCopilot, AI Resume Analyzer, Clinical Multi-Disease Predictor, and a Network Intrusion Detection ML Pipeline (97%+ F1).',
+      reply: 'Samyak has built flagship systems across AI & Data: ARGUS AI (Evidence-oriented Knowledge Agent), NEXUS (Autonomous Data Analyst), SHIRO CodeMind (Codebase Intelligence), L (LLM Evaluation Platform), AI Resume Analyzer, and Clinical Multi-Disease Predictor.',
       nav: { sectionId: 'scene-projects', label: 'Selected Projects' },
     };
   }
@@ -105,7 +112,7 @@ function generateLocalKnowledgeResponse(query: string): { reply: string; nav?: P
   }
 
   return {
-    reply: 'I am SAM.exe, trained on Samyak Anand’s verified AI engineering background, projects (NEXUS, ARGUS AI, StudyCopilot), and technical capabilities. Feel free to ask about any specific project, skill, or how to get in touch!',
+    reply: 'I am SAM.exe, trained on Samyak Anand’s verified AI engineering background, projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), and technical capabilities. Feel free to ask about any specific project, skill, or how to get in touch!',
   };
 }
 

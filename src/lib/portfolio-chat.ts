@@ -26,8 +26,10 @@ PROFILE
 - Public contact: samyak.g.anand@gmail.com.
 
 PROJECTS
-- NEXUS: an early analytics prototype for CSV, JSON, and XLSX data, with dataset profiling and deterministic Pandas/SQL analysis. LLM synthesis, multi-user authentication, and durable database storage are not implemented. https://github.com/SamyakAnand/NEXUS
 - ARGUS AI: a development-preview local text knowledge search project. Citation checks verify passage IDs and do not establish semantic entailment; it is not intended for sensitive or multi-tenant use. https://github.com/SamyakAnand/Argus-Ai
+- NEXUS: an early analytics prototype for CSV, JSON, and XLSX data, with dataset profiling and deterministic Pandas/SQL analysis. LLM synthesis, multi-user authentication, and durable database storage are not implemented. https://github.com/SamyakAnand/NEXUS
+- SHIRO CodeMind: codebase intelligence workspace indexing public GitHub repos with AST-derived import graphs, symbol mind maps, and line citations. https://github.com/SamyakAnand/Shiro-Ai
+- L: LLM intelligence and evaluation platform for repeatable experiments, deterministic evaluator suites, and regression traces. https://github.com/SamyakAnand/L-Intelligence-Platform
 - Resume Analyzer: a resume analysis project. https://github.com/SamyakAnand/Resume-Analyzer
 - Disease Predictor: a machine-learning project. https://github.com/SamyakAnand/Disease-Predictor
 - Blinkit Sales & Inventory Dashboard: a Power BI sales and inventory dashboard. https://github.com/SamyakAnand/Blinkit-Sales-Inventory-Analytics-Dashboard-End-to-End-Power-BI-Project

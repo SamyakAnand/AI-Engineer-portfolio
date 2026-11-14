@@ -61,6 +61,7 @@ export const profile: Profile = {
     'argus',
     'nexus',
     'shiro',
+    'l-platform',
     'resume-analyzer',
     'disease-predictor',
     'blinkit-dashboard',

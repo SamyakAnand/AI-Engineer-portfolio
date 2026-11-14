@@ -256,6 +256,7 @@ export default function Scene04Projects() {
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProject, currentIndex, filteredProjects]);
 
   /* Native wheel event listener on the scroll container to ensure 100% fluid scrolling */
