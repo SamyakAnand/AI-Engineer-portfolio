@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Award, ExternalLink, X, Brain, Database, BarChart3, Code2,
-  CheckCircle2, Sparkles, ShieldCheck, ChevronLeft, ChevronRight
+  Sparkles, ShieldCheck, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 /* ─── Verified Certifications Data (All 11 Official Credentials) ─────────── */
@@ -149,6 +149,7 @@ function CertCard({
   onSelect,
 }: {
   cert: CertItem;
+  // eslint-disable-next-line no-unused-vars
   onSelect: (cert: CertItem) => void;
 }) {
   const Icon = cert.icon;

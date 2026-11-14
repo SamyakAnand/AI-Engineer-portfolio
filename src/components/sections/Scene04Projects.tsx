@@ -7,8 +7,8 @@ import { projects } from '@/content/projects';
 import type { Project } from '@/content/types';
 import {
   GitBranch, Cpu, CheckCircle, ArrowRight,
-  ShieldCheck, X, ExternalLink, Layers, AlertCircle, Wrench, Sparkles, Play,
-  Workflow, Database, ArrowUpRight, ChevronLeft, ChevronRight, ArrowLeft
+  ShieldCheck, X, Layers, AlertCircle, Wrench, Sparkles, Play,
+  Workflow, ArrowUpRight, ChevronLeft, ChevronRight, ArrowLeft
 } from 'lucide-react';
 import { soundFx } from '@/components/sound/AmbientSoundManager';
 
@@ -29,7 +29,8 @@ function ProjectCard({
 }: {
   project: Project;
   idx?: number;
-  onSelect: (p: Project) => void;
+  // eslint-disable-next-line no-unused-vars
+  onSelect: (project: Project) => void;
 }) {
   return (
     <motion.div

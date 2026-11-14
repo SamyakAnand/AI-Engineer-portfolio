@@ -9,16 +9,16 @@ import {
   Briefcase,
   Brain,
   Database,
-  Zap,
+  BarChart3,
   Users,
-  Award,
-  Clock,
-  GitBranch,
   ShieldCheck,
+  Globe,
+  UserCheck,
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, type ComponentType } from 'react';
+import { professionalKpis, professionalImpactStatement } from '@/content/kpis';
 
 function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -27,6 +27,13 @@ function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
 
   useEffect(() => {
     if (!inView) return;
+
+    // Respect prefers-reduced-motion for accessibility
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCount(to);
+      return;
+    }
+
     let frame = 0;
     const duration = 1600;
     const start = performance.now();
@@ -45,80 +52,16 @@ function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
   return <span ref={ref}>{formatted}{suffix}</span>;
 }
 
-const stats = [
-  {
-    label: 'AI & ML Systems',
-    value: 10,
-    suffix: '+',
-    icon: Brain,
-    color: 'text-purple-400',
-    desc: 'RAG, Agents & Custom Modeling',
-    glow: 'bg-purple-500/20',
-  },
-  {
-    label: 'Live Deployments',
-    value: 6,
-    suffix: '',
-    icon: Zap,
-    color: 'text-emerald-400',
-    desc: 'Vercel & Render Production',
-    glow: 'bg-emerald-500/20',
-  },
-  {
-    label: 'Students Mentored',
-    value: 100,
-    suffix: '+',
-    icon: Users,
-    color: 'text-cyan-400',
-    desc: 'Python, ML & Data Science',
-    glow: 'bg-cyan-500/20',
-  },
-  {
-    label: "Master's Groups Guided",
-    value: 10,
-    suffix: '+',
-    icon: Award,
-    color: 'text-amber-400',
-    desc: 'End-to-End Capstone Pipelines',
-    glow: 'bg-amber-500/20',
-  },
-  {
-    label: 'Datasets Analyzed',
-    value: 20,
-    suffix: '+',
-    icon: Database,
-    color: 'text-indigo-400',
-    desc: 'EDA, Feature Pipelines & BI',
-    glow: 'bg-indigo-500/20',
-  },
-  {
-    label: 'Verified Certifications',
-    value: 11,
-    suffix: '+',
-    icon: ShieldCheck,
-    color: 'text-fuchsia-400',
-    desc: 'Naresh IT, Kaggle & Research',
-    glow: 'bg-fuchsia-500/20',
-  },
-  {
-    label: 'Training Hours Delivered',
-    value: 1000,
-    suffix: '+',
-    icon: Clock,
-    color: 'text-rose-400',
-    desc: 'Hands-on Labs & Curriculum',
-    glow: 'bg-rose-500/20',
-  },
-  {
-    label: 'GitHub Repositories',
-    value: 27,
-    suffix: '+',
-    icon: GitBranch,
-    color: 'text-blue-400',
-    desc: 'Public Systems & Open Source',
-    glow: 'bg-blue-500/20',
-  },
-];
+const kpiIcons: Record<string, ComponentType<{ className?: string }>> = {
+  'students-mentored': Users,
+  'data-analytics-projects': BarChart3,
+  'ai-ml-projects': Brain,
+  'datasets-analyzed': Database,
+  'academic-projects': GraduationCap,
+  'certifications': ShieldCheck,
+  'websites-applications': Globe,
+  'team-leadership': UserCheck,
+};
 
 const expertise = [
   { label: 'LLM Systems & RAG', level: 88, color: 'from-purple-500 to-violet-600' },
@@ -230,7 +173,7 @@ export default function Scene02Identity() {
                 I enjoy taking an idea from problem definition to implementation. My hands-on work includes building machine learning applications, developing LLM-powered applications, experimenting with retrieval-augmented generation (RAG), creating local knowledge intelligence workflows, and architecting data analytics platforms.
               </p>
               <p className="text-sm leading-relaxed text-slate-100" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.95)' }}>
-                Alongside engineering, I teach Python, data science, and machine learning at Softgrowth Infotech — having mentored over 100+ students and guided 10+ college master&apos;s capstone groups end-to-end through real-world deployment.
+                Alongside engineering, I teach Python, Data Analytics, Data Science, and Machine Learning at Softgrowth Infotech — having mentored over 100+ students and guided 5+ Master&apos;s-level academic project teams through end-to-end architecture, technical documentation, reports, and defense presentations.
               </p>
             </div>
 
@@ -327,13 +270,13 @@ export default function Scene02Identity() {
         <div className="mt-16">
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-4">
             <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
-              <span className="text-xs font-mono uppercase tracking-widest text-purple-300">
-                Track Record &amp; Impact · Verified Metrics
+              <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="text-xs font-mono uppercase tracking-widest text-cyan-300">
+                Professional Impact · Stated Achievements &amp; Track Record
               </span>
             </div>
             <span className="text-[11px] font-mono text-white/50">
-              Production Deployments · Mentorship · Open Source
+              Technical Mentorship · Analytics · AI Engineering · Team Leadership
             </span>
           </div>
 
@@ -342,39 +285,75 @@ export default function Scene02Identity() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-3.5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4"
           >
-            {stats.map(({ label, value, suffix, icon: Icon, color, desc, glow }) => (
-              <div
-                key={label}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 p-4 text-left backdrop-blur-md shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/40 hover:bg-slate-900/70"
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${color} shadow-sm transition-transform duration-300 group-hover:scale-110`}>
-                    <Icon className="h-4.5 w-4.5" />
+            {professionalKpis.map((kpi) => {
+              const Icon = kpiIcons[kpi.id] || Sparkles;
+              return (
+                <div
+                  key={kpi.id}
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-4 sm:p-5 text-left backdrop-blur-md shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                    kpi.featured
+                      ? 'border-cyan-400/40 bg-gradient-to-br from-cyan-950/30 via-slate-950/60 to-slate-950/50 shadow-[0_0_25px_rgba(6,182,212,0.14)] ring-1 ring-cyan-400/25 hover:border-cyan-400/60 hover:bg-slate-900/80'
+                      : 'border-white/10 bg-slate-950/50 hover:border-purple-400/40 hover:bg-slate-900/70'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${kpi.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}
+                    >
+                      <Icon className="h-4.5 w-4.5" />
+                    </div>
+                    {kpi.featured ? (
+                      <span className="rounded-full border border-cyan-400/30 bg-cyan-950/60 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+                        Flagship
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">
+                        Verified
+                      </span>
+                    )}
                   </div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">Verified</span>
-                </div>
 
-                <div className="mt-3">
+                  <div className="mt-3.5">
+                    <div
+                      className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl ${kpi.color}`}
+                      style={{ textShadow: '0 2px 14px rgba(0,0,0,0.9)' }}
+                    >
+                      <AnimatedCounter to={kpi.value} suffix={kpi.suffix} />
+                    </div>
+                    <h3 className="mt-1 text-xs sm:text-sm font-bold text-white/95 group-hover:text-white leading-snug">
+                      {kpi.label}
+                    </h3>
+                    <p className="mt-1 text-[11px] sm:text-xs font-normal text-white/60 leading-relaxed line-clamp-2">
+                      {kpi.desc}
+                    </p>
+                  </div>
+
+                  {/* Ambient bottom glow accent */}
                   <div
-                    className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl ${color}`}
-                    style={{ textShadow: '0 2px 14px rgba(0,0,0,0.9)' }}
-                  >
-                    <AnimatedCounter to={value} suffix={suffix} />
-                  </div>
-                  <h3 className="mt-1 text-xs font-bold text-white/95 group-hover:text-white sm:text-sm">
-                    {label}
-                  </h3>
-                  <p className="mt-0.5 text-[11px] font-medium text-white/60 leading-tight">
-                    {desc}
-                  </p>
+                    className={`pointer-events-none absolute -bottom-6 -right-6 h-16 w-16 rounded-full blur-2xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 ${kpi.glow}`}
+                  />
                 </div>
+              );
+            })}
+          </motion.div>
 
-                {/* Ambient bottom glow accent */}
-                <div className={`pointer-events-none absolute -bottom-6 -right-6 h-16 w-16 rounded-full blur-2xl opacity-20 transition-opacity duration-300 group-hover:opacity-40 ${glow}`} />
-              </div>
-            ))}
+          {/* ── Compact Professional Impact Statement ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-6 rounded-2xl border border-purple-500/20 bg-slate-950/40 p-4 sm:p-5 backdrop-blur-md flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 shadow-sm"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-purple-400/30 bg-purple-950/50 text-purple-300">
+              <Sparkles className="h-4 w-4 text-purple-400" />
+            </div>
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-200 text-center sm:text-left">
+              <span className="font-semibold text-white">Professional Impact: </span>
+              {professionalImpactStatement}
+            </p>
           </motion.div>
         </div>
       </div>

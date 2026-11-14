@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import {
   Mail, Phone, MapPin, Send, User, MessageSquare, CheckCircle2,
-  AlertCircle, ArrowUpRight, Sparkles, Play
+  AlertCircle, ArrowUpRight, Sparkles
 } from 'lucide-react';
 
 /* ─── Social Platform Icons (GitHub, LinkedIn, WhatsApp, Instagram) ─── */

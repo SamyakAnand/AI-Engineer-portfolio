@@ -1,5 +1,6 @@
 'use client';
 
+import type { MouseEvent } from 'react';
 import { ArrowUpRight, BarChart3, Braces, BrainCircuit, Workflow, Sparkles, CheckCircle, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -43,7 +44,7 @@ const capabilities = [
 ];
 
 export default function Scene05Services() {
-  const scrollToContact = (e: React.MouseEvent) => {
+  const scrollToContact = (e: MouseEvent) => {
     e.preventDefault();
     document.getElementById('scene-contact')?.scrollIntoView({ behavior: 'smooth' });
   };
