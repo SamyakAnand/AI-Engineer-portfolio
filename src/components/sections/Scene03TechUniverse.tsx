@@ -10,16 +10,24 @@ import {
   siLanggraph,
   siDvc,
   siGithubactions,
+  siAnthropic,
+  siGooglegemini,
+  siDeepseek,
+  siOllama,
 } from 'simple-icons';
 import type { SimpleIcon } from 'simple-icons';
 
-const brandIcons: Record<string, SimpleIcon> = {
-  JavaScript: siJavascript,
-  TypeScript: siTypescript,
-  LangChain: siLangchain,
-  LangGraph: siLanggraph,
-  DVC: siDvc,
-  'GitHub Actions': siGithubactions,
+const brandIcons: Record<string, { icon: SimpleIcon; color?: string }> = {
+  JavaScript: { icon: siJavascript, color: '#f7df1e' },
+  TypeScript: { icon: siTypescript, color: '#3178c6' },
+  LangChain: { icon: siLangchain, color: '#2dd4bf' },
+  LangGraph: { icon: siLanggraph, color: '#a78bfa' },
+  DVC: { icon: siDvc, color: '#945dd6' },
+  'GitHub Actions': { icon: siGithubactions, color: '#38bdf8' },
+  Claude: { icon: siAnthropic, color: '#d97757' },
+  Gemini: { icon: siGooglegemini, color: '#a78bfa' },
+  DeepSeek: { icon: siDeepseek, color: '#5786FE' },
+  Ollama: { icon: siOllama, color: '#ffffff' },
 };
 
 const logos: Record<string, string> = {
@@ -44,12 +52,66 @@ const logos: Record<string, string> = {
 
 const categoryBadges: Record<string, { label: string; color: string }> = {
   'AI ENGINEERING': { label: 'LLM & Agents', color: 'border-purple-400/30 bg-purple-950/40 text-purple-300' },
-  'PROGRAMMING': { label: 'Languages', color: 'border-blue-400/30 bg-blue-950/40 text-blue-300' },
+  'PROGRAMMING & AI TOOLS': { label: 'Languages & AI Models', color: 'border-blue-400/30 bg-blue-950/40 text-blue-300' },
+  'PROGRAMMING': { label: 'Languages & AI Models', color: 'border-blue-400/30 bg-blue-950/40 text-blue-300' },
   'MACHINE LEARNING': { label: 'Algorithms & Modeling', color: 'border-violet-400/30 bg-violet-950/40 text-violet-300' },
   'BACKEND DEVELOPMENT': { label: 'APIs & Services', color: 'border-emerald-400/30 bg-emerald-950/40 text-emerald-300' },
   'DATA SCIENCE': { label: 'Analytics & BI', color: 'border-amber-400/30 bg-amber-950/40 text-amber-300' },
   'MLOPS AND INFRASTRUCTURE': { label: 'Pipelines & Cloud', color: 'border-fuchsia-400/30 bg-fuchsia-950/40 text-fuchsia-300' },
 };
+
+function renderCustomToolIcon(name: string) {
+  if (name.includes('ChatGPT')) {
+    return (
+      <span
+        aria-hidden="true"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-emerald-400/30 bg-emerald-950/40 p-1 text-emerald-300 shadow-sm"
+      >
+        <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
+          <path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6.07 6.07 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.51 2.9A5.98 5.98 0 0 0 13.26 24a6.06 6.06 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07zm-9.02 12.61a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76c.24-.14.39-.4.39-.68v-6.74l2.02 1.17c.02.01.04.03.04.05v5.58a4.5 4.5 0 0 1-4.49 4.5zm-9.66-4.13a4.47 4.47 0 0 1-.53-3.01l.14.08 4.78 2.76c.24.14.54.14.78 0l5.85-3.37v2.33c0 .03-.01.05-.04.06L9.74 19.95a4.5 4.5 0 0 1-6.14-1.65zM2.34 7.9a4.49 4.49 0 0 1 2.37-1.98v5.68c0 .28.15.54.39.68l5.81 3.35-2.02 1.17c-.02.01-.05.01-.07 0l-4.83-2.79A4.5 4.5 0 0 1 2.34 7.9zm16.1 3.85-5.84-3.37 2.02-1.17c.02-.01.05-.01.07 0l4.83 2.79a4.5 4.5 0 0 1-.68 8.1v-5.67c0-.28-.15-.54-.4-.68zm2.01-3.02-.14-.08-4.78-2.79c-.24-.14-.54-.14-.78 0L9.41 9.23V6.9c0-.03.01-.05.03-.06l4.83-2.79a4.5 4.5 0 0 1 6.68 4.66zM8.31 12.86l-2.02-1.16a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.79 2.76c-.24.14-.39.4-.39.68zm1.1-2.36 2.6-1.5 2.61 1.5v3l-2.6 1.5-2.61-1.5z" />
+        </svg>
+      </span>
+    );
+  }
+  if (name.includes('Kimi')) {
+    return (
+      <span
+        aria-hidden="true"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-cyan-400/30 bg-cyan-950/40 p-1 text-cyan-300 shadow-sm"
+      >
+        <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
+          <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A6.006 6.006 0 0 1 6.07 12H6a1 1 0 0 1 0-2h.07A6.006 6.006 0 0 1 11 5.07V5a1 1 0 0 1 2 0v.07A6.006 6.006 0 0 1 17.93 10H18a1 1 0 0 1 0 2h-.07A6.006 6.006 0 0 1 13 16.93z" />
+        </svg>
+      </span>
+    );
+  }
+  if (name.includes('Hermes')) {
+    return (
+      <span
+        aria-hidden="true"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-amber-400/30 bg-amber-950/40 p-1 text-amber-300 shadow-sm"
+      >
+        <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
+          <path d="M12 2L15 8L21 9L16.5 13.5L18 20L12 16.5L6 20L7.5 13.5L3 9L9 8L12 2Z" />
+        </svg>
+      </span>
+    );
+  }
+  if (name.includes('DeepSeek Harness')) {
+    return (
+      <span
+        aria-hidden="true"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-indigo-400/30 bg-indigo-950/40 p-1 text-indigo-300 shadow-sm"
+      >
+        <svg viewBox="0 0 24 24" className="h-full w-full fill-none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 17l6-6-6-6M12 19h8" stroke="#5786FE" strokeWidth="2.5" />
+          <circle cx="17" cy="8" r="3" fill="#5786FE" fillOpacity="0.35" stroke="#818cf8" strokeWidth="1.5" />
+        </svg>
+      </span>
+    );
+  }
+  return null;
+}
 
 export default function Scene03TechUniverse() {
   return (
@@ -102,7 +164,8 @@ export default function Scene03TechUniverse() {
                 <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   {group.skills.map((skill) => {
                     const logo = logos[skill.name];
-                    const brand = brandIcons[skill.name];
+                    const brandObj = brandIcons[skill.name];
+                    const customIcon = renderCustomToolIcon(skill.name);
 
                     return (
                       <li
@@ -119,22 +182,30 @@ export default function Scene03TechUniverse() {
                               className="h-full w-full object-contain"
                             />
                           </span>
-                        ) : brand ? (
+                        ) : brandObj ? (
                           <span
                             aria-hidden="true"
                             className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/[0.08] p-1.5"
-                            style={{ color: `#${brand.hex}` }}
+                            style={{ color: brandObj.color || `#${brandObj.icon.hex}` }}
                           >
                             <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
-                              <path d={brand.path} />
+                              <path d={brandObj.icon.path} />
                             </svg>
                           </span>
+                        ) : customIcon ? (
+                          customIcon
                         ) : (
                           <span
                             aria-hidden="true"
                             className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-purple-400/30 bg-purple-950/50 text-[10px] font-bold text-purple-200 shadow-sm"
                           >
-                            {skill.name.includes('Large') ? 'LLM' : skill.name.includes('Retrieval') ? 'RAG' : skill.name.includes('Agents') ? 'AGT' : skill.name.slice(0, 2).toUpperCase()}
+                            {skill.name.includes('Large')
+                              ? 'LLM'
+                              : skill.name.includes('Retrieval')
+                              ? 'RAG'
+                              : skill.name.includes('Agents')
+                              ? 'AGT'
+                              : skill.name.slice(0, 2).toUpperCase()}
                           </span>
                         )}
 

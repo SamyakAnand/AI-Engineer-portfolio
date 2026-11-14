@@ -15,12 +15,20 @@ export const skills: readonly SkillCategory[] = [
     ],
   },
   {
-    category: 'PROGRAMMING',
+    category: 'PROGRAMMING & AI TOOLS',
     skills: [
       { name: 'Python', group: 'programming' },
       { name: 'SQL', group: 'programming' },
       { name: 'JavaScript', group: 'programming' },
       { name: 'TypeScript', group: 'programming' },
+      { name: 'ChatGPT', group: 'ai-tools' },
+      { name: 'Claude', group: 'ai-tools' },
+      { name: 'Gemini', group: 'ai-tools' },
+      { name: 'DeepSeek', group: 'ai-tools' },
+      { name: 'Kimi', group: 'ai-tools' },
+      { name: 'Ollama', group: 'ai-tools' },
+      { name: 'Hermes', group: 'ai-tools' },
+      { name: 'DeepSeek Harness', group: 'ai-tools' },
     ],
   },
   {
