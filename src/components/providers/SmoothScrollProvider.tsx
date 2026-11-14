@@ -31,6 +31,18 @@ export default function SmoothScrollProvider({
     };
     window.addEventListener('portfolio:navigate', navigate);
 
+    const handleScrollLock = (event: Event) => {
+      const locked = (event as CustomEvent<{ locked?: boolean }>).detail?.locked;
+      if (lenisRef.current) {
+        if (locked) {
+          lenisRef.current.stop();
+        } else {
+          lenisRef.current.start();
+        }
+      }
+    };
+    window.addEventListener('portfolio:scroll-lock', handleScrollLock);
+
     // Respect user reduced motion preference
     if (reducedMotion) {
       return () => window.removeEventListener('portfolio:navigate', navigate);
@@ -61,6 +73,7 @@ export default function SmoothScrollProvider({
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       window.removeEventListener('portfolio:navigate', navigate);
+      window.removeEventListener('portfolio:scroll-lock', handleScrollLock);
     };
   }, []);
 

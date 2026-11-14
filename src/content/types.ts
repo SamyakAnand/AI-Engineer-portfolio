@@ -18,9 +18,12 @@ export interface Project {
   id: string;
   name: string;
   category?: string;
+  type?: 'ai' | 'ml' | 'analytics';
   description: string;
   problem: string;
+  solution?: string;
   architecture: string;
+  pipelineSteps?: string[];
   decisions?: string;
   limitations?: string;
   stack: string[];
@@ -28,6 +31,7 @@ export interface Project {
   screenshots: string[];
   github: string;
   demo: string | null;
+  stats?: { label: string; value: string }[];
 }
 
 export interface SkillGroup {

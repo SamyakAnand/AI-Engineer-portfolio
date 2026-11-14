@@ -48,6 +48,7 @@ const logos: Record<string, string> = {
   MLflow: 'mlflow_logo.png',
   'Git & GitHub': 'git.png',
   AWS: 'aws_logo.png',
+  Hermes: 'hermes.png',
 };
 
 const categoryBadges: Record<string, { label: string; color: string }> = {
@@ -85,18 +86,7 @@ function renderCustomToolIcon(name: string) {
       </span>
     );
   }
-  if (name.includes('Hermes')) {
-    return (
-      <span
-        aria-hidden="true"
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-amber-400/30 bg-amber-950/40 p-1 text-amber-300 shadow-sm"
-      >
-        <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
-          <path d="M12 2L15 8L21 9L16.5 13.5L18 20L12 16.5L6 20L7.5 13.5L3 9L9 8L12 2Z" />
-        </svg>
-      </span>
-    );
-  }
+
   if (name.includes('DeepSeek Harness')) {
     return (
       <span
