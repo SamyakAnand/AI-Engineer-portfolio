@@ -66,7 +66,7 @@ const CAPABILITIES: Capability[] = [
       'Continuous drift tracking with MLflow metrics',
     ],
     techUsed: ['PyTorch', 'Scikit-learn', 'XGBoost', 'Pandas', 'NumPy', 'MLflow'],
-    benchmark: '97%+ F1 classification score on cybersecurity packet streams',
+    benchmark: 'Disease Predictor: modular pipelines for five disease categories; Network Security: ML workflow documented in repository',
   },
   {
     id: 'backend',
@@ -83,7 +83,7 @@ const CAPABILITIES: Capability[] = [
       'Automated OpenAPI spec generation and unit testing',
     ],
     techUsed: ['FastAPI', 'Python 3.12', 'Pydantic V2', 'SQLAlchemy', 'PostgreSQL', 'Uvicorn'],
-    benchmark: 'Sub-50ms API response latency on production query endpoints',
+    benchmark: 'FastAPI and Flask REST API development with request validation and documented endpoints',
   },
   {
     id: 'mlops',
@@ -100,7 +100,7 @@ const CAPABILITIES: Capability[] = [
       'GitHub Actions automated linting, testing & deployment',
     ],
     techUsed: ['Docker', 'MLflow', 'DVC', 'DAGsHub', 'GitHub Actions', 'AWS', 'Vercel'],
-    benchmark: '100% reproducible training runs across distributed environments',
+    benchmark: 'MLflow and DagsHub experiment tracking; Docker and GitHub Actions in the engineering toolkit',
   },
   {
     id: 'data',
@@ -117,7 +117,7 @@ const CAPABILITIES: Capability[] = [
       'Resilient retry logic with exponential backoff',
     ],
     techUsed: ['Selenium', 'BeautifulSoup4', 'Playwright', 'Pandas', 'Power BI', 'SQL'],
-    benchmark: '25% improvement in team workflow delivery efficiency (Evoastra)',
+    benchmark: 'Evoastra: CARS24 data collection and NLP resume-analysis workflow',
   },
 ];
 
@@ -141,12 +141,12 @@ export default function Scene05Capabilities() {
               ENGINEERING PILLARS<span className="text-violet-500">.</span>
             </h2>
             <p className="mt-2 text-base sm:text-lg text-gray-300 font-light max-w-2xl">
-              Moving beyond theoretical demos into resilient, production-grade intelligence architectures.
+              Practical engineering across retrieval, analytics, model workflows, APIs, and reproducible development.
             </p>
           </div>
 
           <span className="text-xs font-mono text-white/40 uppercase">
-            6 VERIFIED COMPETENCY DOMAINS
+            6 PROJECT-BACKED COMPETENCY AREAS
           </span>
         </div>
 
