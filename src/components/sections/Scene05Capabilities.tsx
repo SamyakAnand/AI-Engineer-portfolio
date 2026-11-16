@@ -26,13 +26,13 @@ const CAPABILITIES: Capability[] = [
     description:
       'Exploring agent-style workflows through Python projects that model state, typed handoffs, bounded routines, and inspectable execution history. The current portfolio prototypes do not claim a production agent sandbox.',
     architecturalPillars: [
-      'Stateful cyclic graph orchestration (LangGraph)',
-      'Deterministic JSON Schema validation on all tool calls',
+      'Stateful workflow concepts and typed handoffs',
+      'Typed task boundaries and explicit completion states',
       'Explicit failure boundaries and bounded execution',
       'Persisted workflow state and inspectable artifacts',
     ],
     techUsed: ['LangGraph', 'LangChain', 'Python', 'FastAPI', 'Pydantic V2', 'Docker'],
-    benchmark: 'Zero uncontrolled execution loops with verified fallback routing',
+    benchmark: 'AKATSUKI documents four deterministic routines and one fixed verification path',
   },
   {
     id: 'rag',
@@ -49,7 +49,7 @@ const CAPABILITIES: Capability[] = [
       'Optional synthesis is disabled by default',
     ],
     techUsed: ['Python', 'FastAPI', 'SQLite', 'Next.js', 'TypeScript'],
-    benchmark: '99.4% citation passage verification accuracy',
+    benchmark: 'ARGUS: lexical retrieval, source offsets, and citation-ID checks; no semantic entailment claim',
   },
   {
     id: 'ml',
@@ -71,7 +71,7 @@ const CAPABILITIES: Capability[] = [
   {
     id: 'backend',
     title: 'Python Backend & API Engineering',
-    category: 'SCALABLE INFRASTRUCTURE',
+    category: 'PYTHON API DEVELOPMENT',
     icon: Server,
     headline: 'Practical APIs with validation, clear contracts, and useful integrations.',
     description:
