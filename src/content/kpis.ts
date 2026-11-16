@@ -57,13 +57,13 @@ export const professionalKpis: readonly ProfessionalKpi[] = [
   },
   {
     id: 'datasets-analyzed',
-    value: 3,
+    value: 4,
     suffix: '',
-    label: 'Public Live Demos',
-    desc: 'Deployed applications available to explore; each demo has its own project scope',
+    label: 'Public Demo URLs',
+    desc: 'Four deployed project links; two Vercel demos are interactive and two Render demos may need a cold start',
     color: 'text-indigo-400',
     glow: 'bg-indigo-500/20',
-    evidenceCategory: 'NEXUS, ARGUS AI, Disease Predictor',
+    evidenceCategory: 'NEXUS, ARGUS AI, Disease Predictor, Student Performance Indicator',
   },
   {
     id: 'certifications',
