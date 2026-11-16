@@ -8,7 +8,6 @@ import {
   Sparkles,
   Briefcase,
   Brain,
-  Database,
   BarChart3,
   Users,
   ShieldCheck,
