@@ -33,7 +33,6 @@ export const profile: Profile = {
         'Delivered practical instruction in data preprocessing, exploratory data analysis, statistical analysis, machine learning algorithms, and technical problem-solving.',
         'Guided 5+ postgraduate academic project teams through problem definition, technical architecture, implementation, documentation, and presentations.',
         'Commission-based / performance-based engagement; concluded 9 November 2026.',
-        'Engagement concluded 9 November 2026.',
       ],
     },
     {
@@ -43,7 +42,8 @@ export const profile: Profile = {
       end: 'August 2025',
       location: 'Remote',
       items: [
-        'Led a collaborative team of five interns working on applied Data Science and Machine Learning projects. Developed CARS24 listing data-collection workflows for automotive market analysis.',
+        'Led a collaborative team of five interns working on applied Data Science and Machine Learning projects.',
+        'Developed CARS24 listing data-collection workflows for automotive market analysis.',
         'Contributed to an NLP-based recruitment and resume-analysis solution, including text processing, skill matching, feature engineering, and analytical reporting.',
       ],
     },
