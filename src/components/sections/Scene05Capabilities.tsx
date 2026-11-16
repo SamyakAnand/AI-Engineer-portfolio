@@ -13,7 +13,7 @@ interface Capability {
   description: string;
   architecturalPillars: string[];
   techUsed: string[];
-  benchmark: string;
+  evidence: string;
 }
 
 const CAPABILITIES: Capability[] = [
@@ -32,7 +32,7 @@ const CAPABILITIES: Capability[] = [
       'Persisted workflow state and inspectable artifacts',
     ],
     techUsed: ['LangGraph', 'LangChain', 'Python', 'FastAPI', 'Pydantic V2', 'Docker'],
-    benchmark: 'AKATSUKI documents four deterministic routines and one fixed verification path',
+    evidence: 'AKATSUKI documents four deterministic routines and one fixed verification path',
   },
   {
     id: 'rag',
@@ -266,19 +266,19 @@ export default function Scene05Capabilities() {
                 </div>
               </div>
 
-              {/* Bottom Benchmark Callout */}
+              {/* Bottom Project Evidence Callout */}
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest block">
-                    VERIFIED PRODUCTION IMPACT
+                    PROJECT EVIDENCE
                   </span>
                   <span className="text-xs sm:text-sm font-mono font-bold text-cyan-300">
-                    {selectedCap.benchmark}
+                    {selectedCap.evidence}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>SYSTEM OPERATIONAL</span>
+                  <span>DOCUMENTED</span>
                 </div>
               </div>
             </div>
