@@ -13,6 +13,7 @@ import {
   Users,
   ShieldCheck,
   CheckCircle2,
+  Globe,
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
