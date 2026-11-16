@@ -19,7 +19,7 @@ interface Capability {
 const CAPABILITIES: Capability[] = [
   {
     id: 'agentic',
-    title: 'Agentic AI & Deterministic Tool Orchestration',
+    title: 'Agent Workflow Prototypes & Deterministic Routines',
     category: 'AUTONOMOUS WORKFLOWS',
     icon: Bot,
     headline: 'Stateful workflows with typed inputs, explicit boundaries, and inspectable run history.',
@@ -31,7 +31,7 @@ const CAPABILITIES: Capability[] = [
       'Explicit failure boundaries and bounded execution',
       'Persisted workflow state and inspectable artifacts',
     ],
-    techUsed: ['LangGraph', 'LangChain', 'Python', 'FastAPI', 'Pydantic V2', 'Docker'],
+    techUsed: ['Python', 'SQLite', 'Typed Handoffs', 'Persistent State', 'Local Verification'],
     evidence: 'AKATSUKI documents four deterministic routines and one fixed verification path',
   },
   {
