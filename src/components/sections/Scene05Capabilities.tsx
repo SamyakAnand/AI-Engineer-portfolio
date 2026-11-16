@@ -49,7 +49,7 @@ const CAPABILITIES: Capability[] = [
       'Optional synthesis is disabled by default',
     ],
     techUsed: ['Python', 'FastAPI', 'SQLite', 'Next.js', 'TypeScript'],
-    benchmark: 'ARGUS: lexical retrieval, source offsets, and citation-ID checks; no semantic entailment claim',
+    evidence: 'ARGUS: lexical retrieval, source offsets, and citation-ID checks; no semantic entailment claim',
   },
   {
     id: 'ml',
@@ -66,7 +66,7 @@ const CAPABILITIES: Capability[] = [
       'Drift reporting in modular ML pipelines',
     ],
     techUsed: ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Pandas', 'MLflow'],
-    benchmark: 'Disease Predictor: modular pipelines for five disease categories; Network Security: ML workflow documented in repository',
+    evidence: 'Disease Predictor: modular pipelines for five disease categories; Network Security: ML workflow documented in repository',
   },
   {
     id: 'backend',
@@ -83,7 +83,7 @@ const CAPABILITIES: Capability[] = [
       'Integration with SQLite, PostgreSQL, and MongoDB',
     ],
     techUsed: ['Python', 'FastAPI', 'Flask', 'Pydantic', 'SQLite', 'PostgreSQL'],
-    benchmark: 'FastAPI and Flask REST API development with request validation and documented endpoints',
+    evidence: 'FastAPI and Flask REST API development with request validation and documented endpoints',
   },
   {
     id: 'mlops',
@@ -100,7 +100,7 @@ const CAPABILITIES: Capability[] = [
       'CI workflows and repository checks with GitHub Actions',
     ],
     techUsed: ['Docker', 'MLflow', 'DVC', 'DAGsHub', 'GitHub Actions', 'AWS', 'Vercel'],
-    benchmark: 'MLflow and DagsHub used in ML projects; DVC, Docker and GitHub Actions in the toolkit',
+    evidence: 'MLflow and DagsHub used in ML projects; DVC, Docker and GitHub Actions in the toolkit',
   },
   {
     id: 'data',
@@ -117,7 +117,7 @@ const CAPABILITIES: Capability[] = [
       'Schema checks, cleaning, and deduplication',
     ],
     techUsed: ['Python', 'BeautifulSoup', 'Pandas', 'SQL', 'Power BI', 'Tableau'],
-    benchmark: 'Evoastra: CARS24 data collection and NLP resume-analysis workflow',
+    evidence: 'Evoastra: CARS24 data collection and NLP resume-analysis workflow',
   },
 ];
 
