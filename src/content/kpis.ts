@@ -1,5 +1,4 @@
-// Single source of truth for Samyak Anand's Professional Impact KPIs & Track Record metrics.
-
+// Evidence-led professional metrics. Keep values tied to the resume and project records.
 export interface ProfessionalKpi {
   id: string;
   value: number;
@@ -14,68 +13,69 @@ export interface ProfessionalKpi {
 
 export const professionalKpis: readonly ProfessionalKpi[] = [
   {
-    id: 'ai-ml-projects',
-    value: 10,
-    suffix: '+',
-    label: 'AI & ML Systems Built',
-    desc: 'Autonomous agents, RAG retrieval architectures, supervised pipelines & deep learning',
-    color: 'text-purple-400',
-    glow: 'bg-purple-500/20',
-    featured: true,
-    evidenceCategory: 'NEXUS, ARGUS AI, SHIRO, L Platform, Resume Matcher, NetworkSecurity',
-  },
-  {
     id: 'students-mentored',
     value: 100,
     suffix: '+',
     label: 'Learners Mentored',
-    desc: 'Python programming, exploratory data analysis, machine learning pipelines & capstones',
+    desc: 'Python, data science, machine learning, and hands-on project guidance',
     color: 'text-cyan-400',
     glow: 'bg-cyan-500/25',
     featured: true,
-    evidenceCategory: 'Technical Mentorship · Softgrowth Infotech (Oct 2025 – Nov 2026)',
-  },
-  {
-    id: 'data-analytics-projects',
-    value: 50,
-    suffix: '+',
-    label: 'Data Analytics Deliverables',
-    desc: 'Power BI executive dashboards, DAX modeling, SQL transformations & business intelligence',
-    color: 'text-amber-400',
-    glow: 'bg-amber-500/20',
-    evidenceCategory: 'Financial Risk, Credit Card Delinquency, Blinkit, Insurance & Sales BI',
-  },
-  {
-    id: 'datasets-analyzed',
-    value: 40,
-    suffix: '+',
-    label: 'Datasets Analyzed',
-    desc: 'Data profiling, anomaly checks, distributional metrics, statistical modeling & feature engineering',
-    color: 'text-indigo-400',
-    glow: 'bg-indigo-500/20',
-    evidenceCategory: 'Clinical, Financial, E-commerce, Automobile & Network Telemetry',
+    evidenceCategory: 'Softgrowth Infotech · Data Science Trainer',
   },
   {
     id: 'academic-projects',
     value: 5,
     suffix: '+',
-    label: "Master's Capstones Guided",
-    desc: 'Technical project architecture, documentation, defense decks & execution mentoring',
+    label: 'Postgraduate Teams Guided',
+    desc: 'Project planning, technical implementation, documentation, and presentations',
     color: 'text-emerald-400',
     glow: 'bg-emerald-500/20',
-    evidenceCategory: 'End-to-End Capstones, Technical Specs & Defense Presentations',
+    featured: true,
+    evidenceCategory: 'Master’s-level academic project teams · Softgrowth Infotech',
+  },
+  {
+    id: 'ai-ml-projects',
+    value: 5,
+    suffix: '+',
+    label: 'Featured AI & ML Projects',
+    desc: 'Knowledge retrieval, code intelligence, data analysis, and supervised ML',
+    color: 'text-purple-400',
+    glow: 'bg-purple-500/20',
+    featured: true,
+    evidenceCategory: 'NEXUS, ARGUS AI, SHIRO CodeMind, Disease Predictor, Resume Analyzer',
+  },
+  {
+    id: 'data-analytics-projects',
+    value: 6,
+    suffix: '+',
+    label: 'BI Case Studies',
+    desc: 'Financial risk, insurance, credit cards, retail, and streaming analytics',
+    color: 'text-amber-400',
+    glow: 'bg-amber-500/20',
+    evidenceCategory: 'Power BI and SQL portfolio projects documented in the resume',
+  },
+  {
+    id: 'datasets-analyzed',
+    value: 4,
+    suffix: '',
+    label: 'Public Demo URLs',
+    desc: 'Four deployed project links; two Vercel demos are interactive and two Render demos may need a cold start',
+    color: 'text-indigo-400',
+    glow: 'bg-indigo-500/20',
+    evidenceCategory: 'NEXUS, ARGUS AI, Disease Predictor, Student Performance Indicator',
   },
   {
     id: 'certifications',
-    value: 9,
-    suffix: '+',
-    label: 'Verified Credentials',
-    desc: 'Data Science, Machine Learning, Deep Learning, Cloud & Python engineering',
+    value: 11,
+    suffix: '',
+    label: 'Courses & Credentials',
+    desc: 'Data science, machine learning, Python, and internship/research completions',
     color: 'text-fuchsia-400',
     glow: 'bg-fuchsia-500/20',
-    evidenceCategory: 'Naresh IT, Kaggle, Evoastra, Gilbert, Udemy, CADD',
+    evidenceCategory: 'Naresh IT, Kaggle, Udemy, Evoastra, Gilbert Research Center, CADD',
   },
 ] as const;
 
 export const professionalImpactStatement =
-  'I build practical AI applications that combine intelligent workflows, retrieval systems, machine learning, data engineering and reliable backend infrastructure — backed by hands-on engineering, technical training, and verifiable project codebases.';
+  'I build practical AI applications that combine retrieval, machine learning, deterministic data workflows, and reliable Python APIs—backed by hands-on projects and technical mentorship.';

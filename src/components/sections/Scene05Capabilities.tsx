@@ -13,94 +13,94 @@ interface Capability {
   description: string;
   architecturalPillars: string[];
   techUsed: string[];
-  benchmark: string;
+  evidence: string;
 }
 
 const CAPABILITIES: Capability[] = [
   {
     id: 'agentic',
-    title: 'Agentic AI & Deterministic Tool Orchestration',
+    title: 'Agent Workflow Prototypes & Deterministic Routines',
     category: 'AUTONOMOUS WORKFLOWS',
     icon: Bot,
-    headline: 'Cyclic state machines and schema-enforced tool execution.',
+    headline: 'Stateful workflows with typed inputs, explicit boundaries, and inspectable run history.',
     description:
-      'Designing robust autonomous agents using LangGraph and Python. Agents do not execute unconstrained generation; they operate through typed schemas, deterministic tool verification, retry policies, and transparent run traces.',
+      'Exploring agent-style workflows through Python projects that model state, typed handoffs, bounded routines, and inspectable execution history. The current portfolio prototypes do not claim a production agent sandbox.',
     architecturalPillars: [
-      'Stateful cyclic graph orchestration (LangGraph)',
-      'Deterministic JSON Schema validation on all tool calls',
-      'Automated error-correction & fallback planning',
-      'Auditable step-by-step execution telemetry',
+      'Stateful workflow concepts and typed handoffs',
+      'Typed task boundaries and explicit completion states',
+      'Explicit failure boundaries and bounded execution',
+      'Persisted workflow state and inspectable artifacts',
     ],
-    techUsed: ['LangGraph', 'LangChain', 'Python', 'FastAPI', 'Pydantic V2', 'Docker'],
-    benchmark: 'Zero uncontrolled execution loops with verified fallback routing',
+    techUsed: ['Python', 'SQLite', 'Typed Handoffs', 'Persistent State', 'Local Verification'],
+    evidence: 'AKATSUKI documents four deterministic routines and one fixed verification path',
   },
   {
     id: 'rag',
-    title: 'Production RAG & Evidence Grounding',
+    title: 'Retrieval Workflows & Evidence Traceability',
     category: 'RETRIEVAL & FACTUALITY',
     icon: Brain,
-    headline: 'Eliminating hallucinations via passage citation gates.',
+    headline: 'Preserving source context with passage offsets and reference checks.',
     description:
-      'Architecting enterprise retrieval pipelines that decouple search from synthesis. Content is pre-indexed with hierarchical chunking, dense vector embeddings, and cross-encoder re-ranking. Generation is explicitly blocked unless verified citations match source passage IDs.',
+      'Building local document workflows that separate passage retrieval from optional answer synthesis. ARGUS indexes Markdown and UTF-8 text, retrieves passages lexically, tracks source offsets, and validates citation IDs.',
     architecturalPillars: [
       'Passage-level citation matching & provenance tracking',
-      'Hybrid dense vector + BM25 sparse keyword retrieval',
-      'Cross-encoder re-ranking to boost top-k relevance',
-      'Context compression to reduce LLM token overhead',
+      'Lexical passage retrieval over indexed text',
+      'Exact source-offset mapping for traceability',
+      'Optional synthesis is disabled by default',
     ],
-    techUsed: ['Sentence Transformers', 'ChromaDB', 'PostgreSQL pgvector', 'FastAPI', 'LangChain'],
-    benchmark: '99.4% citation passage verification accuracy',
+    techUsed: ['Python', 'FastAPI', 'SQLite', 'Next.js', 'TypeScript'],
+    evidence: 'ARGUS: lexical retrieval, source offsets, and citation-ID checks; no semantic entailment claim',
   },
   {
     id: 'ml',
     title: 'Applied Machine Learning & Statistical Modeling',
     category: 'PREDICTIVE SYSTEMS',
     icon: Workflow,
-    headline: 'Production-ready clinical and cybersecurity classification.',
+    headline: 'Modular supervised learning workflows and evaluation.',
     description:
-      'Developing supervised and ensemble machine learning systems from clinical disease risk predictors to high-velocity network intrusion classifiers. Rigorous handling of imbalanced datasets, cross-validation, and feature drift detection.',
+      'Building and studying supervised ML workflows, including a five-category disease predictor and a network-security pipeline. Project work covers data validation, transformation, training, and drift reporting.',
     architecturalPillars: [
-      'XGBoost, Random Forests & Ensemble Stacking',
-      'SMOTE & class-weight compensation for severe imbalance',
-      'Model explainability via SHAP & feature importance',
-      'Continuous drift tracking with MLflow metrics',
+      'Regression and classification workflows',
+      'Feature engineering and preprocessing',
+      'Model evaluation and validation',
+      'Drift reporting in modular ML pipelines',
     ],
-    techUsed: ['PyTorch', 'Scikit-learn', 'XGBoost', 'Pandas', 'NumPy', 'MLflow'],
-    benchmark: '97%+ F1 classification score on cybersecurity packet streams',
+    techUsed: ['Scikit-learn', 'TensorFlow', 'Keras', 'PyTorch', 'Pandas', 'MLflow'],
+    evidence: 'Disease Predictor: modular pipelines for five disease categories; Network Security: ML workflow documented in repository',
   },
   {
     id: 'backend',
-    title: 'High-Concurrency Async Backend Architecture',
-    category: 'SCALABLE INFRASTRUCTURE',
+    title: 'Python Backend & API Engineering',
+    category: 'PYTHON API DEVELOPMENT',
     icon: Server,
-    headline: 'Sub-50ms async APIs powering AI inference.',
+    headline: 'Practical APIs with validation, clear contracts, and useful integrations.',
     description:
-      'Engineering low-latency backend architectures with FastAPI, AsyncIO, and PostgreSQL. Cleanly decoupling heavy computational AI workers from lightweight client endpoints using connection pooling, background tasks, and streaming responses.',
+      'Developing Python APIs with FastAPI and Flask, REST endpoints, Pydantic validation, and data-store integrations for AI and analytics applications.',
     architecturalPillars: [
-      'AsyncIO non-blocking event loops for high I/O throughput',
+      'REST API design with FastAPI and Flask',
       'Strict schema validation with Pydantic V2 models',
-      'Connection pooling for PostgreSQL and SQLite concurrency',
-      'Automated OpenAPI spec generation and unit testing',
+      'Pydantic request and response validation',
+      'Integration with SQLite, PostgreSQL, and MongoDB',
     ],
-    techUsed: ['FastAPI', 'Python 3.12', 'Pydantic V2', 'SQLAlchemy', 'PostgreSQL', 'Uvicorn'],
-    benchmark: 'Sub-50ms API response latency on production query endpoints',
+    techUsed: ['Python', 'FastAPI', 'Flask', 'Pydantic', 'SQLite', 'PostgreSQL'],
+    evidence: 'FastAPI and Flask REST API development with request validation and documented endpoints',
   },
   {
     id: 'mlops',
-    title: 'MLOps, Reproducibility & Cloud CI/CD',
-    category: 'LIFECYCLE MANAGEMENT',
+    title: 'MLOps, Experiment Tracking & Delivery',
+    category: 'REPRODUCIBLE WORKFLOWS',
     icon: GitCommit,
-    headline: 'Zero black boxes: reproducible models, code, and data.',
+    headline: 'Track experiments and organize repeatable project workflows.',
     description:
-      'Implementing automated end-to-end MLOps architectures. Using MLflow for experiment tracking, DVC for dataset versioning, Docker for reproducible environments, and GitHub Actions for continuous testing and container deployment.',
+      'Using MLflow and DagsHub for experiment tracking in ML projects, alongside DVC, Docker, and GitHub Actions in the broader development toolkit. The portfolio does not claim a fully automated production MLOps platform.',
     architecturalPillars: [
-      'Automated model tracking & parameter logging via MLflow',
-      'Data version control and remote synchronization with DVC',
-      'Multi-stage Docker builds optimizing image footprint',
-      'GitHub Actions automated linting, testing & deployment',
+      'Experiment tracking and metric logging with MLflow',
+      'Dataset versioning workflows with DVC',
+      'Containerized development and reproducible environments with Docker',
+      'CI workflows and repository checks with GitHub Actions',
     ],
     techUsed: ['Docker', 'MLflow', 'DVC', 'DAGsHub', 'GitHub Actions', 'AWS', 'Vercel'],
-    benchmark: '100% reproducible training runs across distributed environments',
+    evidence: 'MLflow and DagsHub used in ML projects; DVC, Docker and GitHub Actions in the toolkit',
   },
   {
     id: 'data',
@@ -109,15 +109,15 @@ const CAPABILITIES: Capability[] = [
     icon: Database,
     headline: 'Automated telemetry extraction and market analytics.',
     description:
-      'Building resilient web-scraping pipelines and automated ETL pipelines to ingest dynamic market pricing, candidate resumes, and clinical datasets. Includes proxy rotation, robust error recovery, and strict schema validation.',
+      'Building data collection and preparation workflows, including CARS24 listing scraping, resume text processing, clinical dataset preparation, and analytical reporting.',
     architecturalPillars: [
-      'Automated scraping with Selenium, BeautifulSoup4 & Playwright',
+      'Web scraping and HTML parsing with Python tools',
       'Schema validation & deduplication pipelines',
-      'Automated Power BI and Tableau visualization exports',
-      'Resilient retry logic with exponential backoff',
+      'Data preparation for Power BI and Tableau reporting',
+      'Schema checks, cleaning, and deduplication',
     ],
-    techUsed: ['Selenium', 'BeautifulSoup4', 'Playwright', 'Pandas', 'Power BI', 'SQL'],
-    benchmark: '25% improvement in team workflow delivery efficiency (Evoastra)',
+    techUsed: ['Python', 'BeautifulSoup', 'Pandas', 'SQL', 'Power BI', 'Tableau'],
+    evidence: 'Evoastra: CARS24 data collection and NLP resume-analysis workflow',
   },
 ];
 
@@ -141,12 +141,12 @@ export default function Scene05Capabilities() {
               ENGINEERING PILLARS<span className="text-violet-500">.</span>
             </h2>
             <p className="mt-2 text-base sm:text-lg text-gray-300 font-light max-w-2xl">
-              Moving beyond theoretical demos into resilient, production-grade intelligence architectures.
+              Practical engineering across retrieval, analytics, model workflows, APIs, and reproducible development.
             </p>
           </div>
 
           <span className="text-xs font-mono text-white/40 uppercase">
-            6 VERIFIED COMPETENCY DOMAINS
+            6 PROJECT-BACKED COMPETENCY AREAS
           </span>
         </div>
 
@@ -266,19 +266,19 @@ export default function Scene05Capabilities() {
                 </div>
               </div>
 
-              {/* Bottom Benchmark Callout */}
+              {/* Bottom Project Evidence Callout */}
               <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest block">
-                    VERIFIED PRODUCTION IMPACT
+                    PROJECT EVIDENCE
                   </span>
                   <span className="text-xs sm:text-sm font-mono font-bold text-cyan-300">
-                    {selectedCap.benchmark}
+                    {selectedCap.evidence}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>SYSTEM OPERATIONAL</span>
+                  <span>DOCUMENTED</span>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { projects } from '@/content/projects';
+import { profile } from '@/content/profile';
 import type { Project } from '@/content/types';
 import {
   GitBranch, Cpu, CheckCircle, ArrowRight,
@@ -197,7 +198,9 @@ const ProjectCard = React.forwardRef<HTMLElement, ProjectCardProps>(function Pro
 ProjectCard.displayName = 'ProjectCard';
 
 export default function Scene04Projects() {
-  const projectList = Object.values(projects);
+  const projectList = profile.projects
+    .map((id) => projects[id as keyof typeof projects])
+    .filter((project): project is Project => Boolean(project));
   const [mounted, setMounted] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');

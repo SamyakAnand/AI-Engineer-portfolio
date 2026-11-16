@@ -8,11 +8,11 @@ import {
   Sparkles,
   Briefcase,
   Brain,
-  Database,
   BarChart3,
   Users,
   ShieldCheck,
   CheckCircle2,
+  Globe,
 } from 'lucide-react';
 import Image from 'next/image';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
@@ -55,37 +55,37 @@ const kpiIcons: Record<string, ComponentType<{ className?: string }>> = {
   'students-mentored': Users,
   'data-analytics-projects': BarChart3,
   'ai-ml-projects': Brain,
-  'datasets-analyzed': Database,
+  'datasets-analyzed': Globe,
   'academic-projects': GraduationCap,
   'certifications': ShieldCheck,
 };
 
 const verifiedCompetencies = [
   {
-    domain: 'LLM Systems & RAG Architectures',
+    domain: 'LLM Applications & Retrieval Workflows',
     badge: 'Project-Verified',
-    context: 'Passage offset verification in ARGUS AI & AST symbol mind maps in SHIRO',
+    context: 'Lexical passage retrieval and exact source offsets in ARGUS; parser-derived imports and source references in SHIRO',
     border: 'border-purple-400/35 bg-purple-950/40 text-purple-200',
     dot: 'bg-purple-400',
   },
   {
-    domain: 'Supervised ML & Production Pipelines',
+    domain: 'Supervised ML & Data Pipelines',
     badge: 'Project-Verified',
-    context: 'Clinical Predictor (SVM/Random Forest) & Network Security (MongoDB + Drift)',
+    context: 'Five-category Disease Predictor and modular Network Security ML pipeline',
     border: 'border-indigo-400/35 bg-indigo-950/40 text-indigo-200',
     dot: 'bg-indigo-400',
   },
   {
     domain: 'Python & FastAPI Backend Architecture',
-    badge: 'Production Stack',
-    context: 'Asynchronous inference endpoints, Pydantic validation & deterministic evaluators',
+    badge: 'Project-Backed',
+    context: 'FastAPI / Flask endpoints, request validation, and deterministic evaluation workflows',
     border: 'border-emerald-400/35 bg-emerald-950/40 text-emerald-200',
     dot: 'bg-emerald-400',
   },
   {
-    domain: 'Data Analytics & Star-Schema BI',
-    badge: '50+ Dashboards',
-    context: 'Executive DAX modeling, Power BI reports across Financial Risk, Credit Cards & Blinkit',
+    domain: 'Data Analytics & Business Intelligence',
+    badge: 'BI Case Studies',
+    context: 'Power BI case studies across Financial Risk, Credit Cards, Insurance, Retail & Streaming',
     border: 'border-amber-400/35 bg-amber-950/40 text-amber-200',
     dot: 'bg-amber-400',
   },
