@@ -13,7 +13,6 @@ export const skills: readonly SkillCategory[] = [
       { name: 'Structured Tool Calling', group: 'ai' },
       { name: 'AI Agent Concepts', group: 'ai' },
       { name: 'LLM Evaluation & Citation Checks', group: 'ai' },
-      { name: 'LangChain & LangGraph', group: 'ai' },
     ],
   },
   {
