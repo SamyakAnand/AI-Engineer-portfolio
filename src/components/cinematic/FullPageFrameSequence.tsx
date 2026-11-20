@@ -31,11 +31,11 @@ export default function FullPageFrameSequence() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (image?.complete && image.naturalWidth) {
-      // On phones, fit the complete source frame instead of cropping it to fill
-      // the tall viewport. Desktop keeps the original immersive cover treatment.
-      const fitScale = mobile
-        ? Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight) * 0.94
-        : Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      // On phones, use a softened cover scale: noticeably wider framing than
+      // full-bleed cover, but large enough to avoid the tiny letterboxed frame.
+      // Desktop keeps the original immersive cover treatment.
+      const coverScale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      const fitScale = mobile ? coverScale * 0.78 : coverScale;
       const width = image.naturalWidth * fitScale;
       const height = image.naturalHeight * fitScale;
       ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
