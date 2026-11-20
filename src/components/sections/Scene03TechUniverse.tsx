@@ -55,7 +55,6 @@ const logos: Record<string, string> = {
   Tableau: 'tableau_logo.png',
   Docker: 'docker_logo.png',
   MLflow: 'mlflow_logo.png',
-  'Git & GitHub': 'git.png',
   AWS: 'aws_logo.png',
   Hermes: 'hermes.png',
 };
