@@ -53,6 +53,14 @@ const ProjectCard = React.forwardRef<HTMLElement, ProjectCardProps>(function Pro
       role="button"
       aria-label={`Inspect case study for ${project.name}`}
       onKeyDown={(e) => {
+        // Let nested links and controls keep their native keyboard behavior.
+        // Without this guard, Enter on a Live Demo / GitHub anchor bubbles to
+        // the card and gets preventDefault()'d before the browser can navigate.
+        const target = e.target as HTMLElement;
+        if (target.closest('a, button, input, textarea, select, [role="link"], [role="button"]')) {
+          return;
+        }
+
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           soundFx.playClick();
