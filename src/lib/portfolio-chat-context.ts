@@ -39,7 +39,14 @@ const BASE_INSTRUCTION = [
   '- SHIRO supports public repository snapshots and validates file/line references; do not imply private-repository access.',
   '- L is early-stage; do not claim live provider benchmarking.',
   '- Do not claim to have run code, inspected private accounts, or verified a live deployment during this chat.',
-].join('\n');
+].join('\\n');
+
+const GENERIC_QUERY_TERMS = new Set([
+  'tell', 'about', 'the', 'portfolio', 'me', 'my', 'your', 'you', 'what', 'which',
+  'overview', 'describe', 'explain', 'show', 'all', 'project', 'projects', 'work',
+  'profile', 'background', 'experience', 'skills', 'skill', 'technology', 'technologies',
+  'built', 'build', 'building', 'summarize', 'summary', 'give', 'can', 'does',
+]);
 
 function scoreProject(project: (typeof projects)[keyof typeof projects], query: string) {
   const haystack = [
@@ -49,7 +56,8 @@ function scoreProject(project: (typeof projects)[keyof typeof projects], query: 
     project.description,
     project.stack.join(' '),
   ].join(' ').toLowerCase();
-  const terms = query.toLowerCase().match(/[a-z0-9+#.-]{3,}/g) || [];
+  const terms = (query.toLowerCase().match(/[a-z0-9+#.-]{3,}/g) || [])
+    .filter((term) => !GENERIC_QUERY_TERMS.has(term));
   return terms.reduce((score, term) => score + (haystack.includes(term) ? (project.name.toLowerCase().includes(term) ? 4 : 1) : 0), 0);
 }
 
@@ -59,7 +67,9 @@ export function buildPortfolioSystemInstruction(query: string) {
     .map((project) => ({ project, score: scoreProject(project, query) }))
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score);
-  const selected = (ranked.length ? ranked.slice(0, 3).map((entry) => entry.project) : allProjects.filter((project) => project.tier === 1).slice(0, 4));
+  const selected = ranked.length
+    ? ranked.slice(0, 3).map((entry) => entry.project)
+    : allProjects.filter((project) => project.tier === 1).slice(0, 4);
   const projectContext = selected.map((project) => [
     '- ' + project.name,
     '  Summary: ' + project.description,
@@ -70,7 +80,7 @@ export function buildPortfolioSystemInstruction(query: string) {
     '  Limitations: ' + project.limitations,
     '  Repository: ' + (project.github || 'Not listed'),
     '  Demo: ' + (project.demo || 'Not listed'),
-  ].join('\n')).join('\n\n');
+  ].join('\\n')).join('\\n\\n');
 
-  return BASE_INSTRUCTION + '\n\nRELEVANT PROJECT RECORDS\n' + projectContext;
+  return BASE_INSTRUCTION + '\\n\\nRELEVANT PROJECT RECORDS\\n' + projectContext;
 }
