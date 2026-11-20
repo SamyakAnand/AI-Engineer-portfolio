@@ -6,7 +6,7 @@ import { findNearestLoadedFrame, mapScrollToFrameProgress, type FrameScrollAncho
 const TOTAL_FRAMES = 300;
 const MOBILE_FRAME_STRIDE = 1;
 const MOBILE_CACHE_RADIUS = 5;
-const MOBILE_FOREGROUND_SCALE = 0.56;
+const MOBILE_FOREGROUND_SCALE = 0.62;
 
 export default function FullPageFrameSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
