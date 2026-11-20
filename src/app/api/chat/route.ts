@@ -8,6 +8,24 @@ const WINDOW_MS = 60_000;
 const LIMIT = 10;
 const MAX_BYTES = 24 * 1024;
 const requestLog = new Map<string, number[]>();
+const responseCache = new Map<string, { reply: string; expiresAt: number }>();
+const CACHE_TTL_MS = 60_000;
+
+function getCachedReply(key: string) {
+  const cached = responseCache.get(key);
+  if (!cached) return null;
+  if (cached.expiresAt <= Date.now()) { responseCache.delete(key); return null; }
+  return cached.reply;
+}
+
+function setCachedReply(key: string, reply: string) {
+  if (!reply) return;
+  if (responseCache.size >= 100) {
+    const oldest = responseCache.keys().next().value;
+    if (oldest) responseCache.delete(oldest);
+  }
+  responseCache.set(key, { reply, expiresAt: Date.now() + CACHE_TTL_MS });
+}
 const apiBase = (process.env.EURI_API_BASE_URL || 'https://api.euron.one/api/v1/euri').replace(/\/$/, '');
 
 function limited(ip: string) {
@@ -45,7 +63,8 @@ function extractDelta(payload: unknown): string {
   return '';
 }
 
-async function* readProviderDeltas(body: ReadableStream<Uint8Array>): AsyncGenerator<string> {
+async function* readProviderDeltas(body: ReadableStream<Uint8Array>, onComplete?: (reply: string) => void): AsyncGenerator<string> {
+  let collected = '';
   const reader = body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -70,11 +89,12 @@ async function* readProviderDeltas(body: ReadableStream<Uint8Array>): AsyncGener
       buffer = lines.pop() || '';
       for (const line of lines) {
         const delta = parseLine(line);
-        if (delta) yield delta;
+        if (delta) { collected += delta; yield delta; }
       }
       if (done) {
         const finalDelta = parseLine(buffer);
-        if (finalDelta) yield finalDelta;
+        if (finalDelta) { collected += finalDelta; yield finalDelta; }
+        onComplete?.(collected.trim());
         break;
       }
     }
@@ -113,6 +133,12 @@ export async function POST(request: NextRequest) {
 
   const lastUserMessage = parsed.data.messages[parsed.data.messages.length - 1].content;
   const systemInstruction = buildPortfolioSystemInstruction(lastUserMessage);
+  const singleQuestion = parsed.data.messages.filter((message) => message.role === 'user').length === 1;
+  const cacheKey = model + ':' + lastUserMessage.trim().toLowerCase();
+  const cachedReply = singleQuestion ? getCachedReply(cacheKey) : null;
+  if (cachedReply) {
+    return new Response(cachedReply, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-SAM-Cache': 'HIT' } });
+  }
 
   try {
     const upstream = await fetch(apiBase + '/chat/completions', {
@@ -142,11 +168,12 @@ export async function POST(request: NextRequest) {
       const message = first && typeof first === 'object' && 'message' in first ? (first as { message: unknown }).message : null;
       const content = message && typeof message === 'object' && 'content' in message ? (message as { content: unknown }).content : '';
       if (typeof content !== 'string' || !content.trim()) return errorResponse('empty_reply', 502);
-      return new Response(content, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
+      if (singleQuestion) setCachedReply(cacheKey, content.trim());
+      return new Response(content, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-SAM-Cache': 'MISS' } });
     }
 
     const encoder = new TextEncoder();
-    const iterator = readProviderDeltas(upstream.body);
+    const iterator = readProviderDeltas(upstream.body, (reply) => { if (singleQuestion) setCachedReply(cacheKey, reply); });
     const stream = new ReadableStream<Uint8Array>({
       async pull(controller) {
         try {
