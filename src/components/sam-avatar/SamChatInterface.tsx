@@ -7,6 +7,7 @@ import { SamAudioService, VoiceMode, VoiceReferenceFile, type TalkingAvatarInsta
 import { ExpressionController } from './ExpressionController';
 import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-navigation';
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
+import { readTextStream } from '@/lib/read-text-stream';
 
 export interface ChatMessage {
   id: string;
@@ -184,12 +185,15 @@ export default function SamChatInterface() {
     setIsPending(true);
     setAvatarStatus('thinking');
 
+    const assistantId = makeId();
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: nextMessages.slice(-10).map(({ role, content: msgContent }) => ({
+          messages: nextMessages.slice(-6).map(({ role, content: msgContent }) => ({
             role,
             content: msgContent,
           })),
@@ -197,23 +201,40 @@ export default function SamChatInterface() {
         }),
       });
 
-      const data = await response.json().catch(() => ({}));
-      const reply = response.ok && typeof data.reply === 'string' ? cleanText(data.reply) : failureMessage(data.error);
+      let reply = '';
+      if (response.ok && response.body) {
+        const placeholder: ChatMessage = {
+          id: assistantId,
+          role: 'assistant',
+          content: '',
+          navigation,
+          timestamp,
+        };
+        setMessages([...nextMessages, placeholder]);
+        reply = await readTextStream(response, (_chunk, accumulated) => {
+          setMessages([...nextMessages, { ...placeholder, content: cleanText(accumulated) }]);
+        });
+        reply = cleanText(reply);
+      } else {
+        const data = await response.json().catch(() => ({}));
+        reply = failureMessage(data.error);
+      }
+
+      if (!reply) reply = failureMessage('upstream_failed');
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
       const assistantMsg: ChatMessage = {
-        id: makeId(),
+        id: assistantId,
         role: 'assistant',
         content: reply,
         navigation,
         emailDraft: wantsEmail ? content : undefined,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp,
       };
 
       setMessages([...nextMessages, assistantMsg]);
       setIsPending(false);
 
-      // Trigger avatar speech & lip-sync
       if (!isMuted) {
         speakAvatarResponse(reply);
       }
@@ -223,10 +244,10 @@ export default function SamChatInterface() {
       }
     } catch {
       const errMsg: ChatMessage = {
-        id: makeId(),
+        id: assistantId,
         role: 'assistant',
         content: 'I could not reach the assistant server just now. You can email Samyak directly at samyak.g.anand@gmail.com.',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        timestamp,
       };
       setMessages([...nextMessages, errMsg]);
       setIsPending(false);

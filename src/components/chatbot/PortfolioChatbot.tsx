@@ -5,6 +5,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-navigation';
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
+import { readTextStream } from '@/lib/read-text-stream';
 
 const Chatbot3DBackground = dynamic(
   () => import('@/components/3d/Chatbot3DBackground'),
@@ -142,7 +143,6 @@ export default function PortfolioChatbot() {
     if (!content || pending) return;
 
     let navigation = getPortfolioNavigationTarget(content) ?? undefined;
-
     const nextMessages = [...messages, { id: makeId(), role: 'user' as const, content }];
     setMessages(nextMessages);
     setDraft('');
@@ -153,32 +153,35 @@ export default function PortfolioChatbot() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: nextMessages.slice(-10).map(({ role, content: text }) => ({ role, content: text })),
+          messages: nextMessages.slice(-6).map(({ role, content: text }) => ({ role, content: text })),
         }),
       });
 
       let reply = '';
-      if (response.ok) {
+      const assistantId = makeId();
+      if (response.ok && response.body) {
+        const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation };
+        setMessages([...nextMessages, placeholder]);
+        reply = await readTextStream(response, (_chunk, accumulated) => {
+          setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated) }]);
+        });
+        reply = plainText(reply);
+      } else {
         const data = await response.json().catch(() => ({}));
-        if (typeof data.reply === 'string' && data.reply.trim()) {
-          reply = plainText(data.reply);
-        }
+        console.warn('[SAM.exe] Chat request failed:', data.error || response.status);
       }
 
-      // If upstream failed or was not configured, gracefully use our authentic portfolio knowledge base
       if (!reply) {
         const fallback = generateLocalKnowledgeResponse(content);
         reply = fallback.reply;
-        if (!navigation && fallback.nav) {
-          navigation = fallback.nav;
-        }
+        if (!navigation && fallback.nav) navigation = fallback.nav;
       }
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
       setMessages([
         ...nextMessages,
         {
-          id: makeId(),
+          id: assistantId,
           role: 'assistant',
           content: reply,
           navigation,

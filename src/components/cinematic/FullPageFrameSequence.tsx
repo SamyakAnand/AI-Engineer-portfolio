@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef } from 'react';
 import { findNearestLoadedFrame, mapScrollToFrameProgress, type FrameScrollAnchor } from '@/lib/cinematic';
 
 const TOTAL_FRAMES = 300;
+const MOBILE_FRAME_STRIDE = 3;
+const MOBILE_CACHE_RADIUS = MOBILE_FRAME_STRIDE * 4;
 
 export default function FullPageFrameSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,20 +18,26 @@ export default function FullPageFrameSequence() {
     const canvas = canvasRef.current;
     const images = imagesRef.current;
     if (!canvas) return;
+
+    const mobile = window.matchMedia('(max-width: 767px)').matches;
     const index = findNearestLoadedFrame(requested, images);
     const image = index >= 0 ? images[index] : null;
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
+
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
+    ctx.imageSmoothingQuality = mobile ? 'medium' : 'high';
     ctx.fillStyle = '#07111d';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     if (image?.complete && image.naturalWidth) {
-      // Keep the sequence immersive on phones; section content is separately
-      // constrained to a single readable column at narrow widths.
-      const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
-      const width = image.naturalWidth * scale;
-      const height = image.naturalHeight * scale;
+      // On phones, fit the complete source frame instead of cropping it to fill
+      // the tall viewport. Desktop keeps the original immersive cover treatment.
+      const fitScale = mobile
+        ? Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight) * 0.94
+        : Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
+      const width = image.naturalWidth * fitScale;
+      const height = image.naturalHeight * fitScale;
       ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
     }
   }, []);
@@ -37,12 +45,17 @@ export default function FullPageFrameSequence() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let cancelled = false;
     const requested = new Array<boolean>(TOTAL_FRAMES).fill(false);
     imagesRef.current = new Array(TOTAL_FRAMES).fill(null);
-    const loadFrame = (index: number, priority: 'high' | 'low' = 'low') => new Promise<void>(resolve => {
-      if (requested[index]) { resolve(); return; }
+
+    const loadFrame = (index: number, priority: 'high' | 'low' = 'low') => new Promise<void>((resolve) => {
+      if (index < 0 || index >= TOTAL_FRAMES || requested[index]) {
+        resolve();
+        return;
+      }
       requested[index] = true;
       const image = new Image();
       image.decoding = 'async';
@@ -50,26 +63,32 @@ export default function FullPageFrameSequence() {
       image.onload = () => {
         if (!cancelled) {
           imagesRef.current[index] = image;
-          if (Math.abs(index - frameRef.current) < 5) render(frameRef.current);
+          const mobile = window.matchMedia('(max-width: 767px)').matches;
+          if (Math.abs(index - frameRef.current) <= (mobile ? MOBILE_FRAME_STRIDE * 2 + 1 : 5)) {
+            render(frameRef.current);
+          }
         }
         resolve();
       };
       image.onerror = () => resolve();
       image.src = `/frames/frame_${String(index + 1).padStart(3, '0')}.webp`;
     });
+
     const resize = () => {
       const mobile = window.matchMedia('(max-width: 767px)').matches;
       const ratio = Math.min(
         window.devicePixelRatio || 1,
-        mobile ? 1.5 : 3,
-        (mobile ? 1920 : 3840) / window.innerWidth,
-        2160 / window.innerHeight,
+        mobile ? 1.25 : 2,
+        (mobile ? 1280 : 2560) / window.innerWidth,
+        (mobile ? 1600 : 2160) / window.innerHeight,
       );
       canvas.width = Math.round(window.innerWidth * ratio);
       canvas.height = Math.round(window.innerHeight * ratio);
       render(frameRef.current);
     };
+
     const update = () => {
+      const mobile = window.matchMedia('(max-width: 767px)').matches;
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const sectionBeats = [
         ['hero-cinematic', 0],
@@ -86,45 +105,62 @@ export default function FullPageFrameSequence() {
         return section ? [{ scroll: section.offsetTop, progress }] : [];
       });
       anchors.push({ scroll: maxScroll, progress: 1 });
+
       progressRef.current = reducedMotion ? 0 : mapScrollToFrameProgress(window.scrollY, anchors);
-      frameRef.current = progressRef.current * (TOTAL_FRAMES - 1);
+      const rawFrame = progressRef.current * (TOTAL_FRAMES - 1);
+      const stride = mobile ? MOBILE_FRAME_STRIDE : 1;
+      const frame = mobile ? Math.round(rawFrame / stride) * stride : Math.round(rawFrame);
+      frameRef.current = Math.min(TOTAL_FRAMES - 1, frame);
+
       if (!reducedMotion) {
-        const frame = Math.round(frameRef.current);
-        void loadFrame(frame, 'high');
-        for (const neighbor of [frame - 1, frame + 1, frame - 2, frame + 2]) {
-          if (neighbor >= 0 && neighbor < TOTAL_FRAMES) void loadFrame(neighbor, 'low');
+        void loadFrame(frameRef.current, 'high');
+        for (const offset of [-stride, stride, -stride * 2, stride * 2]) {
+          void loadFrame(frameRef.current + offset, 'low');
         }
-        if (window.matchMedia('(max-width: 767px)').matches) {
+
+        if (mobile) {
           imagesRef.current.forEach((image, index) => {
-            if (image && Math.abs(index - frame) > 12) {
+            if (image && Math.abs(index - frameRef.current) > MOBILE_CACHE_RADIUS) {
               imagesRef.current[index] = null;
               requested[index] = false;
             }
           });
         }
       }
+
       render(frameRef.current);
       window.dispatchEvent(new CustomEvent('sam:hero-progress', { detail: { progress: progressRef.current } }));
     };
+
     const onScroll = () => {
       if (rafRef.current) return;
-      rafRef.current = requestAnimationFrame(() => { rafRef.current = 0; update(); });
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        update();
+      });
     };
+
     window.addEventListener('resize', resize, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
-    resize(); update();
+    resize();
+    update();
+
     const preload = async () => {
       await loadFrame(0, 'high');
-      if (reducedMotion) return;
+      if (reducedMotion || cancelled) return;
       if (window.matchMedia('(max-width: 767px)').matches) {
-        await Promise.all(Array.from({ length: 6 }, (_, index) => loadFrame(index + 1)));
+        // Sample every third source frame on phones; scroll still maps across
+        // the complete sequence while avoiding hundreds of eager image loads.
+        await Promise.all(Array.from({ length: 5 }, (_, index) => loadFrame((index + 1) * MOBILE_FRAME_STRIDE)));
         return;
       }
       for (let start = 1; start < TOTAL_FRAMES && !cancelled; start += 16) {
         await Promise.all(Array.from({ length: Math.min(16, TOTAL_FRAMES - start) }, (_, offset) => loadFrame(start + offset)));
       }
     };
+
     void preload();
+
     return () => {
       cancelled = true;
       window.removeEventListener('resize', resize);
@@ -133,7 +169,9 @@ export default function FullPageFrameSequence() {
     };
   }, [render]);
 
-  return <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-    <canvas ref={canvasRef} className="absolute inset-0 h-full w-full object-cover" />
-  </div>;
+  return (
+    <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+    </div>
+  );
 }
