@@ -194,6 +194,7 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-store, no-transform',
         'X-Accel-Buffering': 'no',
+        'X-SAM-Cache': 'MISS',
       },
     });
   } catch {
