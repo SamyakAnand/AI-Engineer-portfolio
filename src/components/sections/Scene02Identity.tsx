@@ -133,7 +133,7 @@ export default function Scene02Identity() {
             <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-to-tr from-purple-600/35 via-violet-600/30 to-fuchsia-600/20 blur-2xl opacity-75 transition-opacity duration-700 group-hover:opacity-100" />
 
             {/* Portrait Container */}
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/45 p-2 sm:p-2.5 shadow-[0_16px_50px_rgba(0,0,0,0.75)] backdrop-blur-md transition-all duration-500 group-hover:border-purple-400/50">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-transparent p-2 sm:p-2.5 shadow-none transition-all duration-500 group-hover:border-purple-400/50">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/portfolio/profile-samyak.png"
@@ -148,7 +148,7 @@ export default function Scene02Identity() {
               </div>
 
               {/* Floating Location Badge */}
-              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between rounded-full border border-purple-400/30 bg-[#060f1b]/85 px-3.5 sm:px-4 py-2 backdrop-blur-xl shadow-lg">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between rounded-full border border-purple-400/40 bg-transparent px-3.5 sm:px-4 py-2 shadow-none">
                 <span className="flex items-center gap-2 text-xs font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)] sm:text-sm">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -262,7 +262,7 @@ export default function Scene02Identity() {
                 href="https://github.com/SamyakAnand"
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
+                className="group rounded-2xl border border-white/15 bg-black/45 p-4  shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
               >
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-fuchsia-300">
                   <span className="flex items-center gap-2">
