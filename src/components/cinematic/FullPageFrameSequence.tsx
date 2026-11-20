@@ -4,8 +4,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import { findNearestLoadedFrame, mapScrollToFrameProgress, type FrameScrollAnchor } from '@/lib/cinematic';
 
 const TOTAL_FRAMES = 300;
-const MOBILE_FRAME_STRIDE = 3;
-const MOBILE_CACHE_RADIUS = MOBILE_FRAME_STRIDE * 4;
+const MOBILE_FRAME_STRIDE = 1;
+const MOBILE_CACHE_RADIUS = 5;
+const MOBILE_FOREGROUND_SCALE = 0.56;
 
 export default function FullPageFrameSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -26,19 +27,57 @@ export default function FullPageFrameSequence() {
     if (!ctx) return;
 
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = mobile ? 'medium' : 'high';
+    ctx.imageSmoothingQuality = mobile ? 'high' : 'high';
     ctx.fillStyle = '#07111d';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     if (image?.complete && image.naturalWidth) {
-      // On phones, fit the complete source frame instead of cropping it to fill
-      // the tall viewport. Desktop keeps the original immersive cover treatment.
-      const fitScale = mobile
-        ? Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight) * 0.94
-        : Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
-      const width = image.naturalWidth * fitScale;
-      const height = image.naturalHeight * fitScale;
-      ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+      const coverScale = Math.max(
+        canvas.width / image.naturalWidth,
+        canvas.height / image.naturalHeight,
+      );
+
+      if (mobile) {
+        // A soft, full-bleed version of the same frame fills the phone canvas.
+        // This avoids the empty black bands caused by contain/fit rendering.
+        const backgroundWidth = image.naturalWidth * coverScale;
+        const backgroundHeight = image.naturalHeight * coverScale;
+        ctx.save();
+        ctx.filter = 'blur(22px) brightness(0.48)';
+        ctx.drawImage(
+          image,
+          (canvas.width - backgroundWidth) / 2,
+          (canvas.height - backgroundHeight) / 2,
+          backgroundWidth,
+          backgroundHeight,
+        );
+        ctx.restore();
+
+        // Keep the cinematic frame prominent, but pull back to about 56% of
+        // full-cover scale so more of the original scene remains visible.
+        const foregroundScale = coverScale * MOBILE_FOREGROUND_SCALE;
+        const width = image.naturalWidth * foregroundScale;
+        const height = image.naturalHeight * foregroundScale;
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.42)';
+        ctx.shadowBlur = 26;
+        ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+        ctx.restore();
+
+        // Subtle dark edge treatment keeps text layered above the moving frame.
+        const vignette = ctx.createRadialGradient(
+          canvas.width / 2, canvas.height / 2, canvas.height * 0.18,
+          canvas.width / 2, canvas.height / 2, canvas.height * 0.78,
+        );
+        vignette.addColorStop(0, 'rgba(3, 8, 18, 0)');
+        vignette.addColorStop(1, 'rgba(3, 8, 18, 0.32)');
+        ctx.fillStyle = vignette;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else {
+        const width = image.naturalWidth * coverScale;
+        const height = image.naturalHeight * coverScale;
+        ctx.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+      }
     }
   }, []);
 
@@ -64,7 +103,7 @@ export default function FullPageFrameSequence() {
         if (!cancelled) {
           imagesRef.current[index] = image;
           const mobile = window.matchMedia('(max-width: 767px)').matches;
-          if (Math.abs(index - frameRef.current) <= (mobile ? MOBILE_FRAME_STRIDE * 2 + 1 : 5)) {
+          if (Math.abs(index - frameRef.current) <= (mobile ? MOBILE_CACHE_RADIUS : 5)) {
             render(frameRef.current);
           }
         }
@@ -78,7 +117,7 @@ export default function FullPageFrameSequence() {
       const mobile = window.matchMedia('(max-width: 767px)').matches;
       const ratio = Math.min(
         window.devicePixelRatio || 1,
-        mobile ? 1.25 : 2,
+        mobile ? 1.2 : 2,
         (mobile ? 1280 : 2560) / window.innerWidth,
         (mobile ? 1600 : 2160) / window.innerHeight,
       );
@@ -114,13 +153,13 @@ export default function FullPageFrameSequence() {
 
       if (!reducedMotion) {
         void loadFrame(frameRef.current, 'high');
-        for (const offset of [-stride, stride, -stride * 2, stride * 2]) {
+        for (const offset of [-stride * 2, -stride, stride, stride * 2]) {
           void loadFrame(frameRef.current + offset, 'low');
         }
 
         if (mobile) {
-          imagesRef.current.forEach((image, index) => {
-            if (image && Math.abs(index - frameRef.current) > MOBILE_CACHE_RADIUS) {
+          imagesRef.current.forEach((loadedImage, index) => {
+            if (loadedImage && Math.abs(index - frameRef.current) > MOBILE_CACHE_RADIUS) {
               imagesRef.current[index] = null;
               requested[index] = false;
             }
@@ -149,9 +188,9 @@ export default function FullPageFrameSequence() {
       await loadFrame(0, 'high');
       if (reducedMotion || cancelled) return;
       if (window.matchMedia('(max-width: 767px)').matches) {
-        // Sample every third source frame on phones; scroll still maps across
-        // the complete sequence while avoiding hundreds of eager image loads.
-        await Promise.all(Array.from({ length: 5 }, (_, index) => loadFrame((index + 1) * MOBILE_FRAME_STRIDE)));
+        // Warm the first few consecutive frames; subsequent frames are loaded
+        // around the current scroll position so the sequence stays continuous.
+        await Promise.all(Array.from({ length: 6 }, (_, index) => loadFrame(index + 1)));
         return;
       }
       for (let start = 1; start < TOTAL_FRAMES && !cancelled; start += 16) {
