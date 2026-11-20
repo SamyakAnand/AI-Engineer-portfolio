@@ -33,6 +33,14 @@ const brandIcons: Record<string, { icon: SimpleIcon; color?: string }> = {
 
 const logos: Record<string, string> = {
   Python: 'python.png',
+  'TensorFlow & Keras': 'tensorflow_logo.png',
+  'Pandas & NumPy': 'pandas_logo.png',
+  'Git & GitHub': 'github.png',
+  'Power BI & DAX': 'PowerBI_Logo.png',
+  'Matplotlib & Seaborn': 'Numpy_logo.png',
+  'Advanced Excel & Power Query': 'PowerBI_Logo.png',
+  'Sentence Transformers': 'pytorch_logo.png',
+  NLTK: 'nltk_logo.png',
   SQL: 'sql.png',
   PyTorch: 'pytorch_logo.png',
   TensorFlow: 'tensorflow_logo.png',
@@ -47,7 +55,6 @@ const logos: Record<string, string> = {
   Tableau: 'tableau_logo.png',
   Docker: 'docker_logo.png',
   MLflow: 'mlflow_logo.png',
-  'Git & GitHub': 'git.png',
   AWS: 'aws_logo.png',
   Hermes: 'hermes.png',
 };
@@ -180,22 +187,22 @@ export default function Scene03TechUniverse() {
                     return (
                       <li
                         key={skill.name}
-                        className="group/item flex min-h-12 items-center gap-2.5 rounded-2xl border border-white/10 bg-transparent px-3 py-2 text-xs text-white/90 transition-all duration-200 hover:border-purple-400/40 hover:bg-transparent hover:text-white"
+                        className="group/item flex min-h-14 items-center gap-3 rounded-2xl border border-white/10 bg-transparent px-3 py-2 text-xs text-white/90 transition-all duration-200 hover:border-purple-400/45 hover:bg-white/[0.025] hover:text-white"
                       >
                         {logo ? (
-                          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-transparent p-1">
+                          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-transparent p-1 drop-shadow-[0_3px_7px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3">
                             <Image
                               src={`/portfolio/skills/${logo}`}
                               alt={skill.name}
-                              width={24}
-                              height={24}
-                              className="h-full w-full object-contain"
+                              width={32}
+                              height={32}
+                              className="h-full w-full object-contain drop-shadow-[0_2px_5px_rgba(255,255,255,0.18)]"
                             />
                           </span>
                         ) : brandObj ? (
                           <span
                             aria-hidden="true"
-                            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-white/15 bg-transparent p-1.5"
+                            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-transparent p-1.5 drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3"
                             style={{ color: brandObj.color || `#${brandObj.icon.hex}` }}
                           >
                             <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
@@ -207,8 +214,8 @@ export default function Scene03TechUniverse() {
                         ) : (() => {
                           const SkillIcon = conceptIcons[skill.name] || groupIcons[skill.group] || Sparkles;
                           return (
-                            <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-purple-400/30 bg-transparent p-1.5 text-purple-200">
-                              <SkillIcon className="h-full w-full" strokeWidth={1.8} />
+                            <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-transparent p-1.5 transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3">
+                              <SkillIcon className="h-full w-full drop-shadow-[0_2px_6px_currentColor]" strokeWidth={2.1} style={{ color: ({ ai: "#c084fc", programming: "#60a5fa", backend: "#34d399", ml: "#a78bfa", data: "#fbbf24", database: "#22d3ee", frontend: "#fb7185", mlops: "#e879f9" } as Record<string, string>)[skill.group] || "#c084fc" }} />
                             </span>
                           );
                         })()}

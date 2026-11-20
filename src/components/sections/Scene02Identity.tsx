@@ -133,7 +133,7 @@ export default function Scene02Identity() {
             <div className="absolute -inset-1 rounded-[2.2rem] bg-gradient-to-tr from-purple-600/35 via-violet-600/30 to-fuchsia-600/20 blur-2xl opacity-75 transition-opacity duration-700 group-hover:opacity-100" />
 
             {/* Portrait Container */}
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/45 p-2 sm:p-2.5 shadow-[0_16px_50px_rgba(0,0,0,0.75)] backdrop-blur-md transition-all duration-500 group-hover:border-purple-400/50">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-transparent p-2 sm:p-2.5 shadow-none transition-all duration-500 group-hover:border-purple-400/50">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem]">
                 <Image
                   src="/portfolio/profile-samyak.png"
@@ -148,7 +148,7 @@ export default function Scene02Identity() {
               </div>
 
               {/* Floating Location Badge */}
-              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between rounded-full border border-purple-400/30 bg-[#060f1b]/85 px-3.5 sm:px-4 py-2 backdrop-blur-xl shadow-lg">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between rounded-full border border-purple-400/40 bg-transparent px-3.5 sm:px-4 py-2 shadow-none">
                 <span className="flex items-center gap-2 text-xs font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,1)] sm:text-sm">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -173,7 +173,7 @@ export default function Scene02Identity() {
             className="flex flex-col gap-6"
           >
             <motion.div variants={itemVariants}>
-              <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-950/40 px-3.5 py-1 text-xs font-semibold uppercase tracking-widest text-purple-300">
+              <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-purple-400/40 bg-transparent px-3.5 py-1 text-xs font-semibold uppercase tracking-widest text-purple-300">
                 <Sparkles className="h-3.5 w-3.5 text-purple-400 animate-pulse" />
                 About · Professional Identity
               </div>
@@ -200,7 +200,7 @@ export default function Scene02Identity() {
             {/* Evidence-Based Competency Deck */}
             <motion.div
               variants={itemVariants}
-              className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 backdrop-blur-sm space-y-3"
+              className="rounded-2xl border border-white/15 bg-transparent p-4 sm:p-5 shadow-none space-y-3"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-purple-300">
@@ -216,7 +216,7 @@ export default function Scene02Identity() {
                   <motion.div
                     key={comp.domain}
                     whileHover={reduceMotion ? {} : { scale: 1.01 }}
-                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:border-purple-400/30 hover:bg-white/[0.06]"
+                    className="flex flex-col justify-between rounded-xl border border-white/15 bg-transparent p-3 transition hover:border-purple-400/40 hover:bg-transparent"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-bold text-white leading-tight">
@@ -239,7 +239,7 @@ export default function Scene02Identity() {
             <motion.div variants={itemVariants} className="grid gap-3 sm:grid-cols-2">
               <motion.div
                 whileHover={reduceMotion ? {} : { y: -2 }}
-                className="rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
+                className="rounded-2xl border border-white/20 bg-transparent p-4 shadow-none transition hover:border-purple-400/50 hover:bg-transparent"
               >
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-purple-300">
                   <GraduationCap className="h-4 w-4 text-purple-400" />
@@ -262,7 +262,7 @@ export default function Scene02Identity() {
                 href="https://github.com/SamyakAnand"
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
+                className="group rounded-2xl border border-white/15 bg-black/45 p-4  shadow-lg transition hover:border-purple-400/40 hover:bg-black/55"
               >
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-fuchsia-300">
                   <span className="flex items-center gap-2">
@@ -284,7 +284,7 @@ export default function Scene02Identity() {
                 href="https://www.linkedin.com/in/samyakanand/"
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-white/15 bg-black/45 p-4 backdrop-blur-md shadow-lg transition hover:border-[#0a66c2]/60 hover:bg-black/55"
+                className="group rounded-2xl border border-white/20 bg-transparent p-4 shadow-none transition hover:border-[#0a66c2]/60 hover:bg-transparent"
               >
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-blue-300">
                   <span className="flex items-center gap-2">
@@ -306,7 +306,7 @@ export default function Scene02Identity() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-purple-400/30 bg-purple-950/30 p-4 backdrop-blur-md shadow-lg transition hover:border-purple-400/60 hover:bg-purple-950/50"
+                className="group rounded-2xl border border-purple-400/35 bg-transparent p-4 shadow-none transition hover:border-purple-400/60 hover:bg-transparent"
               >
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-purple-300">
                   <span className="flex items-center gap-2">
@@ -353,15 +353,15 @@ export default function Scene02Identity() {
                 <motion.div
                   key={kpi.id}
                   whileHover={reduceMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-5 text-left backdrop-blur-md shadow-lg transition-colors ${
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-5 text-left shadow-none transition-colors ${
                     kpi.featured
-                      ? 'border-cyan-400/40 bg-gradient-to-br from-cyan-950/30 via-slate-950/60 to-slate-950/50 shadow-[0_0_25px_rgba(6,182,212,0.14)] ring-1 ring-cyan-400/25 hover:border-cyan-400/60 hover:bg-slate-900/80'
-                      : 'border-white/10 bg-slate-950/50 hover:border-purple-400/40 hover:bg-slate-900/70'
+                      ? 'border-cyan-400/40 bg-transparent shadow-none ring-1 ring-cyan-400/20 hover:border-cyan-400/60 hover:bg-transparent'
+                      : 'border-white/20 bg-transparent hover:border-purple-400/40 hover:bg-transparent'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div
-                      className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-white/10 bg-black/60 ${kpi.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}
+                      className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-white/20 bg-transparent ${kpi.color} shadow-sm transition-transform duration-300 group-hover:scale-110`}
                     >
                       <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
                     </div>
@@ -406,7 +406,7 @@ export default function Scene02Identity() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 rounded-2xl border border-purple-500/20 bg-slate-950/40 p-4 sm:p-5 backdrop-blur-md flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 shadow-sm"
+            className="mt-6 rounded-2xl border border-purple-500/30 bg-transparent p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-3.5 sm:gap-4 shadow-sm"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-purple-400/30 bg-purple-950/50 text-purple-300">
               <Sparkles className="h-4 w-4 text-purple-400" />
