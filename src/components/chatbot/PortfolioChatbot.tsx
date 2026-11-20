@@ -26,6 +26,35 @@ const INITIAL_MESSAGE: ChatMessage = {
   content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), his technical stack, or connect you directly with him. What would you like to explore?',
 };
 
+type Reaction = 'greeting' | 'thinking' | 'typing' | 'confident' | 'celebrating' | 'confused' | 'gaming' | 'sad' | 'error' | 'idle';
+
+const REACTION_META: Record<Reaction, { emoji: string; label: string }> = {
+  greeting: { emoji: '👋', label: 'Greeting' }, thinking: { emoji: '🤔', label: 'Thinking' },
+  typing: { emoji: '⌨️', label: 'Typing' }, confident: { emoji: '😎', label: 'Confident' },
+  celebrating: { emoji: '🎉', label: 'Celebrating' }, confused: { emoji: '😵‍💫', label: 'Confused' },
+  gaming: { emoji: '🎮', label: 'Gaming' }, sad: { emoji: '🥺', label: 'Empathetic' },
+  error: { emoji: '⚠️', label: 'Error' }, idle: { emoji: '✨', label: 'Idle' },
+};
+
+function getReplyReaction(reply: string): Reaction {
+  const value = reply.toLowerCase();
+  if (/\b(error|failed|unable|unavailable|issue)\b/.test(value)) return 'error';
+  if (/\b(congratulations|congrats|great job|well done|success|milestone|achievement)\b/.test(value)) return 'celebrating';
+  if (/\b(game|gaming|play|controller|quest)\b/.test(value)) return 'gaming';
+  if (/\b(not sure|unclear|could you clarify|what do you mean|which one)\b/.test(value)) return 'confused';
+  if (/\b(sorry to hear|that sounds|understand how|tough|difficult)\b/.test(value)) return 'sad';
+  return 'confident';
+}
+
+function ReactionAvatar({ reaction, className }: { reaction: Reaction; className: string }) {
+  const meta = REACTION_META[reaction];
+  return (
+    <div className={'relative inline-flex flex-none overflow-visible ' + className} role="img" aria-label={'SAM.exe reaction: ' + meta.label}>
+      <Image src="/portfolio/chatbot-avatar.png" alt="" fill sizes="48px" className="rounded-full object-cover object-top" />
+      <span key={reaction} className="absolute -bottom-1 -right-1 z-10 grid h-5 w-5 place-items-center rounded-full border border-sky-300/80 bg-[#030c19] text-[11px] shadow-[0_0_12px_rgba(56,189,248,0.4)]" aria-hidden="true">{meta.emoji}</span>
+    </div>
+  );
+}
 const suggestedQuestions = [
   'Walk me through ARGUS AI',
   'What is NEXUS Autonomous Analyst?',
@@ -129,6 +158,7 @@ export default function PortfolioChatbot() {
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [pending, setPending] = useState(false);
+  const [reaction, setReaction] = useState<Reaction>('greeting');
   const messageListRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -147,6 +177,7 @@ export default function PortfolioChatbot() {
     setMessages(nextMessages);
     setDraft('');
     setPending(true);
+    setReaction('thinking');
 
     try {
       const response = await fetch('/api/chat', {
@@ -163,6 +194,7 @@ export default function PortfolioChatbot() {
         const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation };
         setMessages([...nextMessages, placeholder]);
         reply = await readTextStream(response, (_chunk, accumulated) => {
+          setReaction('typing');
           setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated) }]);
         });
         reply = plainText(reply);
@@ -178,6 +210,7 @@ export default function PortfolioChatbot() {
       }
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
+      setReaction(getReplyReaction(reply));
       setMessages([
         ...nextMessages,
         {
@@ -189,6 +222,7 @@ export default function PortfolioChatbot() {
         },
       ]);
     } catch {
+      setReaction('error');
       const fallback = generateLocalKnowledgeResponse(content);
       setMessages([
         ...nextMessages,
@@ -226,16 +260,7 @@ export default function PortfolioChatbot() {
 
           <header className="portfolio-chat__header relative z-10 flex items-center justify-between border-b border-white/10 px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]">
-                <Image
-                  src="/portfolio/chatbot-avatar.png"
-                  alt="Samyak Anand AI"
-                  fill
-                  sizes="48px"
-                  className="object-cover object-top"
-                />
-                <span className="absolute bottom-0.5 right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#060f1b]" />
-              </div>
+              <ReactionAvatar reaction={reaction} className="h-12 w-12 rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]" />
               <div>
                 <span className="portfolio-chat__eyebrow text-[10px] font-mono tracking-widest text-sky-400">
                   SAMYAK ANAND · AI ASSISTANT
@@ -274,15 +299,7 @@ export default function PortfolioChatbot() {
               >
                 {message.role === 'assistant' && (
                   <div className="relative mb-1.5 flex items-center gap-2">
-                    <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]">
-                      <Image
-                        src="/portfolio/chatbot-avatar.png"
-                        alt="SAM"
-                        fill
-                        sizes="24px"
-                        className="object-cover object-top"
-                      />
-                    </div>
+                    <ReactionAvatar reaction={message.content ? getReplyReaction(message.content) : 'typing'} className="h-6 w-6 rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]" />
                     <span className="text-[11px] font-mono font-semibold text-sky-300">SAM.exe</span>
                   </div>
                 )}
@@ -310,7 +327,7 @@ export default function PortfolioChatbot() {
                 )}
               </div>
             ))}
-            {pending && <p className="portfolio-chat__typing" role="status">Thinking…</p>}
+            {pending && <p className="portfolio-chat__typing flex items-center gap-2" role="status"><span aria-hidden="true">{REACTION_META[reaction].emoji}</span>{reaction === 'typing' ? 'SAM.exe is typing…' : 'SAM.exe is thinking…'}</p>}
           </div>
 
           {messages.length === 1 && !pending && (
@@ -336,7 +353,10 @@ export default function PortfolioChatbot() {
               id="portfolio-chat-input"
               className="portfolio-chat__input"
               value={draft}
-              onChange={(event) => setDraft(event.target.value)}
+              onChange={(event) => {
+                setDraft(event.target.value);
+                if (!pending) setReaction(event.target.value ? 'typing' : (open ? 'idle' : 'greeting'));
+              }}
               maxLength={1000}
               placeholder="Ask about ARGUS AI, NEXUS, skills..."
               autoComplete="off"
@@ -365,16 +385,7 @@ export default function PortfolioChatbot() {
         aria-expanded={open}
         aria-label={open ? 'Close SAM.exe assistant' : 'Open SAM.exe assistant'}
       >
-        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]">
-          <Image
-            src="/portfolio/chatbot-avatar.png"
-            alt="Samyak Anand AI"
-            fill
-            sizes="40px"
-            className="object-cover object-top"
-          />
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#060f1b]" />
-        </div>
+        <ReactionAvatar reaction={reaction} className="h-10 w-10 rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
         <div className="flex flex-col text-left">
           <span className="text-xs font-bold tracking-tight text-white group-hover:text-sky-200">
             {open ? 'Close Assistant' : 'Ask SAM.exe'}
