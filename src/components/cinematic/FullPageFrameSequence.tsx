@@ -110,7 +110,7 @@ export default function FullPageFrameSequence() {
         resolve();
       };
       image.onerror = () => resolve();
-      image.src = \`/frames/frame_\${String(index + 1).padStart(3, '0')}.webp\`;
+      image.src = `/frames/frame_${String(index + 1).padStart(3, '0')}.webp`;
     });
 
     const resize = () => {
