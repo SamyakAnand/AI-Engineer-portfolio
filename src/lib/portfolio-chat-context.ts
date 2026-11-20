@@ -39,7 +39,7 @@ const BASE_INSTRUCTION = [
   '- SHIRO supports public repository snapshots and validates file/line references; do not imply private-repository access.',
   '- L is early-stage; do not claim live provider benchmarking.',
   '- Do not claim to have run code, inspected private accounts, or verified a live deployment during this chat.',
-].join('\\n');
+].join('\n');
 
 const GENERIC_QUERY_TERMS = new Set([
   'tell', 'about', 'the', 'portfolio', 'me', 'my', 'your', 'you', 'what', 'which',
@@ -80,7 +80,7 @@ export function buildPortfolioSystemInstruction(query: string) {
     '  Limitations: ' + project.limitations,
     '  Repository: ' + (project.github || 'Not listed'),
     '  Demo: ' + (project.demo || 'Not listed'),
-  ].join('\\n')).join('\\n\\n');
+  ].join('\n')).join('\n\n');
 
-  return BASE_INSTRUCTION + '\\n\\nRELEVANT PROJECT RECORDS\\n' + projectContext;
+  return BASE_INSTRUCTION + '\n\nRELEVANT PROJECT RECORDS\n' + projectContext;
 }
