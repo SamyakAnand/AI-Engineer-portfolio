@@ -18,6 +18,10 @@ export default function SmoothScrollProvider({
 
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Keep native touch scrolling on phones. Running a second smooth-scroll
+    // loop alongside touch momentum and the frame canvas made mobile feel heavy.
+    const mobile = window.matchMedia('(max-width: 767px)').matches;
+
     const navigate = (event: Event) => {
       const sectionId = (event as CustomEvent<{ sectionId?: string }>).detail?.sectionId;
       if (!sectionId) return;
@@ -26,26 +30,24 @@ export default function SmoothScrollProvider({
       if (lenisRef.current && !reducedMotion) {
         lenisRef.current.scrollTo(target, { offset: -96, duration: 0.9, force: true });
       } else {
-        target.scrollIntoView({ behavior: 'auto', block: 'start' });
+        target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
       }
     };
     window.addEventListener('portfolio:navigate', navigate);
 
     const handleScrollLock = (event: Event) => {
       const locked = (event as CustomEvent<{ locked?: boolean }>).detail?.locked;
-      if (lenisRef.current) {
-        if (locked) {
-          lenisRef.current.stop();
-        } else {
-          lenisRef.current.start();
-        }
-      }
+      if (!lenisRef.current) return;
+      if (locked) lenisRef.current.stop();
+      else lenisRef.current.start();
     };
     window.addEventListener('portfolio:scroll-lock', handleScrollLock);
 
-    // Respect user reduced motion preference
-    if (reducedMotion) {
-      return () => window.removeEventListener('portfolio:navigate', navigate);
+    if (reducedMotion || mobile) {
+      return () => {
+        window.removeEventListener('portfolio:navigate', navigate);
+        window.removeEventListener('portfolio:scroll-lock', handleScrollLock);
+      };
     }
 
     const lenis = new Lenis({
@@ -59,19 +61,15 @@ export default function SmoothScrollProvider({
     });
     lenisRef.current = lenis;
 
-    // Synchronize Lenis scroll position with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
-
-    const tickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
+    const tickerCallback = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
+      lenisRef.current = null;
       window.removeEventListener('portfolio:navigate', navigate);
       window.removeEventListener('portfolio:scroll-lock', handleScrollLock);
     };
