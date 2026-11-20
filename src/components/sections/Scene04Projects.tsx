@@ -23,7 +23,7 @@ const ts = (size: 'sm' | 'md' | 'lg') => ({
   }[size],
 });
 
-export type FilterType = 'all' | 'ai' | 'ml' | 'ds' | 'analytics' | 'live' | 'portfolio';
+export type FilterType = 'all' | 'ai' | 'ml' | 'ds' | 'analytics' | 'live' | 'portfolio' | 'systems';
 
 interface ProjectCardProps {
   project: Project;
@@ -233,6 +233,7 @@ export default function Scene04Projects() {
     else if (activeFilter === 'ds') categoryMatch = p.type === 'ds';
     else if (activeFilter === 'analytics') categoryMatch = p.type === 'analytics';
     else if (activeFilter === 'portfolio') categoryMatch = p.type === 'portfolio';
+    else if (activeFilter === 'systems') categoryMatch = p.type === 'systems';
     else if (activeFilter === 'live') categoryMatch = Boolean(p.isLive && p.demo);
     else categoryMatch = true; // 'all'
 
@@ -380,6 +381,7 @@ export default function Scene04Projects() {
     { id: 'analytics', label: 'Data Analytics', count: projectList.filter((p) => p.type === 'analytics').length, icon: Award },
     { id: 'live', label: 'Live', count: projectList.filter((p) => p.isLive && p.demo).length, icon: Globe },
     { id: 'portfolio', label: 'Portfolio', count: projectList.filter((p) => p.type === 'portfolio').length, icon: FolderGit2 },
+    { id: 'systems', label: 'Developer Tools', count: projectList.filter((p) => p.type === 'systems').length, icon: GitBranch },
   ];
 
   const displayedProjects = filteredProjects.slice(0, visibleCount);
