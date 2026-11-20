@@ -133,6 +133,9 @@ export const profile: Profile = {
     'diwali-sales-python',
     'ecommerce-superstore-python',
     'municipal-complaint',
+    'municipal-complaint-system',
+    'light-dark-dashboard-theme',
+    'pro-theme-dashboard',
   ],
   links: {
     github: 'https://github.com/SamyakAnand',
