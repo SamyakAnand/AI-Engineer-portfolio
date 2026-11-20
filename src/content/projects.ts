@@ -127,8 +127,8 @@ export const projects: Record<Project['id'], Project> = {
     ],
     screenshots: ['/images/projects/shiro.webp', '/images/projects/shiro-explaining.webp'],
     github: 'https://github.com/SamyakAnand/Shiro-Ai',
-    demo: null,
-    isLive: false,
+    demo: 'https://shiro-ai-one.vercel.app',
+    isLive: true,
     stats: [
       { label: 'Input', value: 'Public GitHub Snapshots' },
       { label: 'Parser', value: 'Python AST + JS/TS Heuristics' },
@@ -171,8 +171,8 @@ export const projects: Record<Project['id'], Project> = {
     ],
     screenshots: ['/images/projects/l-platform.webp', '/images/projects/l-platform-landing.webp'],
     github: 'https://github.com/SamyakAnand/L-Intelligence-Platform',
-    demo: null,
-    isLive: false,
+    demo: 'https://web-inky-one-56.vercel.app',
+    isLive: true,
     stats: [
       { label: 'Focus', value: 'Prompt & Model Evaluation' },
       { label: 'Approach', value: 'Provider-Independent' },
@@ -483,7 +483,7 @@ export const projects: Record<Project['id'], Project> = {
     ],
     screenshots: ['/images/projects/disease-predictor.webp'],
     github: 'https://github.com/SamyakAnand/Disease-Predictor',
-    demo: 'https://disease-predictor-dvty.onrender.com/',
+    demo: 'https://disease-predictor-j8m7.onrender.com',
     isLive: true,
     stats: [
       { label: 'Diseases', value: '5 Conditions' },
