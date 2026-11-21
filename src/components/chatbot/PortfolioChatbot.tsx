@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-navigation';
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
 import { readTextStream } from '@/lib/read-text-stream';
+import { getReactionAssetPath, getReplyReaction, REACTION_META, type Reaction } from '@/lib/chatbot-reactions';
+import { generateLocalKnowledgeResponse } from '@/lib/chatbot-fallback';
 
 const Chatbot3DBackground = dynamic(
   () => import('@/components/3d/Chatbot3DBackground'),
@@ -18,14 +20,31 @@ type ChatMessage = {
   content: string;
   navigation?: PortfolioTarget;
   emailDraft?: string;
+  reaction?: Reaction;
 };
 
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
   content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), his technical stack, or connect you directly with him. What would you like to explore?',
+  reaction: 'greeting',
 };
 
+function ReactionAvatar({ reaction, className, sizes }: { reaction: Reaction; className: string; sizes: string }) {
+  const meta = REACTION_META[reaction];
+  return (
+    <div className={'relative inline-flex flex-none overflow-visible ' + className} role="img" aria-label={'SAM.exe reaction: ' + meta.label}>
+      <Image
+        src={getReactionAssetPath(reaction)}
+        alt=""
+        fill
+        sizes={sizes}
+        className="object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]"
+        unoptimized
+      />
+    </div>
+  );
+}
 const suggestedQuestions = [
   'Walk me through ARGUS AI',
   'What is NEXUS Autonomous Analyst?',
@@ -46,77 +65,6 @@ function plainText(value: string) {
     .trim();
 }
 
-function generateLocalKnowledgeResponse(query: string): { reply: string; nav?: PortfolioTarget } {
-  const q = query.toLowerCase();
-
-  if (q.includes('argus')) {
-    return {
-      reply: 'ARGUS AI is an enterprise evidence-oriented intelligence platform. It decouples document retrieval from linguistic synthesis and strictly verifies citation passage IDs before generating an answer, eliminating hallucinations. Tech stack: Python, FastAPI, Next.js, LangChain, Vector DB.',
-      nav: { sectionId: 'scene-projects', label: 'ARGUS AI Project' },
-    };
-  }
-
-  if (q.includes('nexus') || q.includes('analyst')) {
-    return {
-      reply: 'NEXUS is an autonomous data analyst agent. It ingests natural-language queries, dynamically profiles datasets, selects deterministic tools (Pandas, SQLAlchemy), executes analysis, and returns reproducible reports with full execution run traces.',
-      nav: { sectionId: 'scene-projects', label: 'NEXUS Project' },
-    };
-  }
-
-  if (q.includes('shiro') || q.includes('codemind') || q.includes('codebase')) {
-    return {
-      reply: 'SHIRO CodeMind is an autonomous codebase intelligence workspace that indexes public GitHub repositories, builds parser-derived import graphs and symbol mind maps, and delivers source-grounded answers with verifiable line citations. Tech stack: Python, FastAPI, AST Parsing, NVIDIA NIM, Supabase, TypeScript.',
-      nav: { sectionId: 'scene-projects', label: 'SHIRO CodeMind Project' },
-    };
-  }
-
-  if (q.includes('l-platform') || q.includes('evaluation') || q.includes('evaluator') || q.includes('l intelligence') || q === 'l') {
-    return {
-      reply: 'L is an LLM intelligence and evaluation platform providing AI engineers with a provider-independent workspace to run repeatable experiments, score model outputs against explicit evaluation definitions, compare revisions, and inspect failures with verifiable trace evidence. Tech stack: Next.js, FastAPI, PostgreSQL, Supabase.',
-      nav: { sectionId: 'scene-projects', label: 'L Intelligence Platform' },
-    };
-  }
-
-  if (q.includes('resume analyzer') || q.includes('ranking')) {
-    return {
-      reply: 'The AI Resume Analyzer & Ranking Tool uses a hybrid scoring algorithm: 50% semantic sentence embeddings, 30% TF-IDF keyword relevance, and 20% skill overlap to objectively match candidate profiles against job requirements.',
-      nav: { sectionId: 'scene-projects', label: 'Resume Analyzer Project' },
-    };
-  }
-
-  if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('github')) {
-    return {
-      reply: 'Samyak has built flagship systems across AI & Data: ARGUS AI (Evidence-oriented Knowledge Agent), NEXUS (Autonomous Data Analyst), SHIRO CodeMind (Codebase Intelligence), L (LLM Evaluation Platform), AI Resume Analyzer, and Clinical Multi-Disease Predictor.',
-      nav: { sectionId: 'scene-projects', label: 'Selected Projects' },
-    };
-  }
-
-  if (q.includes('skill') || q.includes('tech') || q.includes('stack') || q.includes('python') || q.includes('rag') || q.includes('agent')) {
-    return {
-      reply: 'Samyak specializes in: Applied AI Engineering (LangChain, LangGraph, RAG, Semantic Search), Machine Learning (PyTorch, TensorFlow, Scikit-learn), Backend (FastAPI, AsyncIO, Pydantic V2, PostgreSQL), and MLOps (Docker, MLflow, DVC, AWS).',
-      nav: { sectionId: 'scene-tech', label: 'Technology Universe' },
-    };
-  }
-
-  if (q.includes('experience') || q.includes('job') || q.includes('career') || q.includes('intern') || q.includes('education') || q.includes('degree')) {
-    return {
-      reply: 'Samyak is currently a Data Science Trainer at Softgrowth Infotech. Previously, he was a Data Scientist Intern (Lead) at Evoastra Ventures (leading 5 interns and building CARS24 web-scraping pipelines) and ML Intern at Gilbert Research Center. He holds a B.Tech in Computer Science & Engineering (2024).',
-      nav: { sectionId: 'scene-journey', label: 'Professional Journey' },
-    };
-  }
-
-  if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('phone') || q.includes('reach') || q.includes('message')) {
-    return {
-      reply: 'You can reach Samyak directly at samyak.g.anand@gmail.com or by phone/WhatsApp at +91 96237 19948. He is based in Hyderabad, India and open to global AI engineering opportunities.',
-      nav: { sectionId: 'scene-contact', label: 'Contact & Terminal' },
-    };
-  }
-
-  return {
-    reply: 'I am SAM.exe, trained on Samyak Anand’s verified AI engineering background, projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), and technical capabilities. Feel free to ask about any specific project, skill, or how to get in touch!',
-  };
-}
-
 function goToPortfolioTarget(target: PortfolioTarget) {
   if (target.backgroundTab) {
     window.dispatchEvent(new CustomEvent('portfolio:select-background-tab', { detail: target.backgroundTab }));
@@ -129,6 +77,7 @@ export default function PortfolioChatbot() {
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [pending, setPending] = useState(false);
+  const [reaction, setReaction] = useState<Reaction>('greeting');
   const messageListRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -147,6 +96,7 @@ export default function PortfolioChatbot() {
     setMessages(nextMessages);
     setDraft('');
     setPending(true);
+    setReaction('thinking');
 
     try {
       const response = await fetch('/api/chat', {
@@ -158,15 +108,18 @@ export default function PortfolioChatbot() {
       });
 
       let reply = '';
+      let apiFailed = false;
       const assistantId = makeId();
       if (response.ok && response.body) {
-        const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation };
+        const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation, reaction: 'thinking' };
         setMessages([...nextMessages, placeholder]);
         reply = await readTextStream(response, (_chunk, accumulated) => {
-          setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated) }]);
+          setReaction('typing');
+          setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated), reaction: 'typing' }]);
         });
         reply = plainText(reply);
       } else {
+        apiFailed = true;
         const data = await response.json().catch(() => ({}));
         console.warn('[SAM.exe] Chat request failed:', data.error || response.status);
       }
@@ -178,6 +131,8 @@ export default function PortfolioChatbot() {
       }
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
+      const finalReaction: Reaction = apiFailed ? 'error' : getReplyReaction(reply);
+      setReaction(finalReaction);
       setMessages([
         ...nextMessages,
         {
@@ -186,9 +141,11 @@ export default function PortfolioChatbot() {
           content: reply,
           navigation,
           emailDraft: wantsEmail ? content : undefined,
+          reaction: finalReaction,
         },
       ]);
     } catch {
+      setReaction('error');
       const fallback = generateLocalKnowledgeResponse(content);
       setMessages([
         ...nextMessages,
@@ -197,6 +154,7 @@ export default function PortfolioChatbot() {
           role: 'assistant',
           content: fallback.reply,
           navigation: navigation || fallback.nav,
+          reaction: 'error',
         },
       ]);
     } finally {
@@ -226,16 +184,7 @@ export default function PortfolioChatbot() {
 
           <header className="portfolio-chat__header relative z-10 flex items-center justify-between border-b border-white/10 px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]">
-                <Image
-                  src="/portfolio/chatbot-avatar.png"
-                  alt="Samyak Anand AI"
-                  fill
-                  sizes="48px"
-                  className="object-cover object-top"
-                />
-                <span className="absolute bottom-0.5 right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#060f1b]" />
-              </div>
+              <ReactionAvatar reaction={reaction} sizes="48px" className="h-12 w-12 rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]" />
               <div>
                 <span className="portfolio-chat__eyebrow text-[10px] font-mono tracking-widest text-sky-400">
                   SAMYAK ANAND · AI ASSISTANT
@@ -249,7 +198,7 @@ export default function PortfolioChatbot() {
             <button
               className="portfolio-chat__close rounded-lg p-1.5 text-white/60 transition hover:bg-white/10 hover:text-white"
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); setReaction('idle'); }}
               aria-label="Close chat"
             >
               ×
@@ -274,15 +223,7 @@ export default function PortfolioChatbot() {
               >
                 {message.role === 'assistant' && (
                   <div className="relative mb-1.5 flex items-center gap-2">
-                    <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]">
-                      <Image
-                        src="/portfolio/chatbot-avatar.png"
-                        alt="SAM"
-                        fill
-                        sizes="24px"
-                        className="object-cover object-top"
-                      />
-                    </div>
+                    <ReactionAvatar reaction={message.reaction ?? (message.id === 'welcome' ? 'greeting' : message.content ? getReplyReaction(message.content) : 'typing')} sizes="24px" className="h-6 w-6 rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]" />
                     <span className="text-[11px] font-mono font-semibold text-sky-300">SAM.exe</span>
                   </div>
                 )}
@@ -310,7 +251,7 @@ export default function PortfolioChatbot() {
                 )}
               </div>
             ))}
-            {pending && <p className="portfolio-chat__typing" role="status">Thinking…</p>}
+            {pending && <p className="portfolio-chat__typing flex items-center gap-2" role="status"><ReactionAvatar reaction={reaction} sizes="20px" className="h-5 w-5 rounded-full border border-sky-400/50" />{reaction === 'typing' ? 'SAM.exe is typing…' : 'SAM.exe is thinking…'}</p>}
           </div>
 
           {messages.length === 1 && !pending && (
@@ -336,7 +277,10 @@ export default function PortfolioChatbot() {
               id="portfolio-chat-input"
               className="portfolio-chat__input"
               value={draft}
-              onChange={(event) => setDraft(event.target.value)}
+              onChange={(event) => {
+                setDraft(event.target.value);
+                if (!pending) setReaction(event.target.value ? 'typing' : (open ? 'idle' : 'greeting'));
+              }}
               maxLength={1000}
               placeholder="Ask about ARGUS AI, NEXUS, skills..."
               autoComplete="off"
@@ -361,20 +305,15 @@ export default function PortfolioChatbot() {
       <button
         className="portfolio-chat__launcher group relative flex items-center gap-3 rounded-full border border-sky-400/50 bg-[#060f1b]/95 p-1.5 pr-4 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(56,189,248,0.35)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-sky-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(56,189,248,0.55)] active:scale-95"
         type="button"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          const nextOpen = !open;
+          setOpen(nextOpen);
+          setReaction(nextOpen ? (messages.length === 1 ? 'greeting' : 'idle') : 'idle');
+        }}
         aria-expanded={open}
         aria-label={open ? 'Close SAM.exe assistant' : 'Open SAM.exe assistant'}
       >
-        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]">
-          <Image
-            src="/portfolio/chatbot-avatar.png"
-            alt="Samyak Anand AI"
-            fill
-            sizes="40px"
-            className="object-cover object-top"
-          />
-          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#060f1b]" />
-        </div>
+        <ReactionAvatar reaction={open ? reaction : 'idle'} sizes="40px" className="h-10 w-10 rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
         <div className="flex flex-col text-left">
           <span className="text-xs font-bold tracking-tight text-white group-hover:text-sky-200">
             {open ? 'Close Assistant' : 'Ask SAM.exe'}
