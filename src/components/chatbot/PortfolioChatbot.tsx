@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-navigation';
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
 import { readTextStream } from '@/lib/read-text-stream';
+import { getReplyReaction, REACTION_META, type Reaction } from '@/lib/chatbot-reactions';
 
 const Chatbot3DBackground = dynamic(
   () => import('@/components/3d/Chatbot3DBackground'),
@@ -25,26 +26,6 @@ const INITIAL_MESSAGE: ChatMessage = {
   role: 'assistant',
   content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), his technical stack, or connect you directly with him. What would you like to explore?',
 };
-
-type Reaction = 'greeting' | 'thinking' | 'typing' | 'confident' | 'celebrating' | 'confused' | 'gaming' | 'sad' | 'error' | 'idle';
-
-const REACTION_META: Record<Reaction, { emoji: string; label: string }> = {
-  greeting: { emoji: '👋', label: 'Greeting' }, thinking: { emoji: '🤔', label: 'Thinking' },
-  typing: { emoji: '⌨️', label: 'Typing' }, confident: { emoji: '😎', label: 'Confident' },
-  celebrating: { emoji: '🎉', label: 'Celebrating' }, confused: { emoji: '😵‍💫', label: 'Confused' },
-  gaming: { emoji: '🎮', label: 'Gaming' }, sad: { emoji: '🥺', label: 'Empathetic' },
-  error: { emoji: '⚠️', label: 'Error' }, idle: { emoji: '✨', label: 'Idle' },
-};
-
-function getReplyReaction(reply: string): Reaction {
-  const value = reply.toLowerCase();
-  if (/\b(error|failed|unable|unavailable|issue)\b/.test(value)) return 'error';
-  if (/\b(congratulations|congrats|great job|well done|success|milestone|achievement)\b/.test(value)) return 'celebrating';
-  if (/\b(game|gaming|play|controller|quest)\b/.test(value)) return 'gaming';
-  if (/\b(not sure|unclear|could you clarify|what do you mean|which one)\b/.test(value)) return 'confused';
-  if (/\b(sorry to hear|that sounds|understand how|tough|difficult)\b/.test(value)) return 'sad';
-  return 'confident';
-}
 
 function ReactionAvatar({ reaction, className }: { reaction: Reaction; className: string }) {
   const meta = REACTION_META[reaction];
@@ -189,6 +170,7 @@ export default function PortfolioChatbot() {
       });
 
       let reply = '';
+      let apiFailed = false;
       const assistantId = makeId();
       if (response.ok && response.body) {
         const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation };
@@ -199,6 +181,7 @@ export default function PortfolioChatbot() {
         });
         reply = plainText(reply);
       } else {
+        apiFailed = true;
         const data = await response.json().catch(() => ({}));
         console.warn('[SAM.exe] Chat request failed:', data.error || response.status);
       }
@@ -210,7 +193,7 @@ export default function PortfolioChatbot() {
       }
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
-      setReaction(getReplyReaction(reply));
+      setReaction(apiFailed ? 'error' : getReplyReaction(reply));
       setMessages([
         ...nextMessages,
         {
