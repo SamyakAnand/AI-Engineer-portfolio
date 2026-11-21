@@ -6,7 +6,7 @@ import { findNearestLoadedFrame, mapScrollToFrameProgress, type FrameScrollAncho
 const TOTAL_FRAMES = 300;
 const MOBILE_FRAME_STRIDE = 1;
 const MOBILE_CACHE_RADIUS = 5;
-const MOBILE_FOREGROUND_SCALE = 0.62;
+const MOBILE_FOREGROUND_SCALE = 0.78;
 
 export default function FullPageFrameSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -53,7 +53,7 @@ export default function FullPageFrameSequence() {
         );
         ctx.restore();
 
-        // Keep the cinematic frame prominent, but pull back to about 56% of
+        // Keep the cinematic frame prominent, with a modest pullback to 78% of
         // full-cover scale so more of the original scene remains visible.
         const foregroundScale = coverScale * MOBILE_FOREGROUND_SCALE;
         const width = image.naturalWidth * foregroundScale;
