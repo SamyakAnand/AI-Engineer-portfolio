@@ -7,6 +7,7 @@ import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-n
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
 import { readTextStream } from '@/lib/read-text-stream';
 import { getReplyReaction, REACTION_META, type Reaction } from '@/lib/chatbot-reactions';
+import { generateLocalKnowledgeResponse } from '@/lib/chatbot-fallback';
 
 const Chatbot3DBackground = dynamic(
   () => import('@/components/3d/Chatbot3DBackground'),
@@ -54,77 +55,6 @@ function plainText(value: string) {
     .replace(/__(.*?)__/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
     .trim();
-}
-
-function generateLocalKnowledgeResponse(query: string): { reply: string; nav?: PortfolioTarget } {
-  const q = query.toLowerCase();
-
-  if (q.includes('argus')) {
-    return {
-      reply: 'ARGUS AI is an enterprise evidence-oriented intelligence platform. It decouples document retrieval from linguistic synthesis and strictly verifies citation passage IDs before generating an answer, eliminating hallucinations. Tech stack: Python, FastAPI, Next.js, LangChain, Vector DB.',
-      nav: { sectionId: 'scene-projects', label: 'ARGUS AI Project' },
-    };
-  }
-
-  if (q.includes('nexus') || q.includes('analyst')) {
-    return {
-      reply: 'NEXUS is an autonomous data analyst agent. It ingests natural-language queries, dynamically profiles datasets, selects deterministic tools (Pandas, SQLAlchemy), executes analysis, and returns reproducible reports with full execution run traces.',
-      nav: { sectionId: 'scene-projects', label: 'NEXUS Project' },
-    };
-  }
-
-  if (q.includes('shiro') || q.includes('codemind') || q.includes('codebase')) {
-    return {
-      reply: 'SHIRO CodeMind is an autonomous codebase intelligence workspace that indexes public GitHub repositories, builds parser-derived import graphs and symbol mind maps, and delivers source-grounded answers with verifiable line citations. Tech stack: Python, FastAPI, AST Parsing, NVIDIA NIM, Supabase, TypeScript.',
-      nav: { sectionId: 'scene-projects', label: 'SHIRO CodeMind Project' },
-    };
-  }
-
-  if (q.includes('l-platform') || q.includes('evaluation') || q.includes('evaluator') || q.includes('l intelligence') || q === 'l') {
-    return {
-      reply: 'L is an LLM intelligence and evaluation platform providing AI engineers with a provider-independent workspace to run repeatable experiments, score model outputs against explicit evaluation definitions, compare revisions, and inspect failures with verifiable trace evidence. Tech stack: Next.js, FastAPI, PostgreSQL, Supabase.',
-      nav: { sectionId: 'scene-projects', label: 'L Intelligence Platform' },
-    };
-  }
-
-  if (q.includes('resume analyzer') || q.includes('ranking')) {
-    return {
-      reply: 'The AI Resume Analyzer & Ranking Tool uses a hybrid scoring algorithm: 50% semantic sentence embeddings, 30% TF-IDF keyword relevance, and 20% skill overlap to objectively match candidate profiles against job requirements.',
-      nav: { sectionId: 'scene-projects', label: 'Resume Analyzer Project' },
-    };
-  }
-
-  if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('github')) {
-    return {
-      reply: 'Samyak has built flagship systems across AI & Data: ARGUS AI (Evidence-oriented Knowledge Agent), NEXUS (Autonomous Data Analyst), SHIRO CodeMind (Codebase Intelligence), L (LLM Evaluation Platform), AI Resume Analyzer, and Clinical Multi-Disease Predictor.',
-      nav: { sectionId: 'scene-projects', label: 'Selected Projects' },
-    };
-  }
-
-  if (q.includes('skill') || q.includes('tech') || q.includes('stack') || q.includes('python') || q.includes('rag') || q.includes('agent')) {
-    return {
-      reply: 'Samyak specializes in: Applied AI Engineering (LangChain, LangGraph, RAG, Semantic Search), Machine Learning (PyTorch, TensorFlow, Scikit-learn), Backend (FastAPI, AsyncIO, Pydantic V2, PostgreSQL), and MLOps (Docker, MLflow, DVC, AWS).',
-      nav: { sectionId: 'scene-tech', label: 'Technology Universe' },
-    };
-  }
-
-  if (q.includes('experience') || q.includes('job') || q.includes('career') || q.includes('intern') || q.includes('education') || q.includes('degree')) {
-    return {
-      reply: 'Samyak is currently a Data Science Trainer at Softgrowth Infotech. Previously, he was a Data Scientist Intern (Lead) at Evoastra Ventures (leading 5 interns and building CARS24 web-scraping pipelines) and ML Intern at Gilbert Research Center. He holds a B.Tech in Computer Science & Engineering (2024).',
-      nav: { sectionId: 'scene-journey', label: 'Professional Journey' },
-    };
-  }
-
-  if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('phone') || q.includes('reach') || q.includes('message')) {
-    return {
-      reply: 'You can reach Samyak directly at samyak.g.anand@gmail.com or by phone/WhatsApp at +91 96237 19948. He is based in Hyderabad, India and open to global AI engineering opportunities.',
-      nav: { sectionId: 'scene-contact', label: 'Contact & Terminal' },
-    };
-  }
-
-  return {
-    reply: 'I am SAM.exe, trained on Samyak Anand’s verified AI engineering background, projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), and technical capabilities. Feel free to ask about any specific project, skill, or how to get in touch!',
-  };
 }
 
 function goToPortfolioTarget(target: PortfolioTarget) {
