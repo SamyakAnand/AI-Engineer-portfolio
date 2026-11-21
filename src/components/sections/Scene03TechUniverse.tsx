@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import { skills } from '@/content/skills';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, BrainCircuit, Code2, Server, ChartLine, Database, PanelsTopLeft, Workflow, MessageSquareText, Search, FileCheck2, Wrench, Bot, ClipboardCheck, Network, ShieldCheck, BarChart3, Table2, Globe2, Boxes, GitBranch, Cloud } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import {
   siJavascript,
   siTypescript,
@@ -32,6 +33,14 @@ const brandIcons: Record<string, { icon: SimpleIcon; color?: string }> = {
 
 const logos: Record<string, string> = {
   Python: 'python.png',
+  'TensorFlow & Keras': 'tensorflow_logo.png',
+  'Pandas & NumPy': 'pandas_logo.png',
+  'Git & GitHub': 'github.png',
+  'Power BI & DAX': 'PowerBI_Logo.png',
+  'Matplotlib & Seaborn': 'Numpy_logo.png',
+  'Advanced Excel & Power Query': 'PowerBI_Logo.png',
+  'Sentence Transformers': 'pytorch_logo.png',
+  NLTK: 'nltk_logo.png',
   SQL: 'sql.png',
   PyTorch: 'pytorch_logo.png',
   TensorFlow: 'tensorflow_logo.png',
@@ -46,9 +55,27 @@ const logos: Record<string, string> = {
   Tableau: 'tableau_logo.png',
   Docker: 'docker_logo.png',
   MLflow: 'mlflow_logo.png',
-  'Git & GitHub': 'git.png',
   AWS: 'aws_logo.png',
   Hermes: 'hermes.png',
+};
+
+const conceptIcons: Record<string, LucideIcon> = {
+  'LLM Application Development': BrainCircuit, 'Prompt Engineering': MessageSquareText,
+  'Retrieval Workflows': Search, 'Lexical Passage Retrieval': Search,
+  'Source-Grounded Question Answering': FileCheck2, 'Structured Tool Calling': Wrench,
+  'AI Agent Concepts': Bot, 'LLM Evaluation & Citation Checks': ClipboardCheck,
+  Java: Code2, C: Code2, R: ChartLine, 'REST APIs': Network, Pydantic: ShieldCheck,
+  'Sentence Transformers': BrainCircuit, NLTK: MessageSquareText,
+  'Regression & Classification': ChartLine, 'Feature Engineering': Workflow, 'Model Evaluation': ClipboardCheck,
+  'Pandas & NumPy': Table2, SciPy: ChartLine, 'Exploratory Data Analysis': Search,
+  'Statistical Analysis': ChartLine, 'Matplotlib & Seaborn': BarChart3,
+  'Power BI & DAX': BarChart3, Tableau: BarChart3, 'Advanced Excel & Power Query': Table2,
+  MySQL: Database, SQLite: Database, 'Next.js': Globe2, React: PanelsTopLeft,
+  'HTML5 & CSS3': Code2, DagsHub: GitBranch, 'Vercel & Render': Cloud,
+};
+const groupIcons: Record<string, LucideIcon> = {
+  ai: BrainCircuit, programming: Code2, backend: Server, ml: ChartLine,
+  data: BarChart3, database: Database, frontend: PanelsTopLeft, mlops: Boxes,
 };
 
 const categoryBadges: Record<string, { label: string; color: string }> = {
@@ -66,7 +93,7 @@ function renderCustomToolIcon(name: string) {
     return (
       <span
         aria-hidden="true"
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-emerald-400/30 bg-emerald-950/40 p-1 text-emerald-300 shadow-sm"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-emerald-400/30 bg-transparent p-1 text-emerald-300"
       >
         <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
           <path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6.07 6.07 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.1 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.51 2.9A5.98 5.98 0 0 0 13.26 24a6.06 6.06 0 0 0 5.77-4.21 5.99 5.99 0 0 0 4-2.9 6.06 6.06 0 0 0-.75-7.07zm-9.02 12.61a4.48 4.48 0 0 1-2.88-1.04l.14-.08 4.78-2.76c.24-.14.39-.4.39-.68v-6.74l2.02 1.17c.02.01.04.03.04.05v5.58a4.5 4.5 0 0 1-4.49 4.5zm-9.66-4.13a4.47 4.47 0 0 1-.53-3.01l.14.08 4.78 2.76c.24.14.54.14.78 0l5.85-3.37v2.33c0 .03-.01.05-.04.06L9.74 19.95a4.5 4.5 0 0 1-6.14-1.65zM2.34 7.9a4.49 4.49 0 0 1 2.37-1.98v5.68c0 .28.15.54.39.68l5.81 3.35-2.02 1.17c-.02.01-.05.01-.07 0l-4.83-2.79A4.5 4.5 0 0 1 2.34 7.9zm16.1 3.85-5.84-3.37 2.02-1.17c.02-.01.05-.01.07 0l4.83 2.79a4.5 4.5 0 0 1-.68 8.1v-5.67c0-.28-.15-.54-.4-.68zm2.01-3.02-.14-.08-4.78-2.79c-.24-.14-.54-.14-.78 0L9.41 9.23V6.9c0-.03.01-.05.03-.06l4.83-2.79a4.5 4.5 0 0 1 6.68 4.66zM8.31 12.86l-2.02-1.16a.08.08 0 0 1-.04-.06V6.07a4.5 4.5 0 0 1 7.38-3.45l-.14.08-4.79 2.76c-.24.14-.39.4-.39.68zm1.1-2.36 2.6-1.5 2.61 1.5v3l-2.6 1.5-2.61-1.5z" />
@@ -78,7 +105,7 @@ function renderCustomToolIcon(name: string) {
     return (
       <span
         aria-hidden="true"
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-cyan-400/30 bg-cyan-950/40 p-1 text-cyan-300 shadow-sm"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-cyan-400/30 bg-transparent p-1 text-cyan-300"
       >
         <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
           <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A6.006 6.006 0 0 1 6.07 12H6a1 1 0 0 1 0-2h.07A6.006 6.006 0 0 1 11 5.07V5a1 1 0 0 1 2 0v.07A6.006 6.006 0 0 1 17.93 10H18a1 1 0 0 1 0 2h-.07A6.006 6.006 0 0 1 13 16.93z" />
@@ -91,7 +118,7 @@ function renderCustomToolIcon(name: string) {
     return (
       <span
         aria-hidden="true"
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-indigo-400/30 bg-indigo-950/40 p-1 text-indigo-300 shadow-sm"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-indigo-400/30 bg-transparent p-1 text-indigo-300"
       >
         <svg viewBox="0 0 24 24" className="h-full w-full fill-none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 17l6-6-6-6M12 19h8" stroke="#5786FE" strokeWidth="2.5" />
@@ -111,7 +138,7 @@ export default function Scene03TechUniverse() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 max-w-3xl">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-950/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-300 backdrop-blur-sm shadow-[0_0_12px_rgba(168,85,247,0.2)]">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-purple-300">
             <Sparkles className="h-3.5 w-3.5 text-purple-400" />
             Technical Capabilities
           </div>
@@ -137,7 +164,7 @@ export default function Scene03TechUniverse() {
             return (
               <section
                 key={group.category}
-                className="group rounded-3xl border border-white/15 bg-black/45 p-6 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-purple-400/40 hover:bg-black/55 sm:p-7"
+                className="group rounded-3xl border border-white/15 bg-transparent p-6 shadow-none transition-all duration-300 hover:border-purple-400/40 hover:bg-transparent sm:p-7"
               >
                 <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
                   <h3
@@ -160,22 +187,22 @@ export default function Scene03TechUniverse() {
                     return (
                       <li
                         key={skill.name}
-                        className="group/item flex min-h-12 items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.035] px-3 py-2 text-xs text-white/90 backdrop-blur-sm transition-all duration-200 hover:border-purple-400/40 hover:bg-white/[0.08] hover:text-white"
+                        className="group/item flex min-h-14 items-center gap-3 rounded-2xl border border-white/10 bg-transparent px-3 py-2 text-xs text-white/90 transition-all duration-200 hover:border-purple-400/45 hover:bg-white/[0.025] hover:text-white"
                       >
                         {logo ? (
-                          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-white/95 p-1 shadow-sm">
+                          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-transparent p-1 drop-shadow-[0_3px_7px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3">
                             <Image
                               src={`/portfolio/skills/${logo}`}
                               alt={skill.name}
-                              width={24}
-                              height={24}
-                              className="h-full w-full object-contain"
+                              width={32}
+                              height={32}
+                              className="h-full w-full object-contain drop-shadow-[0_2px_5px_rgba(255,255,255,0.18)]"
                             />
                           </span>
                         ) : brandObj ? (
                           <span
                             aria-hidden="true"
-                            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/[0.08] p-1.5"
+                            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-transparent p-1.5 drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)] transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3"
                             style={{ color: brandObj.color || `#${brandObj.icon.hex}` }}
                           >
                             <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
@@ -184,20 +211,14 @@ export default function Scene03TechUniverse() {
                           </span>
                         ) : customIcon ? (
                           customIcon
-                        ) : (
-                          <span
-                            aria-hidden="true"
-                            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-purple-400/30 bg-purple-950/50 text-[10px] font-bold text-purple-200 shadow-sm"
-                          >
-                            {skill.name.includes('Large')
-                              ? 'LLM'
-                              : skill.name.includes('Retrieval')
-                              ? 'RAG'
-                              : skill.name.includes('Agents')
-                              ? 'AGT'
-                              : skill.name.slice(0, 2).toUpperCase()}
-                          </span>
-                        )}
+                        ) : (() => {
+                          const SkillIcon = conceptIcons[skill.name] || groupIcons[skill.group] || Sparkles;
+                          return (
+                            <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-transparent p-1.5 transition-transform duration-300 group-hover/item:scale-110 group-hover/item:-rotate-3">
+                              <SkillIcon className="h-full w-full drop-shadow-[0_2px_6px_currentColor]" strokeWidth={2.1} style={{ color: ({ ai: "#c084fc", programming: "#60a5fa", backend: "#34d399", ml: "#a78bfa", data: "#fbbf24", database: "#22d3ee", frontend: "#fb7185", mlops: "#e879f9" } as Record<string, string>)[skill.group] || "#c084fc" }} />
+                            </span>
+                          );
+                        })()}
 
                         <span
                           className="min-w-0 font-medium leading-snug drop-shadow-[0_1px_4px_rgba(0,0,0,1)]"
