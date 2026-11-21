@@ -23,16 +23,16 @@ describe('SAM.exe local knowledge fallback', () => {
     expect(reply).toContain('not implemented');
   });
 
-  it('uses the project record for SHIRO rather than calling it autonomous', () => {
+  it('uses the project record for SHIRO and discloses public-repository scope', () => {
     const reply = generateLocalKnowledgeResponse('What is SHIRO CodeMind?').reply;
-    expect(reply).toContain('read-only');
-    expect(reply).not.toContain('autonomous codebase intelligence');
+    expect(reply).toContain('public GitHub repositories');
+    expect(reply).toContain('Private GitHub source access');
   });
 
   it('keeps L platform maturity and provider limitations explicit', () => {
     const reply = generateLocalKnowledgeResponse('Explain L Intelligence Platform').reply;
     expect(reply).toContain('early-stage');
-    expect(reply).toContain('live providers');
+    expect(reply).toContain('Provider-backed benchmarking is not yet available');
   });
 
   it('returns a bounded, non-claiming answer for unknown questions', () => {
