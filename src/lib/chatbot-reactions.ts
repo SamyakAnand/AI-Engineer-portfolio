@@ -10,18 +10,35 @@ export type Reaction =
   | 'error'
   | 'idle';
 
-export const REACTION_META: Record<Reaction, { emoji: string; label: string }> = {
-  greeting: { emoji: '👋', label: 'Greeting' },
-  thinking: { emoji: '🤔', label: 'Thinking' },
-  typing: { emoji: '⌨️', label: 'Typing' },
-  confident: { emoji: '😎', label: 'Confident' },
-  celebrating: { emoji: '🎉', label: 'Celebrating' },
-  confused: { emoji: '😵‍💫', label: 'Confused' },
-  gaming: { emoji: '🎮', label: 'Gaming' },
-  sad: { emoji: '🥺', label: 'Empathetic' },
-  error: { emoji: '⚠️', label: 'Error' },
-  idle: { emoji: '✨', label: 'Idle' },
+export const REACTION_META: Record<Reaction, { label: string }> = {
+  greeting: { label: 'Greeting' },
+  thinking: { label: 'Thinking' },
+  typing: { label: 'Typing' },
+  confident: { label: 'Confident' },
+  celebrating: { label: 'Celebrating' },
+  confused: { label: 'Confused' },
+  gaming: { label: 'Gaming' },
+  sad: { label: 'Empathetic' },
+  error: { label: 'Error' },
+  idle: { label: 'Idle' },
 };
+
+export const REACTION_ASSET_PATHS: Record<Reaction, string> = {
+  greeting: '/portfolio/chatbot-reactions/greeting.gif',
+  thinking: '/portfolio/chatbot-reactions/thinking.gif',
+  typing: '/portfolio/chatbot-reactions/typing.gif',
+  confident: '/portfolio/chatbot-reactions/confident.gif',
+  celebrating: '/portfolio/chatbot-reactions/celebrating.gif',
+  confused: '/portfolio/chatbot-reactions/confused.gif',
+  gaming: '/portfolio/chatbot-reactions/gaming.gif',
+  sad: '/portfolio/chatbot-reactions/sad.gif',
+  error: '/portfolio/chatbot-reactions/error.gif',
+  idle: '/portfolio/chatbot-reactions/idle.gif',
+};
+
+export function getReactionAssetPath(reaction: Reaction): string {
+  return REACTION_ASSET_PATHS[reaction];
+}
 
 export function getReplyReaction(reply: string): Reaction {
   const value = reply.toLowerCase();

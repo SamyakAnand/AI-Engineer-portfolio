@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { getPortfolioNavigationTarget, type PortfolioTarget } from '@/lib/chat-navigation';
 import { navigateToPortfolioSection } from '@/lib/portfolio-navigation';
 import { readTextStream } from '@/lib/read-text-stream';
-import { getReplyReaction, REACTION_META, type Reaction } from '@/lib/chatbot-reactions';
+import { getReactionAssetPath, getReplyReaction, REACTION_META, type Reaction } from '@/lib/chatbot-reactions';
 import { generateLocalKnowledgeResponse } from '@/lib/chatbot-fallback';
 
 const Chatbot3DBackground = dynamic(
@@ -20,20 +20,28 @@ type ChatMessage = {
   content: string;
   navigation?: PortfolioTarget;
   emailDraft?: string;
+  reaction?: Reaction;
 };
 
 const INITIAL_MESSAGE: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
   content: 'Hi, I’m SAM.exe — Samyak Anand’s AI intelligence assistant. I can walk you through his flagship projects (ARGUS AI, NEXUS, SHIRO CodeMind, L Intelligence Platform), his technical stack, or connect you directly with him. What would you like to explore?',
+  reaction: 'greeting',
 };
 
-function ReactionAvatar({ reaction, className }: { reaction: Reaction; className: string }) {
+function ReactionAvatar({ reaction, className, sizes }: { reaction: Reaction; className: string; sizes: string }) {
   const meta = REACTION_META[reaction];
   return (
     <div className={'relative inline-flex flex-none overflow-visible ' + className} role="img" aria-label={'SAM.exe reaction: ' + meta.label}>
-      <Image src="/portfolio/chatbot-avatar.png" alt="" fill sizes="48px" className="rounded-full object-cover object-top" />
-      <span key={reaction} className="absolute -bottom-1 -right-1 z-10 grid h-5 w-5 place-items-center rounded-full border border-sky-300/80 bg-[#030c19] text-[11px] shadow-[0_0_12px_rgba(56,189,248,0.4)]" aria-hidden="true">{meta.emoji}</span>
+      <Image
+        src={getReactionAssetPath(reaction)}
+        alt=""
+        fill
+        sizes={sizes}
+        className="object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]"
+        unoptimized
+      />
     </div>
   );
 }
@@ -103,11 +111,11 @@ export default function PortfolioChatbot() {
       let apiFailed = false;
       const assistantId = makeId();
       if (response.ok && response.body) {
-        const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation };
+        const placeholder: ChatMessage = { id: assistantId, role: 'assistant', content: '', navigation, reaction: 'thinking' };
         setMessages([...nextMessages, placeholder]);
         reply = await readTextStream(response, (_chunk, accumulated) => {
           setReaction('typing');
-          setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated) }]);
+          setMessages([...nextMessages, { ...placeholder, content: plainText(accumulated), reaction: 'typing' }]);
         });
         reply = plainText(reply);
       } else {
@@ -123,7 +131,8 @@ export default function PortfolioChatbot() {
       }
 
       const wantsEmail = /\b(email|mail|contact|reach out|send.*message)\b/i.test(content);
-      setReaction(apiFailed ? 'error' : getReplyReaction(reply));
+      const finalReaction: Reaction = apiFailed ? 'error' : getReplyReaction(reply);
+      setReaction(finalReaction);
       setMessages([
         ...nextMessages,
         {
@@ -132,6 +141,7 @@ export default function PortfolioChatbot() {
           content: reply,
           navigation,
           emailDraft: wantsEmail ? content : undefined,
+          reaction: finalReaction,
         },
       ]);
     } catch {
@@ -144,6 +154,7 @@ export default function PortfolioChatbot() {
           role: 'assistant',
           content: fallback.reply,
           navigation: navigation || fallback.nav,
+          reaction: 'error',
         },
       ]);
     } finally {
@@ -173,7 +184,7 @@ export default function PortfolioChatbot() {
 
           <header className="portfolio-chat__header relative z-10 flex items-center justify-between border-b border-white/10 px-5 py-4">
             <div className="flex items-center gap-3">
-              <ReactionAvatar reaction={reaction} className="h-12 w-12 rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]" />
+              <ReactionAvatar reaction={reaction} sizes="48px" className="h-12 w-12 rounded-full border-2 border-sky-400 bg-[#060f1b] shadow-[0_0_16px_rgba(56,189,248,0.5)]" />
               <div>
                 <span className="portfolio-chat__eyebrow text-[10px] font-mono tracking-widest text-sky-400">
                   SAMYAK ANAND · AI ASSISTANT
@@ -187,7 +198,7 @@ export default function PortfolioChatbot() {
             <button
               className="portfolio-chat__close rounded-lg p-1.5 text-white/60 transition hover:bg-white/10 hover:text-white"
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); setReaction('idle'); }}
               aria-label="Close chat"
             >
               ×
@@ -212,7 +223,7 @@ export default function PortfolioChatbot() {
               >
                 {message.role === 'assistant' && (
                   <div className="relative mb-1.5 flex items-center gap-2">
-                    <ReactionAvatar reaction={message.content ? getReplyReaction(message.content) : 'typing'} className="h-6 w-6 rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]" />
+                    <ReactionAvatar reaction={message.reaction ?? (message.id === 'welcome' ? 'greeting' : message.content ? getReplyReaction(message.content) : 'typing')} sizes="24px" className="h-6 w-6 rounded-full border border-sky-400/50 shadow-[0_0_8px_rgba(56,189,248,0.3)]" />
                     <span className="text-[11px] font-mono font-semibold text-sky-300">SAM.exe</span>
                   </div>
                 )}
@@ -240,7 +251,7 @@ export default function PortfolioChatbot() {
                 )}
               </div>
             ))}
-            {pending && <p className="portfolio-chat__typing flex items-center gap-2" role="status"><span aria-hidden="true">{REACTION_META[reaction].emoji}</span>{reaction === 'typing' ? 'SAM.exe is typing…' : 'SAM.exe is thinking…'}</p>}
+            {pending && <p className="portfolio-chat__typing flex items-center gap-2" role="status"><ReactionAvatar reaction={reaction} sizes="20px" className="h-5 w-5 rounded-full border border-sky-400/50" />{reaction === 'typing' ? 'SAM.exe is typing…' : 'SAM.exe is thinking…'}</p>}
           </div>
 
           {messages.length === 1 && !pending && (
@@ -294,11 +305,15 @@ export default function PortfolioChatbot() {
       <button
         className="portfolio-chat__launcher group relative flex items-center gap-3 rounded-full border border-sky-400/50 bg-[#060f1b]/95 p-1.5 pr-4 shadow-[0_8px_32px_rgba(0,0,0,0.6),0_0_20px_rgba(56,189,248,0.35)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-sky-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(56,189,248,0.55)] active:scale-95"
         type="button"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          const nextOpen = !open;
+          setOpen(nextOpen);
+          setReaction(nextOpen ? (messages.length === 1 ? 'greeting' : 'idle') : 'idle');
+        }}
         aria-expanded={open}
         aria-label={open ? 'Close SAM.exe assistant' : 'Open SAM.exe assistant'}
       >
-        <ReactionAvatar reaction={reaction} className="h-10 w-10 rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
+        <ReactionAvatar reaction={open ? reaction : 'idle'} sizes="40px" className="h-10 w-10 rounded-full border-2 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
         <div className="flex flex-col text-left">
           <span className="text-xs font-bold tracking-tight text-white group-hover:text-sky-200">
             {open ? 'Close Assistant' : 'Ask SAM.exe'}

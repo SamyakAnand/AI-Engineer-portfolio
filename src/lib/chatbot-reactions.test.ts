@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getReplyReaction } from './chatbot-reactions';
+import { getReactionAssetPath, getReplyReaction, REACTION_META, type Reaction } from './chatbot-reactions';
 
 describe('SAM.exe reply reactions', () => {
   it('does not classify a neutral mention of an issue as an error', () => {
@@ -25,5 +25,16 @@ describe('SAM.exe reply reactions', () => {
   it('recognizes gaming replies without matching ordinary uses of "play"', () => {
     expect(getReplyReaction('Let us play a game with the controller.')).toBe('gaming');
     expect(getReplyReaction('This tool can play an important role in the workflow.')).toBe('confident');
+  });
+});
+
+
+describe('SAM.exe reaction GIF assets', () => {
+  it('maps all ten reaction states to their own animated GIFs', () => {
+    const reactions = Object.keys(REACTION_META) as Reaction[];
+    expect(reactions).toHaveLength(10);
+    for (const reaction of reactions) {
+      expect(getReactionAssetPath(reaction)).toBe(`/portfolio/chatbot-reactions/${reaction}.gif`);
+    }
   });
 });
